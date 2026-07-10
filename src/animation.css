@@ -1,0 +1,28 @@
+.nft {
+  position: relative;
+  overflow: hidden;
+  transition: .5s all;
+}
+
+.nft::before {
+  position: absolute;
+  content: "";
+  box-shadow: 0 0 100px 40px #ffffffb8;
+  top: -10%;
+  left: -100%;
+  transform: rotate(-45deg);
+  height: 60rem;
+  transition: .7s all;
+  pointer-events: none;
+}
+
+.nft:hover {
+  transform: scale(1.03);
+  filter: brightness(1.2);
+}
+
+.nft:hover::before {
+  top: -100%;
+  left: 200%;
+  filter: brightness(.6);
+}
