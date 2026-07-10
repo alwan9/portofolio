@@ -1,7 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
-import { ArrowUp, Menu, X, Globe, ExternalLink, Award, Sparkles } from "lucide-react";
+import { ArrowUp, Menu, X, Globe, ExternalLink, Award, Sparkles, Monitor, Smartphone } from "lucide-react";
 import { Icon } from "@iconify/react";
+import { motion, AnimatePresence } from "motion/react";
 import { projects, achievements, posters } from "./data";
+import GradientText from "./GradientText";
+import ScrollVelocity from "./ScrollVelocity";
+import BorderGlow from "./BorderGlow";
+import LightRays from "./LightRays";
 
 // Animated Counter Component for premium feels
 const Counter = ({ target, duration = 2000 }) => {
@@ -39,7 +44,7 @@ const Counter = ({ target, duration = 2000 }) => {
 
     const totalMiliseconds = duration;
     const incrementTime = Math.max(Math.floor(totalMiliseconds / end), 15);
-    
+
     const timer = setInterval(() => {
       start += Math.ceil(end / (totalMiliseconds / incrementTime));
       if (start >= end) {
@@ -65,20 +70,22 @@ const Counter = ({ target, duration = 2000 }) => {
 
 const ThreeDRingSlider = () => {
   const slides = [
-    { img: "/asset-page/website/bajubagus (1).png", title: "Baju Bagus Inc" },
-    { img: "/asset-page/website/evoting (1).png", title: "E-Voting OSIS" },
-    { img: "/asset-page/website/perpus (2).png", title: "Perpustakaan Online" },
-    { img: "/asset-page/website/game_setan (5).png", title: "Game Setan" },
-    { img: "/asset-page/website/rog_store (1).png", title: "RoG Store" },
-    { img: "/asset-page/website/memorence_spy (1).png", title: "Memorence 2.0" },
-    { img: "/asset-page/website/photoboth (1).png", title: "Memorence Photobooth" },
-    { img: "/asset-page/website/batakaksara (1).png", title: "Aksara Batak" },
-    { img: "/asset-page/website/bajubagus (6).png", title: "Baju Bagus Dashboard" },
-    { img: "/asset-page/website/evoting (3).png", title: "E-Voting Panel" },
-    { img: "/asset-page/website/rog_store (3).png", title: "RoG Store Catalog" },
-    { img: "/asset-page/website/memorence_spy (3).png", title: "Memorence Spotify Mode" }
+    { img: "./asset-page/website/bajubagus (1).png", title: "Baju Bagus Inc" },
+    { img: "./asset-page/website/evoting (1).png", title: "E-Voting OSIS" },
+    { img: "./asset-page/website/perpus (2).png", title: "Perpustakaan Online" },
+    { img: "./asset-page/website/game_setan (5).png", title: "Game Setan" },
+    { img: "./asset-page/website/rog_store (1).png", title: "RoG Store" },
+    { img: "./asset-page/website/memorence_spy (1).png", title: "Memorence 2.0" },
+    { img: "./asset-page/website/photoboth (1).png", title: "Memorence Photobooth" },
+    { img: "./asset-page/website/batakaksara (1).png", title: "Aksara Batak" },
+    { img: "./asset-page/website/bajubagus (6).png", title: "Baju Bagus Dashboard" },
+    { img: "./asset-page/website/evoting (3).png", title: "E-Voting Panel" },
+    { img: "./asset-page/website/rog_store (3).png", title: "RoG Store Catalog" },
+    { img: "./asset-page/website/memorence_spy (3).png", title: "Memorence Spotify Mode" },
+    { img: "./asset-page/website/fpmanager1.png", title: "FPManager" },
+    { img: "./asset-page/website/tpst1.png", title: "TPST Banyumas" }
   ];
-  
+
   const containerRef = useRef(null);
   const cardsRef = useRef([]);
   const rotationRef = useRef(0);
@@ -110,17 +117,17 @@ const ThreeDRingSlider = () => {
     if (!isDraggingRef.current) return;
     const x = e.touches ? e.touches[0].clientX : e.clientX;
     const deltaX = x - lastXRef.current;
-    
+
     // Sensitivitas geser
-    const sensitivity = 0.15; 
+    const sensitivity = 0.15;
     rotationRef.current = (rotationRef.current - deltaX * sensitivity) % 360;
-    
+
     const now = performance.now();
     const timeDelta = now - lastTimeRef.current;
     if (timeDelta > 0) {
       velocityRef.current = -deltaX / timeDelta;
     }
-    
+
     lastXRef.current = x;
     lastTimeRef.current = now;
   };
@@ -131,7 +138,7 @@ const ThreeDRingSlider = () => {
 
   useEffect(() => {
     let animationFrameId;
-    
+
     const animate = () => {
       if (isDraggingRef.current) {
         // Sedang di-drag, posisi diupdate di handleMove
@@ -147,11 +154,11 @@ const ThreeDRingSlider = () => {
           }
         }
       }
-      
+
       const N = slides.length;
       const isMobile = windowWidth < 640;
       const isTablet = windowWidth >= 640 && windowWidth < 1024;
-      
+
       // Sesuaikan ukuran kartu agar landscape jauh lebih besar dan megah
       const cardWidth = isMobile ? 260 : isTablet ? 380 : 500;
       // Perlebar radiusX agar meregang penuh ke ujung kiri dan kanan layar
@@ -160,23 +167,23 @@ const ThreeDRingSlider = () => {
 
       cardsRef.current.forEach((card, i) => {
         if (!card) return;
-        
+
         // Hitung sudut absolut relatif terhadap sudut pandang depan
         const absoluteAngle = (i * (360 / N) + rotationRef.current) % 360;
         const angleRad = (absoluteAngle * Math.PI) / 180;
         const cosVal = Math.cos(angleRad);
         const sinVal = Math.sin(angleRad);
-        
+
         // Warping non-linear sweet-spot: merapat dekat di tengah namun dihitung agar tidak saling menumpuk
         const warpedSin = Math.sign(sinVal) * Math.pow(Math.abs(sinVal), 1.25);
         const translateX = warpedSin * radiusX;
-        
+
         // Translasi Z menggunakan cos (melengkung ke dalam/belakang)
-        const translateZ = cosVal * radiusZ - radiusZ; 
-        
+        const translateZ = cosVal * radiusZ - radiusZ;
+
         // Skala dikecilkan di ujung samping agar tidak menumpuk
         const scale = 0.60 + 0.20 * (1 - Math.abs(sinVal));
-        
+
         // Opacity: Munculkan lebih banyak kartu (lebih lebat), hanya sembunyikan saat mendekati tengah depan
         let opacity = 0;
         if (cosVal < 0.4) {
@@ -188,13 +195,13 @@ const ThreeDRingSlider = () => {
         } else {
           opacity = 0; // Hilang sepenuhnya di area tepat di depan teks hero
         }
-        
+
         // Z-Index diatur dinamis berdasarkan kedalaman Z
         const zIndex = Math.round((cosVal + 1) * 10) + 10;
-        
+
         // Hitung persentase batas potong (clip path) tepat di koordinat tengah layar (X = 0)
         const pct = Math.max(0, Math.min(100, (0.5 - translateX / (cardWidth * scale)) * 100));
-        
+
         const dotsOpacity = Math.abs(sinVal) * 0.8;
         const brightness = 1.0 - Math.abs(sinVal) * 0.25;
 
@@ -217,13 +224,13 @@ const ThreeDRingSlider = () => {
             img.style.filter = `brightness(${brightness})`;
           }
         });
-        
+
         // Apply opacity ke lapisan dots
         const dots = card.querySelector('[data-dots]');
         if (dots) {
           dots.style.opacity = dotsOpacity;
         }
-        
+
         // Mask-image: mulai fade lebih awal (sinVal=0.55) agar kartu di ujung menghilang sebelum sempat menumpuk
         if (sinVal < -0.55) {
           const fadeStop = Math.max(0, Math.min(100, ((-sinVal - 0.55) / 0.35) * 100));
@@ -239,22 +246,22 @@ const ThreeDRingSlider = () => {
           card.style.webkitMaskImage = 'none';
           card.style.maskImage = 'none';
         }
-        
+
         card.style.opacity = opacity;
         card.style.zIndex = zIndex;
         card.style.transform = `translateX(${translateX}px) translateZ(${translateZ}px) rotateY(${rotateYVal}deg) rotateZ(${rotateZVal}deg) scale(${scale})`;
       });
-      
+
       animationFrameId = requestAnimationFrame(animate);
     };
-    
+
     animate();
-    
+
     return () => cancelAnimationFrame(animationFrameId);
   }, [windowWidth]);
 
   return (
-    <div 
+    <div
       ref={containerRef}
       onMouseDown={handleStart}
       onMouseMove={handleMove}
@@ -269,11 +276,11 @@ const ThreeDRingSlider = () => {
     >
       {/* Ambient green glow di tengah belakang */}
       <div className="absolute w-[200px] h-[200px] sm:w-[350px] sm:h-[350px] bg-violet-500/20 rounded-full blur-[80px] pointer-events-none z-0" />
-      
+
       {/* Laser vertikal hijau menyala di tengah, memotong gambar */}
       <div className="absolute top-0 bottom-0 w-[2px] bg-violet-400 shadow-[0_0_15px_#8b5cf6,0_0_30px_#8b5cf6] z-30 pointer-events-none opacity-85" />
 
-      <div 
+      <div
         className="relative w-full h-full flex items-center justify-center z-10"
         style={{ transformStyle: "preserve-3d" }}
       >
@@ -281,19 +288,19 @@ const ThreeDRingSlider = () => {
           <div
             key={idx}
             ref={(el) => (cardsRef.current[idx] = el)}
-            className="absolute w-[260px] sm:w-[380px] md:w-[500px] aspect-video rounded-[24px] sm:rounded-[32px] overflow-hidden border border-zinc-800/80 bg-zinc-900 shadow-2xl cursor-pointer transition-all duration-300 ease-out hover:border-violet-500/60 hover:shadow-[0_0_50px_rgba(139,92,246,0.3)] hover:scale-105 group"
-            style={{ 
+            className="absolute w-[260px] sm:w-[380px] md:w-[500px] aspect-video rounded-[100px] sm:rounded-[32px] overflow-hidden border border-zinc-800/80 bg-zinc-900 shadow-2xl cursor-pointer transition-all duration-300 ease-out hover:border-violet-500/60 hover:shadow-[0_0_50px_rgba(139,92,246,0.3)] hover:scale-105 group"
+            style={{
               transformOrigin: "center center"
             }}
           >
             {/* Lapisan gambar utama (Full Color) */}
             <img src={slide.img} alt={slide.title} className="w-full h-full object-cover group-hover:scale-110 transition-all duration-700 ease-out" />
-            
+
             {/* Lapisan gambar hitam-putih (Grayscale) yang akan di-clip di sebelah kanan laser */}
             <img src={slide.img} alt={slide.title} data-bw className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-all duration-700 ease-out filter grayscale z-10" />
-            
+
             {/* Lapisan Halftone dots hologram yang memudar di tengah */}
-            <div 
+            <div
               data-dots
               className="absolute inset-0 pointer-events-none mix-blend-overlay transition-opacity duration-300"
               style={{
@@ -316,23 +323,41 @@ const ThreeDRingSlider = () => {
 export default function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
-  const [aboutTab, setAboutTab] = useState("me"); // 'me' | 'education' | 'work'
   const [projectTab, setProjectTab] = useState("web"); // 'web' | 'design' | 'achievement'
+  const [showMobileWelcome, setShowMobileWelcome] = useState(true);
+  const [islandExpanded, setIslandExpanded] = useState(false);
+  const [isHeaderHovered, setIsHeaderHovered] = useState(false);
+
+  useEffect(() => {
+    if (showMobileWelcome) {
+      const timer = setTimeout(() => {
+        setIslandExpanded(true);
+      }, 1000);
+      return () => clearTimeout(timer);
+    } else {
+      setIslandExpanded(false);
+    }
+  }, [showMobileWelcome]);
 
   // Popup Modals state
   const [activeModal, setActiveModal] = useState(null); // { type: 'project'|'achievement'|'poster', data: object }
   const [sliderIndex, setSliderIndex] = useState(0);
+  const [viewMode, setViewMode] = useState("desktop"); // 'desktop' | 'mobile'
 
   // Auto-slide for popup images
   useEffect(() => {
-    if (!activeModal || !activeModal.data.mainImg || activeModal.data.mainImg.length <= 1) return;
+    if (!activeModal) return;
+    const imgs = viewMode === "mobile" && activeModal.data.mobileImg?.length
+      ? activeModal.data.mobileImg
+      : activeModal.data.mainImg;
+    if (!imgs || imgs.length <= 1) return;
 
     const interval = setInterval(() => {
-      setSliderIndex((prev) => (prev + 1) % activeModal.data.mainImg.length);
+      setSliderIndex((prev) => (prev + 1) % imgs.length);
     }, 3000);
 
     return () => clearInterval(interval);
-  }, [activeModal]);
+  }, [activeModal, viewMode]);
 
   // Handle scroll event for scroll-to-top button visibility
   useEffect(() => {
@@ -350,6 +375,7 @@ export default function App() {
   const openPopup = (type, data) => {
     setActiveModal({ type, data });
     setSliderIndex(0);
+    setViewMode("desktop");
   };
 
   const closePopup = () => {
@@ -358,7 +384,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-100 font-sans selection:bg-violet-500 selection:text-white">
-      
+
       {/* NAVBAR */}
       <nav className="bg-zinc-950/80 backdrop-blur-md border-b border-zinc-900 text-white fixed w-full z-50 transition-all duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -379,7 +405,7 @@ export default function App() {
               <a href="#about" className="text-sm font-medium text-zinc-300 hover:text-violet-400 transition-colors">About</a>
               <a href="#favorit" className="text-sm font-medium text-zinc-300 hover:text-violet-400 transition-colors">Favorite</a>
               <a href="#all" className="text-sm font-medium text-zinc-300 hover:text-violet-400 transition-colors">Projects</a>
-              <a 
+              <a
                 href="#all"
                 onClick={() => setProjectTab("design")}
                 className="text-sm font-medium text-zinc-300 hover:text-violet-400 transition-colors"
@@ -390,7 +416,7 @@ export default function App() {
 
             {/* BURGER BUTTON */}
             <div className="md:hidden flex items-center">
-              <button 
+              <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 className="text-zinc-400 hover:text-white focus:outline-none p-1"
                 aria-label="Toggle menu"
@@ -404,36 +430,36 @@ export default function App() {
         {/* MOBILE MENU */}
         {mobileMenuOpen && (
           <div className="md:hidden px-4 pt-2 pb-4 space-y-2 bg-zinc-950 border-b border-zinc-900/60 animate-in fade-in slide-in-from-top-5 duration-200">
-            <a 
-              href="#home" 
+            <a
+              href="#home"
               onClick={() => setMobileMenuOpen(false)}
               className="block px-3 py-2 rounded-md text-base font-medium text-zinc-300 hover:bg-zinc-900 hover:text-white"
             >
               Home
             </a>
-            <a 
-              href="#about" 
+            <a
+              href="#about"
               onClick={() => setMobileMenuOpen(false)}
               className="block px-3 py-2 rounded-md text-base font-medium text-zinc-300 hover:bg-zinc-900 hover:text-white"
             >
               About
             </a>
-            <a 
-              href="#favorit" 
+            <a
+              href="#favorit"
               onClick={() => setMobileMenuOpen(false)}
               className="block px-3 py-2 rounded-md text-base font-medium text-zinc-300 hover:bg-zinc-900 hover:text-white"
             >
               Favorite Project
             </a>
-            <a 
-              href="#all" 
+            <a
+              href="#all"
               onClick={() => { setMobileMenuOpen(false); setProjectTab("web"); }}
               className="block px-3 py-2 rounded-md text-base font-medium text-zinc-300 hover:bg-zinc-900 hover:text-white"
             >
               All Projects
             </a>
-            <a 
-              href="#all" 
+            <a
+              href="#all"
               onClick={() => { setMobileMenuOpen(false); setProjectTab("design"); }}
               className="block px-3 py-2 rounded-md text-base font-medium text-zinc-300 hover:bg-zinc-900 hover:text-white"
             >
@@ -444,60 +470,28 @@ export default function App() {
       </nav>
 
       {/* HERO / HEADER */}
-      <header 
-        id="home" 
-        style={{ 
-          background: `
-            linear-gradient(to bottom, rgba(9,9,11,0.80) 0%, rgba(9,9,11,0.50) 45%, rgba(9,9,11,0.90) 100%),
-            repeating-linear-gradient(
-              0deg,
-              transparent,
-              transparent 79px,
-              rgba(139,92,246,0.10) 79px,
-              rgba(139,92,246,0.10) 80px
-            ),
-            repeating-linear-gradient(
-              90deg,
-              transparent,
-              transparent 79px,
-              rgba(99,102,241,0.10) 79px,
-              rgba(99,102,241,0.10) 80px
-            ),
-            #09090b
-          `
-        }}
-        className="relative pt-24 pb-16 md:pt-40 md:pb-24 text-center bg-center bg-no-repeat bg-cover flex flex-col items-center justify-center min-h-[90vh] overflow-hidden"
+      <header
+        id="home"
+        className="relative pt-24 pb-16 md:pt-40 md:pb-24 text-center bg-zinc-950 flex flex-col items-center justify-center min-h-[90vh] overflow-hidden"
       >
-        {/* Colored transparent cells scattered throughout the grid */}
-        <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
-          {/* Top-left area */}
-          <div className="absolute bg-violet-500/8 border border-violet-500/15" style={{width:80,height:80,top:80,left:160}} />
-          <div className="absolute bg-indigo-500/6 border border-indigo-500/12" style={{width:80,height:80,top:240,left:80}} />
-          <div className="absolute bg-violet-400/10 border border-violet-400/20" style={{width:80,height:80,top:160,left:320}} />
-          <div className="absolute bg-blue-500/7 border border-blue-500/14" style={{width:80,height:80,top:400,left:160}} />
-          <div className="absolute bg-indigo-400/8 border border-indigo-400/15" style={{width:80,height:80,top:320,left:0}} />
-          {/* Top-right area */}
-          <div className="absolute bg-violet-500/9 border border-violet-500/18" style={{width:80,height:80,top:80,right:240}} />
-          <div className="absolute bg-blue-400/7 border border-blue-400/14" style={{width:80,height:80,top:240,right:80}} />
-          <div className="absolute bg-indigo-500/8 border border-indigo-500/15" style={{width:80,height:80,top:160,right:320}} />
-          <div className="absolute bg-violet-400/6 border border-violet-400/12" style={{width:80,height:80,top:400,right:160}} />
-          <div className="absolute bg-blue-500/9 border border-blue-500/16" style={{width:80,height:80,top:320,right:0}} />
-          {/* Bottom scattered */}
-          <div className="absolute bg-violet-500/7 border border-violet-500/14" style={{width:80,height:80,bottom:160,left:240}} />
-          <div className="absolute bg-indigo-400/8 border border-indigo-400/16" style={{width:80,height:80,bottom:80,left:400}} />
-          <div className="absolute bg-blue-400/6 border border-blue-400/12" style={{width:80,height:80,bottom:160,right:240}} />
-          <div className="absolute bg-violet-500/9 border border-violet-500/18" style={{width:80,height:80,bottom:80,right:400}} />
-          {/* Middle outer sides */}
-          <div className="absolute bg-indigo-500/7 border border-indigo-500/13" style={{width:80,height:80,top:'35%',left:0}} />
-          <div className="absolute bg-violet-400/8 border border-violet-400/15" style={{width:80,height:80,top:'50%',left:80}} />
-          <div className="absolute bg-blue-500/6 border border-blue-500/12" style={{width:80,height:80,top:'35%',right:0}} />
-          <div className="absolute bg-indigo-400/9 border border-indigo-400/17" style={{width:80,height:80,top:'50%',right:80}} />
+        <div className="absolute inset-0 z-0">
+          <LightRays
+            raysOrigin="top-center"
+            raysColor="#8b5cf6"
+            raysSpeed={1.5}
+            lightSpread={0.8}
+            rayLength={1.2}
+            followMouse={true}
+            mouseInfluence={0.1}
+            noiseAmount={0.1}
+            distortion={0.05}
+          />
         </div>
 
         {/* Decorative ambient glow blobs */}
-        <div className="glow-blob bg-violet-600/10 w-[300px] h-[300px] sm:w-[500px] sm:h-[500px] top-10 left-10" />
-        <div className="glow-blob bg-blue-600/10 w-[250px] h-[250px] sm:w-[400px] sm:h-[400px] bottom-10 right-10" />
-        
+        <div className="glow-blob bg-violet-600/10 w-[300px] h-[300px] sm:w-[500px] sm:h-[500px] top-10 left-10 z-0" />
+        <div className="glow-blob bg-blue-600/10 w-[250px] h-[250px] sm:w-[400px] sm:h-[400px] bottom-10 right-10 z-0" />
+
 
         <div className="relative z-10 w-full max-w-7xl px-6 flex flex-col items-center">
           <div className="focus-in-expand max-w-4xl mx-auto flex flex-col items-center">
@@ -506,20 +500,26 @@ export default function App() {
             </div>
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 font-outfit text-white">
               Create Stunning Websites & Visuals
-              <span className="block bg-gradient-to-r from-violet-400 via-blue-400 to-indigo-400 bg-clip-text text-transparent mt-2 filter drop-shadow-[0_0_20px_rgba(139,92,246,0.4)]">
-                with Just a Concept
-              </span>
+              <div className="mt-2 flex justify-center w-full">
+                <GradientText
+                  colors={["#a78bfa", "#60a5fa", "#818cf8"]}
+                  animationSpeed={6}
+                  className="filter drop-shadow-[0_0_20px_rgba(139,92,246,0.4)] block"
+                >
+                  with Just a Concept
+                </GradientText>
+              </div>
             </h1>
             <p className="text-zinc-400 text-base md:text-lg max-w-2xl mx-auto mb-8 leading-relaxed font-light">
               Mengubah ide Anda menjadi aplikasi web interaktif berkualitas tinggi dan grafis visual menakjubkan dalam hitungan detik.
             </p>
-            
+
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10 relative z-20">
-              <a 
-                href="#all" 
+              <a
+                href="#all"
                 className="w-full sm:w-auto px-8 py-3.5 rounded-full bg-zinc-950 border border-zinc-800 hover:border-violet-500/60 text-white font-medium hover:bg-zinc-900 transition-all duration-300 shadow-[0_0_25px_rgba(99,102,241,0.2)] hover:shadow-[0_0_30px_rgba(99,102,241,0.35)] flex items-center justify-center gap-2 group"
               >
-                Lihat Projek Saya 
+                Lihat Projek Saya
                 <span className="transform group-hover:translate-x-1 transition-transform">→</span>
               </a>
               <a href="#about" className="w-full sm:w-auto px-8 py-3.5 rounded-full bg-zinc-900 border border-zinc-800 text-zinc-300 hover:text-white font-medium hover:bg-zinc-800 transition-all duration-300 flex items-center justify-center gap-2">
@@ -527,7 +527,7 @@ export default function App() {
               </a>
             </div>
           </div>
-          
+
           {/* Interactive 3D infinity Ring Slider - Located below the CTA button */}
           <div className="w-full my-6">
             <ThreeDRingSlider />
@@ -561,30 +561,34 @@ export default function App() {
       <section className="py-20 bg-zinc-950 border-t border-zinc-900 relative overflow-hidden">
         {/* Subtle background glow */}
         <div className="glow-blob bg-violet-800/10 w-[400px] h-[400px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
-        
+
         <div className="max-w-7xl mx-auto px-6 relative z-10">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
             {/* Web Dev skill */}
-            <div className="p-8 rounded-2xl bg-zinc-900/40 border border-zinc-800/80 card-glow-hover group">
-              <div className="w-14 h-14 rounded-xl bg-violet-600/10 border border-violet-500/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(139,92,246,0.15)]">
-                <img src="/asset/logo/logos_web-dev-icon.png" className="w-8 h-8 object-contain" alt="Web Dev icon" />
+            <BorderGlow borderRadius={16} backgroundColor="#18181b" className="h-full w-full">
+              <div className="p-8 rounded-2xl bg-zinc-900/40 border border-zinc-800/80 group h-full">
+                <div className="w-14 h-14 rounded-xl bg-violet-600/10 border border-violet-500/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(139,92,246,0.15)]">
+                  <img src="./asset/logo/logos_web-dev-icon.png" className="w-8 h-8 object-contain" alt="Web Dev icon" />
+                </div>
+                <h3 className="text-2xl font-bold text-zinc-100 mb-4">Web Development</h3>
+                <p className="text-zinc-400 leading-relaxed text-base">
+                  Mengembangkan website dengan pendekatan modern menggunakan Laravel, React JS, JavaScript, dan Tailwind CSS. Terbiasa membangun dashboard interaktif, sistem kasir digital, manajemen produk, dan integrasi AI chatbot.
+                </p>
               </div>
-              <h3 className="text-2xl font-bold text-zinc-100 mb-4">Web Development</h3>
-              <p className="text-zinc-400 leading-relaxed text-base">
-                Mengembangkan website dengan pendekatan modern menggunakan Laravel, React JS, JavaScript, dan Tailwind CSS. Terbiasa membangun dashboard interaktif, sistem kasir digital, manajemen produk, dan integrasi AI chatbot.
-              </p>
-            </div>
-            
+            </BorderGlow>
+
             {/* Graphic Design skill */}
-            <div className="p-8 rounded-2xl bg-zinc-900/40 border border-zinc-800/80 card-glow-hover group">
-              <div className="w-14 h-14 rounded-xl bg-violet-600/10 border border-violet-500/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(139,92,246,0.15)]">
-                <img src="/asset/logo/fluent-color_design-ideas-32.png" className="w-8 h-8 object-contain" alt="Design icon" />
+            <BorderGlow borderRadius={16} backgroundColor="#18181b" className="h-full w-full">
+              <div className="p-8 rounded-2xl bg-zinc-900/40 border border-zinc-800/80 group h-full">
+                <div className="w-14 h-14 rounded-xl bg-violet-600/10 border border-violet-500/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(139,92,246,0.15)]">
+                  <img src="./asset/logo/fluent-color_design-ideas-32.png" className="w-8 h-8 object-contain" alt="Design icon" />
+                </div>
+                <h3 className="text-2xl font-bold text-zinc-100 mb-4">Graphic Design</h3>
+                <p className="text-zinc-400 leading-relaxed text-base">
+                  Berpengalaman dalam pembuatan desain poster manipulation, visual branding, manipulasi foto, dan 3D visualizer menggunakan Photoshop serta SketchUp. Pernah meraih berbagai kejuaraan dari tingkat Kabupaten hingga Nasional.
+                </p>
               </div>
-              <h3 className="text-2xl font-bold text-zinc-100 mb-4">Graphic Design</h3>
-              <p className="text-zinc-400 leading-relaxed text-base">
-                Berpengalaman dalam pembuatan desain poster manipulation, visual branding, manipulasi foto, dan 3D visualizer menggunakan Photoshop serta SketchUp. Pernah meraih berbagai kejuaraan dari tingkat Kabupaten hingga Nasional.
-              </p>
-            </div>
+            </BorderGlow>
           </div>
         </div>
       </section>
@@ -635,275 +639,329 @@ export default function App() {
 
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 items-start">
 
-            {/* LEFT — Photo + Info card */}
+            {/* LEFT — Photo + Info card (Premium Layered Design) */}
             <div className="lg:col-span-2 flex flex-col items-center gap-6 w-full">
-              {/* Photo frame with glowing ring */}
-              <div className="relative w-full max-w-[260px] mx-auto">
-                <div className="absolute -inset-1 rounded-3xl bg-gradient-to-tr from-violet-600 via-blue-500 to-indigo-600 blur-sm opacity-60 animate-pulse" />
-                <div className="relative rounded-3xl overflow-hidden border-2 border-zinc-800 shadow-2xl w-full aspect-[4/5]">
-                  <img
-                    className="w-full h-full object-cover object-center hover:scale-105 transition-transform duration-700"
-                    src="/asset/e3438035-c605-4a2f-9100-2431522526c5.jfif"
-                    alt="Hafiz Alwan"
-                  />
-                  {/* Gradient overlay bottom */}
-                  <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-zinc-950/80 to-transparent" />
-                  <div className="absolute bottom-4 left-0 right-0 text-center">
-                    <p className="text-white text-sm font-bold">Hafiz Alwan</p>
-                    <p className="text-violet-400 text-xs">Fullstack Dev & Designer</p>
+              <div className="relative w-full max-w-[320px] mx-auto group">
+
+                {/* Decorative background elements */}
+                <div className="absolute -top-6 -left-6 w-32 h-32 bg-violet-500/10 rounded-full blur-2xl group-hover:bg-violet-500/20 transition-all duration-700" />
+                <div className="absolute -bottom-4 -right-4 w-24 h-24 bg-blue-500/10 rounded-full blur-xl group-hover:bg-blue-500/20 transition-all duration-700" />
+
+                {/* Background decorative card (rotated) */}
+                <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-violet-600/20 to-blue-600/20 border border-violet-500/10 transform rotate-3 group-hover:rotate-1 transition-transform duration-500 scale-[1.02]" />
+
+                {/* Grid pattern accent */}
+                <div className="absolute -top-3 -right-3 w-16 h-16 opacity-20 group-hover:opacity-40 transition-opacity duration-500"
+                  style={{
+                    backgroundImage: "radial-gradient(circle, #8b5cf6 1px, transparent 1px)",
+                    backgroundSize: "8px 8px"
+                  }}
+                />
+
+                {/* Main photo card */}
+                <div className="relative rounded-2xl overflow-hidden border border-zinc-800/80 shadow-2xl shadow-black/40 transform -rotate-1 group-hover:rotate-0 transition-all duration-500 group-hover:shadow-violet-500/10">
+                  {/* Photo */}
+                  <div className="aspect-[3/4] w-full overflow-hidden bg-zinc-900">
+                    <img
+                      className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
+                      src="./asset/e3438035-c605-4a2f-9100-2431522526c5.jfif"
+                      alt="Hafiz Alwan"
+                    />
+                  </div>
+
+                  {/* Bottom gradient overlay with info */}
+                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-zinc-950 via-zinc-950/80 to-transparent pt-16 pb-5 px-5">
+                    <h3 className="text-xl font-bold text-zinc-100 tracking-tight">Hafiz Alwan Susilo</h3>
+                    <p className="text-violet-400 text-sm font-medium mt-0.5">Fullstack Dev & Designer</p>
+                  </div>
+
+                  {/* Top corner accent line */}
+                  <div className="absolute top-0 left-0 w-16 h-[3px] bg-gradient-to-r from-violet-500 to-transparent rounded-br" />
+                  <div className="absolute top-0 left-0 h-16 w-[3px] bg-gradient-to-b from-violet-500 to-transparent rounded-br" />
+                </div>
+
+                {/* Floating status badge */}
+                <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 z-10">
+                  <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-zinc-900/90 backdrop-blur-md border border-zinc-800 shadow-lg">
+                    <span className="relative flex h-2 w-2">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
+                    </span>
+                    <span className="text-emerald-400 text-[11px] font-semibold tracking-wide">Available for Hire</span>
                   </div>
                 </div>
               </div>
 
-              {/* Quick info glass card */}
-              <div className="w-full rounded-2xl border border-zinc-800/80 bg-zinc-900/50 backdrop-blur-sm p-4 sm:p-5 space-y-3">
-                {[
-                  { icon: "ph:graduation-cap-bold", label: "Kampus", value: "Telkom University", color: "text-violet-400" },
-                  { icon: "ph:map-pin-bold", label: "Lokasi", value: "Purwokerto, Indonesia", color: "text-blue-400" },
-                  { icon: "ph:briefcase-bold", label: "Status", value: "Available for Hire", color: "text-indigo-400" },
-                  { icon: "ph:lightning-bold", label: "Fokus", value: "Web Dev & UI Design", color: "text-violet-300" },
-                ].map((item, i) => (
-                  <div key={i} className="flex items-center gap-3">
-                    <Icon icon={item.icon} className={`text-xl w-7 flex-shrink-0 ${item.color}`} />
-                    <div className="min-w-0">
-                      <p className="text-zinc-500 text-[11px] uppercase tracking-wider font-medium">{item.label}</p>
-                      <p className="text-zinc-200 text-sm font-medium truncate">{item.value}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Social buttons */}
-              <div className="flex gap-3 w-full">
+              {/* Social Links — Pill style */}
+              <div className="flex items-center gap-3 mt-4">
                 <a href="https://fiverr.com" target="_blank" rel="noopener noreferrer"
-                  className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-sm font-semibold shadow-lg shadow-violet-600/25 hover:shadow-violet-600/40 hover:scale-105 transition-all duration-300">
-                  <img src="/asset/logo/Fiverr-Logo-500x281.png" className="h-[18px] brightness-0 invert" alt="Fiverr" />
+                  className="flex items-center gap-2 px-4 py-2 rounded-full bg-zinc-900/80 border border-zinc-800 text-zinc-400 hover:text-emerald-400 hover:border-emerald-500/30 hover:shadow-lg hover:shadow-emerald-500/5 active:scale-95 transition-all duration-300 text-xs font-medium"
+                  title="Fiverr"
+                >
+                  <Icon icon="simple-icons:fiverr" className="text-sm" />
+                  Fiverr
                 </a>
-                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer"
-                  className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-zinc-800 border border-zinc-700 text-zinc-300 text-sm font-semibold hover:bg-zinc-700 hover:text-white hover:scale-105 transition-all duration-300">
+                <a href="https://instagram.com/hafizalwan" target="_blank" rel="noopener noreferrer"
+                  className="flex items-center gap-2 px-4 py-2 rounded-full bg-zinc-900/80 border border-zinc-800 text-zinc-400 hover:text-pink-400 hover:border-pink-500/30 hover:shadow-lg hover:shadow-pink-500/5 active:scale-95 transition-all duration-300 text-xs font-medium"
+                  title="Instagram"
+                >
+                  <Icon icon="ph:instagram-logo-bold" className="text-sm" />
                   Instagram
+                </a>
+                <a href="mailto:hafizalwan.susilo@gmail.com"
+                  className="flex items-center gap-2 px-4 py-2 rounded-full bg-zinc-900/80 border border-zinc-800 text-zinc-400 hover:text-violet-400 hover:border-violet-500/30 hover:shadow-lg hover:shadow-violet-500/5 active:scale-95 transition-all duration-300 text-xs font-medium"
+                  title="Email"
+                >
+                  <Icon icon="ph:envelope-bold" className="text-sm" />
+                  Email
                 </a>
               </div>
             </div>
 
-            {/* RIGHT — Tab content */}
-            <div className="lg:col-span-3">
-              {/* Tab navigation */}
-              <div className="flex flex-wrap gap-2 p-1.5 rounded-2xl bg-zinc-900/60 border border-zinc-800/80 backdrop-blur-sm mb-8 w-full sm:w-fit">
-                {[
-                  { key: "me", label: "About Me", icon: "ph:user-circle-bold" },
-                  { key: "education", label: "Pendidikan", icon: "ph:graduation-cap-bold" },
-                  { key: "work", label: "Pengalaman", icon: "ph:briefcase-bold" },
-                ].map((tab) => (
-                  <button
-                    key={tab.key}
-                    onClick={() => setAboutTab(tab.key)}
-                    className={`flex-1 sm:flex-none px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-300 flex items-center justify-center gap-1.5 sm:gap-2 ${
-                      aboutTab === tab.key
-                        ? "bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-lg shadow-violet-600/30"
-                        : "text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/60"
-                    }`}
-                  >
-                    <Icon icon={tab.icon} className="text-base" />
-                    {tab.label}
-                  </button>
-                ))}
+            {/* RIGHT — VS Code Snippet */}
+            <div className="lg:col-span-3 w-full flex flex-col gap-6 animate-in fade-in duration-300">
+              <div className={`rounded-t-xl overflow-hidden bg-[#1a1b26]/50 backdrop-blur-md border-t border-l border-r shadow-2xl font-mono text-sm lg:text-base w-full transition-all duration-300 relative ${isHeaderHovered ? "shadow-violet-500/10 border-violet-500/30" : "border-[#292e42]"}`}>
+                {/* Window Header */}
+                <div
+                  onMouseEnter={() => setIsHeaderHovered(true)}
+                  onMouseLeave={() => setIsHeaderHovered(false)}
+                  className="bg-[#16161e] opacity-100 z-10 relative px-4 py-2 flex items-center justify-between border-b border-[#292e42] cursor-default"
+                >
+                  <div className="flex gap-2">
+                    <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                    <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+                    <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                  </div>
+                  <div className="text-[#565f89] text-xs font-sans tracking-wide">about_me.json</div>
+                  <div className="w-12"></div> {/* spacer for centering */}
+                </div>
+                {/* Editor Body */}
+                <div className="p-4 flex text-zinc-300 overflow-x-auto">
+                  {/* Line Numbers */}
+                  <div className="flex flex-col text-[#565f89] pr-4 select-none text-right border-r border-[#292e42] mr-4">
+                    <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span><span>16</span><span>17</span><span>18</span><span>19</span>
+                  </div>
+                  {/* Code */}
+                  <div className="flex flex-col whitespace-pre">
+                    <span className="text-[#bb9af7]">{`{`}</span>
+                    <span>  <span className="text-[#7aa2f7]">"name"</span>: <span className="text-[#9ece6a]">"Hafiz Alwan Susilo"</span>,</span>
+                    <span>  <span className="text-[#7aa2f7]">"role"</span>: <span className="text-[#9ece6a]">"Fullstack Dev & Designer"</span>,</span>
+                    <span>  <span className="text-[#7aa2f7]">"university"</span>: <span className="text-[#9ece6a]">"Telkom University Purwokerto"</span>,</span>
+                    <span>  <span className="text-[#7aa2f7]">"location"</span>: <span className="text-[#9ece6a]">"Purwokerto, Indonesia"</span>,</span>
+                    <span>  <span className="text-[#7aa2f7]">"status"</span>: <span className="text-[#9ece6a]">"Available for Hire"</span>,</span>
+                    <span>  <span className="text-[#7aa2f7]">"focus"</span>: <span className="text-[#9ece6a]">"Web Dev & UI Design"</span>,</span>
+                    <span>  <span className="text-[#7aa2f7]">"socials"</span>: <span className="text-[#bb9af7]">{`{`}</span></span>
+                    <span>    <span className="text-[#7aa2f7]">"instagram"</span>: <a href="https://instagram.com" target="_blank" className="text-[#9ece6a] hover:underline">"@hafizalwan"</a>,</span>
+                    <span>    <span className="text-[#7aa2f7]">"fiverr"</span>: <a href="https://fiverr.com" target="_blank" className="text-[#9ece6a] hover:underline">"fiverr.com/hafizalwan"</a></span>
+                    <span>  <span className="text-[#bb9af7]">{`}`}</span>,</span>
+                    <span>  <span className="text-[#7aa2f7]">"description"</span>: <span className="text-[#9ece6a]">"Memiliki minat besar di bidang pemrograman,"</span></span>
+                    <span>                 <span className="text-[#9ece6a]">"desain web, dan pengembangan aplikasi interaktif."</span>,</span>
+                    <span>  <span className="text-[#7aa2f7]">"awards"</span>: <span className="text-[#bb9af7]">[</span></span>
+                    <span>    <span className="text-[#9ece6a]">"Juara 1 Desain Poster (Kabupaten & Provinsi)"</span>,</span>
+                    <span>    <span className="text-[#9ece6a]">"Juara 1 Web Design (Universitas Soedirman)"</span></span>
+                    <span>  <span className="text-[#bb9af7]">]</span></span>
+                    <span className="text-[#bb9af7]">{`}`}</span>
+                  </div>
+                </div>
+                {/* Bottom Black Gradient Overlay */}
+                <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-zinc-950 via-zinc-950/85 to-transparent pointer-events-none z-20" />
               </div>
 
-              {/* Tab: About Me */}
-              {aboutTab === "me" && (
-                <div className="animate-in fade-in duration-300 space-y-6">
-                  <div>
-                    <h3 className="text-2xl md:text-3xl font-bold text-zinc-100 tracking-tight mb-1 flex items-center gap-3">Halo, Saya Hafiz! <Icon icon="ph:hand-waving-bold" className="text-yellow-400" /></h3>
-                    <div className="w-12 h-0.5 bg-gradient-to-r from-violet-500 to-transparent rounded-full mt-2 mb-5" />
-                    <p className="text-zinc-400 leading-relaxed">
-                      Saya <span className="text-violet-400 font-semibold">Hafiz Alwan Susilo</span>, seorang mahasiswa di Telkom University Purwokerto dengan minat besar di bidang pemrograman, desain web, dan pengembangan aplikasi interaktif.
-                    </p>
-                    <p className="text-zinc-400 leading-relaxed mt-4">
-                      Pernah meraih <span className="text-white font-medium">Juara 1 Desain Poster</span> tingkat Kabupaten dan Provinsi (2023–2024), serta <span className="text-white font-medium">Juara 1 Web Design</span> di Universitas Soedirman. Aktif di animasi dan pemrograman sejak SMP.
-                    </p>
-                  </div>
-
-                  {/* Tech Stack with logos */}
-                  <div>
-                    <p className="text-zinc-500 text-xs uppercase tracking-widest font-semibold mb-3">Tech Stack</p>
-                    <div className="flex flex-wrap gap-2">
-                      {[
-                        { name: "React JS",       icon: "logos:react",                bg: "bg-sky-500/8",      border: "border-sky-500/20" },
-                        { name: "Laravel",         icon: "logos:laravel",              bg: "bg-red-500/8",      border: "border-red-500/20" },
-                        { name: "JavaScript",      icon: "logos:javascript",           bg: "bg-yellow-400/8",   border: "border-yellow-400/20" },
-                        { name: "Tailwind CSS",    icon: "logos:tailwindcss-icon",     bg: "bg-cyan-400/8",     border: "border-cyan-400/20" },
-                        { name: "PHP",             icon: "logos:php",                  bg: "bg-indigo-400/8",   border: "border-indigo-400/20" },
-                        { name: "MySQL",           icon: "logos:mysql",                bg: "bg-orange-400/8",   border: "border-orange-400/20" },
-                        { name: "Photoshop",       icon: "logos:adobe-photoshop",      bg: "bg-blue-500/8",     border: "border-blue-500/20" },
-                        { name: "SketchUp",        icon: "simple-icons:sketchup",      bg: "bg-blue-400/8",     border: "border-blue-400/20" },
-                        { name: "Figma",           icon: "logos:figma",                bg: "bg-violet-400/8",   border: "border-violet-400/20" },
-                        { name: "Flowise AI",      icon: "ph:robot-bold",              bg: "bg-violet-500/8",   border: "border-violet-500/20" },
-                        { name: "Gemini",          icon: "simple-icons:googlegemini",  bg: "bg-blue-500/8",     border: "border-blue-500/20" },
-                        { name: "ChatGPT",         icon: "simple-icons:openai",        bg: "bg-emerald-500/8",  border: "border-emerald-500/20" },
-                        { name: "Canva",           icon: "logos:canva",                bg: "bg-cyan-500/8",     border: "border-cyan-500/20" },
-                        { name: "CorelDRAW",       icon: "simple-icons:coreldraw",     bg: "bg-green-500/8",    border: "border-green-500/20" },
-                        { name: "Git",             icon: "logos:git-icon",             bg: "bg-orange-500/8",   border: "border-orange-500/20" },
-                        { name: "Apps Script",     icon: "logos:google-icon",          bg: "bg-blue-400/8",     border: "border-blue-400/20" },
-                      ].map((tech) => (
-                        <div
-                          key={tech.name}
-                          className={`flex items-center gap-2 px-3 py-1.5 rounded-xl ${tech.bg} border ${tech.border} hover:brightness-125 hover:scale-105 transition-all duration-200 group cursor-default`}
-                        >
-                          <Icon icon={tech.icon} className="text-lg flex-shrink-0" />
-                          <span className="text-zinc-300 text-xs font-medium group-hover:text-white transition-colors whitespace-nowrap">{tech.name}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Achievement highlight cards */}
-                  <div className="grid grid-cols-2 gap-3">
-                    {[
-                      { icon: "ph:trophy-bold", color: "text-yellow-400", value: "Juara 1", desc: "Web Design Competition" },
-                      { icon: "ph:palette-bold", color: "text-violet-400", value: "1120+", desc: "Desain Visual Dibuat" },
-                      { icon: "ph:star-bold", color: "text-blue-400", value: "9+", desc: "Prestasi & Penghargaan" },
-                      { icon: "ph:rocket-launch-bold", color: "text-indigo-400", value: "8+", desc: "Web App Dibangun" },
-                    ].map((item, i) => (
-                      <div key={i} className="p-4 rounded-xl bg-zinc-900/50 border border-zinc-800/80 hover:border-violet-500/30 hover:bg-zinc-900 transition-all duration-300 group">
-                        <Icon icon={item.icon} className={`text-2xl ${item.color}`} />
-                        <p className="text-white font-bold text-lg mt-2 group-hover:text-violet-300 transition-colors">{item.value}</p>
-                        <p className="text-zinc-500 text-xs mt-0.5">{item.desc}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Tab: Education */}
-              {aboutTab === "education" && (
-                <div className="animate-in fade-in duration-300 space-y-5">
-                  <div>
-                    <h3 className="text-2xl font-bold text-zinc-100 mb-1">Pendidikan</h3>
-                    <div className="w-12 h-0.5 bg-gradient-to-r from-violet-500 to-transparent rounded-full mt-2 mb-5" />
-                  </div>
-                  {[
-                    {
-                      active: true,
-                      period: "2023 – Sekarang",
-                      institution: "Telkom University Purwokerto",
-                      major: "S1 Rekayasa Perangkat Lunak",
-                      icon: "ph:graduation-cap-bold",
-                      tags: ["Informatika", "Software Engineering"],
-                    },
-                    {
-                      active: false,
-                      period: "2020 – 2023",
-                      institution: "SMK Negeri 1 Purwokerto",
-                      major: "Rekayasa Perangkat Lunak (RPL)",
-                      icon: "ph:building-bold",
-                      tags: ["Programming", "Database", "Web Dev"],
-                    },
-                  ].map((edu, i) => (
-                    <div key={i} className={`relative p-5 rounded-2xl border transition-all duration-300 hover:scale-[1.01] ${edu.active ? "bg-violet-600/5 border-violet-500/30 shadow-[0_0_30px_rgba(139,92,246,0.08)]" : "bg-zinc-900/40 border-zinc-800/80"}`}>
-                      <div className="flex items-start gap-4">
-                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${edu.active ? "bg-violet-600/15 border border-violet-500/30" : "bg-zinc-800 border border-zinc-700"}`}>
-                          <Icon icon={edu.icon} className={`text-2xl ${edu.active ? "text-violet-400" : "text-zinc-400"}`} />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2 mb-1">
-                            <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${edu.active ? "bg-violet-600/20 text-violet-400" : "bg-zinc-800 text-zinc-500"}`}>{edu.period}</span>
-                            {edu.active && <span className="text-xs font-bold text-emerald-400 animate-pulse">● Aktif</span>}
-                          </div>
-                          <h4 className="text-base font-bold text-zinc-100">{edu.institution}</h4>
-                          <p className="text-zinc-400 text-sm mt-0.5">{edu.major}</p>
-                          <div className="flex flex-wrap gap-1.5 mt-3">
-                            {edu.tags.map((tag) => (
-                              <span key={tag} className="text-[10px] px-2 py-0.5 rounded-md bg-zinc-800 border border-zinc-700 text-zinc-400">{tag}</span>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              {/* Tab: Work Experience */}
-              {aboutTab === "work" && (
-                <div className="animate-in fade-in duration-300 space-y-5">
-                  <div>
-                    <h3 className="text-2xl font-bold text-zinc-100 mb-1">Work Experience</h3>
-                    <div className="w-12 h-0.5 bg-gradient-to-r from-violet-500 to-transparent rounded-full mt-2 mb-5" />
-                  </div>
-                  {[
-                    {
-                      active: true,
-                      type: "Full Time",
-                      period: "2025 – Sekarang",
-                      company: "Dr Kreatif",
-                      role: "Graphic Designer & WordPress Admin",
-                      icon: "ph:palette-bold",
-                      bullets: ["Desain visual komersial (logo, brosur, materi promo)", "Modeling 3D dengan SketchUp", "Mengelola website klien berbasis WordPress"],
-                    },
-                    {
-                      active: false,
-                      type: "Internship",
-                      period: "4 Bulan",
-                      company: "CV. Prabu Bima Tech",
-                      role: "Fullstack Developer",
-                      icon: "ph:code-bold",
-                      bullets: ["Web App E-Voting Pemilihan Ketua OSIS", "E-commerce \"Baju Bagus Inc\" terintegrasi AI Chatbot (Flowise)"],
-                    },
-                    {
-                      active: false,
-                      type: "Internship",
-                      period: "3 Bulan",
-                      company: "CV. JVM Purwokerto",
-                      role: "Graphic Designer",
-                      icon: "ph:pen-nib-bold",
-                      bullets: ["Predikat \"Excellent Performance\" peserta terbaik", "371 desain feed Instagram untuk 4 brand berbeda"],
-                    },
-                  ].map((work, i) => (
-                    <div key={i} className={`relative p-5 rounded-2xl border transition-all duration-300 hover:scale-[1.01] ${work.active ? "bg-violet-600/5 border-violet-500/30 shadow-[0_0_30px_rgba(139,92,246,0.08)]" : "bg-zinc-900/40 border-zinc-800/80"}`}>
-                      <div className="flex items-start gap-4">
-                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${work.active ? "bg-violet-600/15 border border-violet-500/30" : "bg-zinc-800 border border-zinc-700"}`}>
-                          <Icon icon={work.icon} className={`text-2xl ${work.active ? "text-violet-400" : "text-zinc-400"}`} />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2 mb-1 flex-wrap">
-                            <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${work.active ? "bg-violet-600/20 text-violet-400" : "bg-zinc-800 text-zinc-500"}`}>{work.type}</span>
-                            <span className="text-zinc-600 text-xs">{work.period}</span>
-                            {work.active && <span className="text-xs font-bold text-emerald-400 animate-pulse">● Aktif</span>}
-                          </div>
-                          <h4 className="text-base font-bold text-zinc-100">{work.company}</h4>
-                          <p className="text-violet-400 text-sm font-medium mt-0.5">{work.role}</p>
-                          <ul className="mt-3 space-y-1">
-                            {work.bullets.map((b, bi) => (
-                              <li key={bi} className="text-zinc-400 text-sm flex items-start gap-2">
-                                <Icon icon="ph:caret-right-bold" className="text-violet-500 mt-0.5 flex-shrink-0" />
-                                {b}
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
 
             </div>
           </div>
         </div>
       </section>
 
-      {/* MARQUEE LOOP */}
-      <section className="relative overflow-hidden py-10 bg-zinc-900 border-t border-b border-zinc-800">
-        <div className="flex whitespace-nowrap animate-marquee">
-          <marquee className="text-white text-2xl font-bold tracking-wider" scrollamount="12" behavior="scroll" direction="left">
-            PORTFOLIO SHOWCASE • WEB DEVELOPMENT • REACT JS • LARAVEL • TAILWIND CSS • GRAPHIC DESIGN • POSTER MANIPULATION • UI/UX DESIGN • FLOWISE AI • RESPONSIVE LAYOUT • FULLSTACK WEB DEVELOPER • 
-          </marquee>
+      {/* RIWAYAT PENDIDIKAN & PENGALAMAN */}
+      <section id="journey" className="py-20 bg-zinc-950 bg-dots relative border-b border-zinc-900">
+        <div className="max-w-7xl mx-auto px-6 relative z-10">
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/30 text-violet-400 text-sm font-semibold mb-4">
+              <Icon icon="ph:map-trifold-bold" /> Perjalanan Saya
+            </div>
+            <h2 className="text-3xl md:text-5xl font-bold text-zinc-100 tracking-tight">
+              Pendidikan & Pengalaman
+            </h2>
+            <div className="w-16 h-1 bg-gradient-to-r from-violet-500 to-blue-500 rounded-full mx-auto mt-4" />
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+            {/* COLUMN 1: PENDIDIKAN */}
+            <div>
+              <div className="flex items-center gap-3 mb-8">
+                <div className="w-10 h-10 rounded-lg bg-blue-500/15 border border-blue-500/30 flex items-center justify-center text-blue-400 text-xl">
+                  <Icon icon="ph:graduation-cap-bold" />
+                </div>
+                <h3 className="text-2xl font-bold text-zinc-100">Riwayat Belajar</h3>
+              </div>
+
+              <div className="relative border-l border-zinc-800/80 ml-5 space-y-12">
+                {[
+                  {
+                    active: true,
+                    period: "2023 – Sekarang",
+                    institution: "Telkom University Purwokerto",
+                    major: "S1 Rekayasa Perangkat Lunak",
+                    tags: ["Informatika", "Software Engineering"],
+                  },
+                  {
+                    active: false,
+                    period: "2020 – 2023",
+                    institution: "SMK Negeri 1 Purwokerto",
+                    major: "Rekayasa Perangkat Lunak (RPL)",
+                    tags: ["Programming", "Database", "Web Dev"],
+                  },
+                ].map((edu, i) => (
+                  <div key={i} className="relative pl-8 group">
+                    {/* Dot on Timeline */}
+                    <span className={`absolute -left-[9px] top-1.5 w-4 h-4 rounded-full border-4 ${edu.active ? "bg-blue-400 border-zinc-950 scale-125 ring-4 ring-blue-500/20" : "bg-zinc-800 border-zinc-950"} transition-all duration-300 group-hover:scale-125`} />
+
+                    <span className={`inline-block text-xs font-semibold px-2.5 py-0.5 rounded-full mb-3 ${edu.active ? "bg-blue-600/20 text-blue-400" : "bg-zinc-800/60 text-zinc-500"}`}>
+                      {edu.period}
+                    </span>
+                    <h4 className="text-xl font-bold text-zinc-100 group-hover:text-blue-400 transition-colors">{edu.institution}</h4>
+                    <p className="text-zinc-400 text-sm mt-1">{edu.major}</p>
+                    <div className="flex flex-wrap gap-2 mt-4">
+                      {edu.tags.map((tag) => (
+                        <span key={tag} className="text-xs px-2 py-0.5 rounded bg-zinc-900 border border-zinc-800 text-zinc-500">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* COLUMN 2: PENGALAMAN */}
+            <div>
+              <div className="flex items-center gap-3 mb-8">
+                <div className="w-10 h-10 rounded-lg bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400 text-xl">
+                  <Icon icon="ph:briefcase-bold" />
+                </div>
+                <h3 className="text-2xl font-bold text-zinc-100">Karir Profesional</h3>
+              </div>
+
+              <div className="relative border-l border-zinc-800/80 ml-5 space-y-12">
+                {[
+                  {
+                    active: true,
+                    type: "Full Time",
+                    period: "2025 – Sekarang",
+                    company: "Dr Kreatif",
+                    role: "Graphic Designer & WordPress Admin",
+                    bullets: ["Desain visual komersial (logo, brosur, promo)", "Modeling 3D dengan SketchUp", "Mengelola website WordPress"],
+                  },
+                  {
+                    active: false,
+                    type: "Internship",
+                    period: "4 Bulan",
+                    company: "CV. Prabu Bima Tech",
+                    role: "Fullstack Developer",
+                    bullets: ["Web App E-Voting Ketua OSIS", "E-commerce dengan AI Chatbot (Flowise)"],
+                  },
+                  {
+                    active: false,
+                    type: "Internship",
+                    period: "3 Bulan",
+                    company: "CV. JVM Purwokerto",
+                    role: "Graphic Designer",
+                    bullets: ["Predikat \"Excellent Performance\"", "371 desain feed Instagram 4 brand"],
+                  },
+                ].map((work, i) => (
+                  <div key={i} className="relative pl-8 group">
+                    {/* Dot on Timeline */}
+                    <span className={`absolute -left-[9px] top-1.5 w-4 h-4 rounded-full border-4 ${work.active ? "bg-emerald-400 border-zinc-950 scale-125 ring-4 ring-emerald-500/20" : "bg-zinc-800 border-zinc-950"} transition-all duration-300 group-hover:scale-125`} />
+
+                    <div className="flex items-center gap-2 mb-3">
+                      <span className={`text-xs font-semibold px-2.5 py-0.5 rounded-full ${work.active ? "bg-emerald-600/20 text-emerald-400" : "bg-zinc-800/60 text-zinc-500"}`}>
+                        {work.type}
+                      </span>
+                      <span className="text-zinc-500 text-xs font-medium">{work.period}</span>
+                    </div>
+                    <h4 className="text-xl font-bold text-zinc-100 group-hover:text-emerald-400 transition-colors">{work.company}</h4>
+                    <p className="text-emerald-500/80 text-sm font-medium mt-1">{work.role}</p>
+                    <ul className="mt-4 space-y-2">
+                      {work.bullets.map((b, bi) => (
+                        <li key={bi} className="text-zinc-400 text-sm flex items-start gap-2">
+                          <Icon icon="ph:caret-right-bold" className="text-emerald-500 mt-1 flex-shrink-0" />
+                          <span className="leading-relaxed">{b}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
+      {/* MARQUEE LOOP */}
+      <section className="relative overflow-hidden py-10 bg-zinc-900 bg-dots border-t border-b border-zinc-800">
+        <ScrollVelocity
+          texts={[
+            (
+              <div className="flex items-center gap-16 px-8 grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-500">
+                {[
+                  { name: "React JS", icon: "logos:react" },
+                  { name: "Laravel", icon: "logos:laravel" },
+                  { name: "Tailwind CSS", icon: "logos:tailwindcss-icon" },
+                  { name: "JavaScript", icon: "logos:javascript" },
+                  { name: "Node.js", icon: "logos:nodejs-icon" },
+                  { name: "MySQL", icon: "logos:mysql" },
+                  { name: "Linux", icon: "logos:linux-tux" },
+                  { name: "Gemini", icon: "logos:google-gemini" },
+                  { name: "ChatGPT", icon: "logos:openai-icon" },
+                  { name: "Claude AI", icon: "logos:anthropic-icon" },
+                  { name: "Flowise AI", icon: "ph:robot-bold" },
+                  { name: "Apps Script", icon: "logos:google-apps-script" },
+                  { name: "Google Sheets", icon: "vscode-icons:file-type-excel" },
+                  { name: "Figma", icon: "logos:figma" },
+                  { name: "Git", icon: "logos:git-icon" }
+                ].map((tech) => (
+                  <div key={tech.name} className="flex items-center gap-4">
+                    <Icon icon={tech.icon} className="w-12 h-12 md:w-16 md:h-16" />
+                    <span className="text-2xl md:text-3xl font-bold text-zinc-200 whitespace-nowrap">{tech.name}</span>
+                  </div>
+                ))}
+              </div>
+            ),
+            (
+              <div className="flex items-center gap-16 px-8 mt-6 md:mt-10 grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-500">
+                {[
+                  { name: "React JS", icon: "logos:react" },
+                  { name: "Laravel", icon: "logos:laravel" },
+                  { name: "Tailwind CSS", icon: "logos:tailwindcss-icon" },
+                  { name: "JavaScript", icon: "logos:javascript" },
+                  { name: "Node.js", icon: "logos:nodejs-icon" },
+                  { name: "MySQL", icon: "logos:mysql" },
+                  { name: "Linux", icon: "logos:linux-tux" },
+                  { name: "Gemini", icon: "logos:google-gemini" },
+                  { name: "ChatGPT", icon: "logos:openai-icon" },
+                  { name: "Claude AI", icon: "logos:anthropic-icon" },
+                  { name: "Flowise AI", icon: "ph:robot-bold" },
+                  { name: "Apps Script", icon: "logos:google-apps-script" },
+                  { name: "Google Sheets", icon: "vscode-icons:file-type-excel" },
+                  { name: "Figma", icon: "logos:figma" },
+                  { name: "Git", icon: "logos:git-icon" }
+                ].map((tech) => (
+                  <div key={tech.name + "_2"} className="flex items-center gap-4">
+                    <Icon icon={tech.icon} className="w-12 h-12 md:w-16 md:h-16" />
+                    <span className="text-2xl md:text-3xl font-bold text-zinc-200 whitespace-nowrap">{tech.name}</span>
+                  </div>
+                ))}
+              </div>
+            )
+          ]}
+          velocity={30}
+          className="flex items-center opacity-90"
+        />
+      </section>
+
       {/* FAVORITE PROJECT */}
-      <section id="favorit" className="py-24 bg-zinc-950">
+      <section id="favorit" className="py-24 bg-zinc-950 bg-dots">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
@@ -916,7 +974,7 @@ export default function App() {
               <p className="mt-6 text-zinc-400 leading-relaxed text-lg">
                 Saya membuat platform e-commerce Baju Bagus Inc dengan manajemen produk terstruktur untuk 1.500+ katalog, chatbot AI pintar untuk merekomendasikan baju, panel kasir instan yang memangkas checkout hingga 40%, serta dashboard analytics untuk sales data secara real-time.
               </p>
-              
+
               {/* Tech Stack Icons */}
               <div className="flex flex-wrap items-center gap-5 mt-8">
                 {/* JavaScript SVG */}
@@ -942,21 +1000,21 @@ export default function App() {
                   <path fill="currentColor"
                     d="m47.961 79.02l.193.094l.344.166q.658.315 1.329.615l.281.125q.769.337 1.551.645l.378.148q.725.283 1.463.543l.184.063c.539.188 1.083.363 1.632.534l.395.117c.558.169 1.109.37 1.685.477c36.554 6.665 47.171-21.967 47.171-21.967c-8.918 11.618-24.747 14.683-39.745 11.271c-.568-.128-1.12-.306-1.674-.47l-.417-.126a51 51 0 0 1-1.612-.524l-.221-.08a51 51 0 0 1-1.421-.527l-.398-.156a43 43 0 0 1-1.534-.638l-.307-.136a61 61 0 0 1-1.294-.602l-.375-.18c-.336-.164-.669-.339-1.001-.51l-.668-.35a38 38 0 0 1-1.199-.673l-.405-.226a59 59 0 0 1-1.563-.958l-.421-.28a41 41 0 0 1-1.112-.739l-.358-.252q-.53-.375-1.051-.76l-.466-.353a47 47 0 0 1-.948-.74l-.423-.34a62 62 0 0 1-1.182-.995l-.129-.109A50 50 0 0 1 43.399 60l-.35-.337q-.454-.43-.893-.874l-.35-.35a50 50 0 0 1-1.095-1.158l-.054-.058a44 44 0 0 1-1.111-1.264l-.291-.346q-.406-.488-.799-.988l-.293-.364a53 53 0 0 1-.923-1.229c-8.326-11.358-11.318-27.023-4.663-39.888l-5.899 7.482c-7.559 10.863-6.617 24.997-.844 36.541l.423.821l.271.52l.168.299l.301.539q.268.474.55.944l.315.519q.312.503.64 1l.272.422q.451.674.926 1.336l.027.035l.156.211q.414.568.844 1.123l.318.404q.383.482.78.959l.298.355q.532.63 1.087 1.242l.022.023l.042.046c.36.394.73.778 1.104 1.164l.354.357q.435.437.882.865l.361.343q.594.561 1.208 1.101l.02.015l.21.18q.543.47 1.099.928l.455.362q.453.363.916.716l.489.372q.51.375 1.027.737l.375.266l.103.073c.328.226.663.442.998.659l.432.288q.77.49 1.562.956l.432.244q.58.335 1.172.656l.648.336zm3.693-36.795c.819 1.174 1.726 2.57 2.813 3.514c.394.434.806.856 1.226 1.273l.324.318q.612.595 1.252 1.164l.052.044l.012.013c.475.416.965.816 1.463 1.21l.333.26c.5.383 1.009.759 1.531 1.118l.045.033l.698.46l.332.22c.373.238.75.472 1.135.694l.16.093q.498.287 1.003.561l.356.187l.702.363l.106.048q.722.356 1.464.682l.323.133q.595.254 1.199.487l.514.188c.366.136.732.26 1.102.383l.499.16c.526.163 1.045.369 1.593.46c28.222 4.677 34.738-17.054 34.738-17.054c-5.874 8.459-17.248 12.494-29.386 9.344a34 34 0 0 1-1.598-.462l-.481-.155q-.563-.182-1.118-.385l-.504-.188a40 40 0 0 1-1.204-.485l-.324-.138a32 32 0 0 1-1.472-.685l-.739-.376l-.426-.219q-.471-.257-.934-.527l-.223-.127a36 36 0 0 1-1.132-.689l-.341-.229l-.732-.484a38 38 0 0 1-1.525-1.115l-.343-.271c-5.313-4.193-9.524-9.927-11.527-16.428c-2.098-6.74-1.646-14.308 1.989-20.449l-4.466 6.306c-5.466 7.865-5.169 18.396-.905 26.715a35 35 0 0 0 2.416 4.035m29.747-9.731l.701.243l.309.098c.333.104.662.226 1.005.29c15.583 3.011 19.811-7.997 20.936-9.617c-3.703 5.331-9.925 6.61-17.56 4.757a19 19 0 0 1-1.848-.57a23 23 0 0 1-2.193-.91a22.7 22.7 0 0 1-3.846-2.347c-6.832-5.185-11.076-15.072-6.618-23.126l-2.412 3.324c-3.222 4.743-3.539 10.633-1.303 15.869c2.358 5.56 7.19 9.92 12.829 11.989M66.359 96.295h-4.226a.56.56 0 0 0-.517.417l-1.5 6.94l-1.5 6.94a.554.554 0 0 1-.516.417h-2.991c-2.959 0-2.617-2.047-2.011-4.851l.018-.085l.066-.354l.012-.066l.135-.72l.145-.771l.154-.785l.682-3.332l.683-3.332a.336.336 0 0 0-.341-.419h-4.337a.55.55 0 0 0-.514.418l-.933 4.424l-.932 4.425l-.002.006l-.086.412c-1.074 4.903-.79 9.58 5.048 9.727l.17.003h9.163a.554.554 0 0 0 .516-.417l1.976-9.289l1.976-9.29c.049-.23-.103-.417-.338-.418m-45.256-.049h-4.64a.56.56 0 0 0-.521.416l-.44 1.942l-.44 1.942c-.051.229.098.416.333.416h4.676a.56.56 0 0 0 .518-.417l.425-1.941l.425-1.941c.049-.229-.101-.417-.336-.417m-1.346 6.044H15.08a.56.56 0 0 0-.521.416l-.657 2.91l-.656 2.909l-.183.834l-.631 2.97l-.63 2.971c-.049.229-.15.599-.225.821c0 0-.874 2.6-2.343 2.57l-.184-.004l-1.271-.023h-.001a.56.56 0 0 0-.524.407l-.485 2.039l-.484 2.038c-.055.228.093.416.326.42c.833.01 2.699.031 3.828.031c3.669 0 5.604-2.033 6.843-7.883l1.451-6.714l1.361-6.297c.049-.227-.103-.415-.337-.415m86.117-1.574l-.194-.801l-.191-.82l-.097-.414c-.38-1.477-1.495-2.328-3.917-2.328l-3.77-.004l-3.472-.005h-3.907a.55.55 0 0 0-.515.417l-.173.816l-.204.964l-.057.271l-1.759 8.24l-1.67 7.822c-.05.23-.066.512-.038.626c.028.115.479.209.713.209h3.524c.235 0 .532-.042.66-.094s.317-.513.364-.742l.626-3.099l.627-3.1l.001-.005l.084-.413l.76-3.56l.671-3.144a.555.555 0 0 1 .515-.417l11.089-.005c.235.002.383-.185.33-.414m14.275-7.24l-.854.003h-3.549a.9.9 0 0 0-.667.353l-7.849 11.498c-.132.194-.283.166-.335-.062l-.578-2.533a.56.56 0 0 0-.522-.416h-5.045c-.235 0-.374.184-.31.409l2.261 7.921c.064.226.069.596.011.824l-.985 3.833c-.059.228.085.413.32.413h4.987a.58.58 0 0 0 .532-.413l.986-3.833a2.5 2.5 0 0 1 .363-.755l12.742-16.911c.142-.188.065-.341-.169-.339zm-40.086 9.919v-.004a.514.514 0 0 1-.499.441h-6.397c-.222 0-.334-.15-.301-.336l.006-.015l-.004.002l.003-.021l.029-.109c.611-1.624 1.855-2.69 4.194-2.69c2.634-.001 3.148 1.285 2.969 2.732m-1.877-7.384c-8.211 0-10.157 4.984-11.249 10.015c-1.091 5.128-.998 9.921 7.5 9.921h1.03l.256-.001h.06l1.02-.003h.018c2.244-.009 4.495-.026 5.406-.033a.55.55 0 0 0 .509-.42l.344-1.681l.067-.327l.41-2.006a.335.335 0 0 0-.341-.418h-7.639c-3.039 0-3.941-.807-3.608-3.181H84.18l-.001.001l.008-.001a.5.5 0 0 0 .445-.315l.029-.106l-.001.001c1.813-6.839 1.293-11.445-6.474-11.446m-38.81 7.358l-.116.409v.001l-.922 3.268l-.922 3.267a.6.6 0 0 1-.543.411h-4.88c-3.702 0-4.604-2.896-3.702-7.166c.901-4.368 2.668-7.083 6.312-7.358c4.98-.376 5.976 3.126 4.773 7.168m3.348 7.105s2.301-5.588 2.823-8.814c.713-4.319-1.45-10.585-9.804-10.585c-8.306 0-11.914 5.981-13.29 12.484c-1.376 6.55.427 12.293 8.686 12.246l6.516-.024l6.089-.022a.59.59 0 0 0 .534-.414l1.061-4.046c.059-.228-.084-.414-.319-.416l-1.017-.006l-1.017-.006c-.199-.001-.313-.131-.289-.302zm41.12-3.741a.28.28 0 1 1-.56.001a.28.28 0 0 1 .56-.001" />
                 </svg>
-                
+
                 {/* Flowise Banner Image */}
-                <img 
-                  src="https://docs.flowiseai.com/~gitbook/image?url=https%3A%2F%2F4068692976-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FUiD7nOmFRK805sNuiieJ%252Fuploads%252Fkc0ui4v8wWvxDhPJEni3%252FFlowise%2520Logo%2520Cropped%2520White%2520High%2520Res.png%3Falt%3Dmedia%26token%3D597f761e-d481-4726-afff-1d916064b926&width=768&dpr=1&quality=100&sign=c55049fa&sv=2" 
-                  alt="Flowise AI" 
-                  className="h-[50px] object-contain hover:scale-110 transition-transform" 
+                <img
+                  src="https://docs.flowiseai.com/~gitbook/image?url=https%3A%2F%2F4068692976-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FUiD7nOmFRK805sNuiieJ%252Fuploads%252Fkc0ui4v8wWvxDhPJEni3%252FFlowise%2520Logo%2520Cropped%2520White%2520High%2520Res.png%3Falt%3Dmedia%26token%3D597f761e-d481-4726-afff-1d916064b926&width=768&dpr=1&quality=100&sign=c55049fa&sv=2"
+                  alt="Flowise AI"
+                  className="h-[50px] object-contain hover:scale-110 transition-transform"
                 />
               </div>
             </div>
 
             <div className="relative rounded-2xl overflow-hidden border border-zinc-800 shadow-2xl group">
-              <img 
-                className="w-full object-cover aspect-video hover:scale-105 transition-transform duration-500" 
-                src="/asset-page/website/bajubagus (4).png" 
-                alt="Baju Bagus Inc dashboard" 
+              <img
+                className="w-full object-cover aspect-video hover:scale-105 transition-transform duration-500"
+                src="./asset-page/website/bajubagus (4).png"
+                alt="Baju Bagus Inc dashboard"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-transparent to-transparent opacity-60 pointer-events-none" />
             </div>
@@ -965,15 +1023,15 @@ export default function App() {
           {/* Part of Favorites Subcards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mt-16">
             <div className="p-6 rounded-xl bg-zinc-900/60 border border-zinc-800/80">
-              <img src="/asset-page/website/bajubagus (10).png" className="w-full aspect-video rounded-lg object-cover mb-4 border border-zinc-800" alt="Subcard" />
+              <img src="./asset-page/website/bajubagus (10).png" className="w-full aspect-video rounded-lg object-cover mb-4 border border-zinc-800" alt="Subcard" />
               <h4 className="text-lg font-bold text-zinc-100 mb-2">Smart Product Management</h4>
               <p className="text-zinc-400 text-sm leading-relaxed">
                 Membangun catalog management dengan lazy loading image, multi-filter dinamis, dan chatbot AI asisten.
               </p>
             </div>
-            
+
             <div className="p-6 rounded-xl bg-zinc-900/60 border border-zinc-800/80">
-              <img src="/asset-page/website/bajubagus (14).png" className="w-full aspect-video rounded-lg object-cover mb-4 border border-zinc-800" alt="Subcard" />
+              <img src="./asset-page/website/bajubagus (14).png" className="w-full aspect-video rounded-lg object-cover mb-4 border border-zinc-800" alt="Subcard" />
               <h4 className="text-lg font-bold text-zinc-100 mb-2">Insightful Admin Dashboard</h4>
               <p className="text-zinc-400 text-sm leading-relaxed">
                 Visualisasi profit analytics secara grafis interaktif dengan real-time low-stock alerts.
@@ -981,7 +1039,7 @@ export default function App() {
             </div>
 
             <div className="p-6 rounded-xl bg-zinc-900/60 border border-zinc-800/80">
-              <img src="/asset-page/website/bajubagus (7).png" className="w-full aspect-video rounded-lg object-cover mb-4 border border-zinc-800" alt="Subcard" />
+              <img src="./asset-page/website/bajubagus (7).png" className="w-full aspect-video rounded-lg object-cover mb-4 border border-zinc-800" alt="Subcard" />
               <h4 className="text-lg font-bold text-zinc-100 mb-2">Sistem Kasir Pintar</h4>
               <p className="text-zinc-400 text-sm leading-relaxed">
                 Total memiliki 20 halaman operasional sistem penjualan dengan cetak invoice otomatis.
@@ -992,7 +1050,7 @@ export default function App() {
       </section>
 
       {/* ALL PROJECTS & ARTWORKS */}
-      <section id="all" className="py-24 bg-zinc-900/40 border-t border-zinc-900">
+      <section id="all" className="py-24 bg-zinc-900/40 bg-dots border-t border-zinc-900">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center max-w-3xl mx-auto mb-12">
             <h2 className="text-3xl md:text-5xl font-bold text-zinc-100 tracking-tight">Semua Karya & Projek</h2>
@@ -1004,29 +1062,26 @@ export default function App() {
 
           {/* Tabs Filter */}
           <div className="flex justify-center gap-3 mb-12 border-b border-zinc-800/60 pb-6">
-            <button 
+            <button
               onClick={() => setProjectTab("web")}
-              className={`px-6 py-2.5 rounded-full text-xs md:text-sm font-semibold tracking-wide duration-300 ${
-                projectTab === "web" ? "bg-violet-600 text-white" : "bg-zinc-900 text-zinc-400 hover:bg-zinc-850 hover:text-zinc-200"
-              }`}
+              className={`px-6 py-2.5 rounded-full text-xs md:text-sm font-semibold tracking-wide duration-300 ${projectTab === "web" ? "bg-violet-600 text-white" : "bg-zinc-900 text-zinc-400 hover:bg-zinc-850 hover:text-zinc-200"
+                }`}
             >
               Web Dev
             </button>
-            <button 
+            <button
               onClick={() => setProjectTab("design")}
-              className={`px-6 py-2.5 rounded-full text-xs md:text-sm font-semibold tracking-wide duration-300 ${
-                projectTab === "design" ? "bg-violet-600 text-white" : "bg-zinc-900 text-zinc-400 hover:bg-zinc-850 hover:text-zinc-200"
-              }`}
+              className={`px-6 py-2.5 rounded-full text-xs md:text-sm font-semibold tracking-wide duration-300 ${projectTab === "design" ? "bg-violet-600 text-white" : "bg-zinc-900 text-zinc-400 hover:bg-zinc-850 hover:text-zinc-200"
+                }`}
             >
               Graphic Design
             </button>
-            <button 
+            <button
               onClick={() => setProjectTab("achievement")}
-              className={`px-6 py-2.5 rounded-full text-xs md:text-sm font-semibold tracking-wide duration-300 ${
-                projectTab === "achievement" ? "bg-violet-600 text-white" : "bg-zinc-900 text-zinc-400 hover:bg-zinc-850 hover:text-zinc-200"
-              }`}
+              className={`px-6 py-2.5 rounded-full text-xs md:text-sm font-semibold tracking-wide duration-300 ${projectTab === "achievement" ? "bg-violet-600 text-white" : "bg-zinc-900 text-zinc-400 hover:bg-zinc-850 hover:text-zinc-200"
+                }`}
             >
-              Achievements
+              Awards
             </button>
           </div>
 
@@ -1034,25 +1089,29 @@ export default function App() {
           {projectTab === "web" && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 animate-in fade-in duration-300">
               {projects.map((item, index) => (
-                <div 
-                  key={index} 
+                <div
+                  key={index}
                   onClick={() => openPopup("project", item)}
-                  className="cursor-pointer group bg-zinc-900/60 rounded-xl border border-zinc-800 card-glow-hover overflow-hidden transition-all duration-300"
+                  className="cursor-pointer group transition-all duration-300 h-full hover:-translate-y-2 hover:shadow-xl hover:shadow-violet-500/20 rounded-xl"
                 >
-                  <div className="aspect-video w-full overflow-hidden bg-zinc-800 relative">
-                    <img src={item.mainImg[0]} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                  </div>
-                  <div className="p-5">
-                    <div className="flex flex-wrap gap-1.5 mb-3">
-                      {item.badges.map((badge, bIdx) => (
-                        <span key={bIdx} className="text-[10px] font-bold tracking-wide uppercase px-2.5 py-0.5 rounded-full bg-violet-600/10 border border-violet-500/20 text-violet-400">
-                          {badge}
-                        </span>
-                      ))}
+                  <BorderGlow borderRadius={12} backgroundColor="#18181b" className="h-full w-full">
+                    <div className="bg-zinc-900/60 rounded-xl border border-zinc-800 overflow-hidden flex flex-col h-full">
+                      <div className="aspect-video w-full overflow-hidden bg-zinc-800 relative">
+                        <img src={item.mainImg[0]} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                      </div>
+                      <div className="p-5 flex-1">
+                        <div className="flex flex-wrap gap-1.5 mb-3">
+                          {item.badges.map((badge, bIdx) => (
+                            <span key={bIdx} className="text-[10px] font-bold tracking-wide uppercase px-2.5 py-0.5 rounded-full bg-violet-600/10 border border-violet-500/20 text-violet-400">
+                              {badge}
+                            </span>
+                          ))}
+                        </div>
+                        <h3 className="text-lg font-bold text-zinc-100 group-hover:text-violet-400 transition-colors line-clamp-1">{item.title}</h3>
+                        <p className="text-zinc-400 text-xs mt-2 line-clamp-2 leading-relaxed">{item.desc}</p>
+                      </div>
                     </div>
-                    <h3 className="text-lg font-bold text-zinc-100 group-hover:text-violet-400 transition-colors line-clamp-1">{item.title}</h3>
-                    <p className="text-zinc-400 text-xs mt-2 line-clamp-2 leading-relaxed">{item.desc}</p>
-                  </div>
+                  </BorderGlow>
                 </div>
               ))}
             </div>
@@ -1061,18 +1120,22 @@ export default function App() {
           {projectTab === "design" && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 animate-in fade-in duration-300">
               {posters.map((item, index) => (
-                <div 
-                  key={index} 
+                <div
+                  key={index}
                   onClick={() => openPopup("poster", item)}
-                  className="cursor-pointer group bg-zinc-900/60 rounded-xl border border-zinc-800 card-glow-hover overflow-hidden transition-all duration-300"
+                  className="cursor-pointer group transition-all duration-300 h-full hover:-translate-y-2 hover:shadow-xl hover:shadow-violet-500/20 rounded-xl"
                 >
-                  <div className="aspect-[3/4] w-full overflow-hidden bg-zinc-800">
-                    <img src={item.image} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                  </div>
-                  <div className="p-5">
-                    <h3 className="text-lg font-bold text-zinc-100 group-hover:text-violet-400 transition-colors">{item.title}</h3>
-                    <p className="text-zinc-400 text-xs mt-2 line-clamp-2 leading-relaxed">{item.description}</p>
-                  </div>
+                  <BorderGlow borderRadius={12} backgroundColor="#18181b" className="h-full w-full">
+                    <div className="bg-zinc-900/60 rounded-xl border border-zinc-800 overflow-hidden flex flex-col h-full">
+                      <div className="aspect-[3/4] w-full overflow-hidden bg-zinc-800">
+                        <img src={item.image} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                      </div>
+                      <div className="p-5 flex-1">
+                        <h3 className="text-lg font-bold text-zinc-100 group-hover:text-violet-400 transition-colors">{item.title}</h3>
+                        <p className="text-zinc-400 text-xs mt-2 line-clamp-2 leading-relaxed">{item.description}</p>
+                      </div>
+                    </div>
+                  </BorderGlow>
                 </div>
               ))}
             </div>
@@ -1081,25 +1144,29 @@ export default function App() {
           {projectTab === "achievement" && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 animate-in fade-in duration-300">
               {achievements.map((item, index) => (
-                <div 
-                  key={index} 
+                <div
+                  key={index}
                   onClick={() => openPopup("achievement", item)}
-                  className="cursor-pointer group bg-zinc-900/60 rounded-xl border border-zinc-800 card-glow-hover overflow-hidden transition-all duration-300"
+                  className="cursor-pointer group transition-all duration-300 h-full hover:-translate-y-2 hover:shadow-xl hover:shadow-amber-500/20 rounded-xl"
                 >
-                  <div className="aspect-video w-full overflow-hidden bg-zinc-800 relative">
-                    <img src={item.mainImg[0]} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                  </div>
-                  <div className="p-5">
-                    <div className="flex flex-wrap gap-1.5 mb-3">
-                      {item.badges.map((badge, bIdx) => (
-                        <span key={bIdx} className="text-[10px] font-bold tracking-wide uppercase px-2.5 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400">
-                          {badge}
-                        </span>
-                      ))}
+                  <BorderGlow borderRadius={12} backgroundColor="#18181b" className="h-full w-full">
+                    <div className="bg-zinc-900/60 rounded-xl border border-zinc-800 overflow-hidden flex flex-col h-full">
+                      <div className="aspect-video w-full overflow-hidden bg-zinc-800 relative">
+                        <img src={item.mainImg[0]} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                      </div>
+                      <div className="p-5 flex-1">
+                        <div className="flex flex-wrap gap-1.5 mb-3">
+                          {item.badges.map((badge, bIdx) => (
+                            <span key={bIdx} className="text-[10px] font-bold tracking-wide uppercase px-2.5 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400">
+                              {badge}
+                            </span>
+                          ))}
+                        </div>
+                        <h3 className="text-lg font-bold text-zinc-100 group-hover:text-violet-400 transition-colors line-clamp-1">{item.title}</h3>
+                        <p className="text-zinc-400 text-xs mt-2 line-clamp-2 leading-relaxed">{item.desc}</p>
+                      </div>
                     </div>
-                    <h3 className="text-lg font-bold text-zinc-100 group-hover:text-violet-400 transition-colors line-clamp-1">{item.title}</h3>
-                    <p className="text-zinc-400 text-xs mt-2 line-clamp-2 leading-relaxed">{item.desc}</p>
-                  </div>
+                  </BorderGlow>
                 </div>
               ))}
             </div>
@@ -1108,7 +1175,7 @@ export default function App() {
       </section>
 
       {/* FOOTER */}
-      <footer className="w-full py-8 bg-zinc-950 border-t border-zinc-900 text-center text-sm text-zinc-500 font-medium">
+      <footer className="w-full py-8 bg-zinc-950 bg-dots border-t border-zinc-900 text-center text-sm text-zinc-500 font-medium">
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
           <p>Designed By Alwan | Copyright © 2025</p>
           <div className="flex items-center gap-6">
@@ -1119,7 +1186,7 @@ export default function App() {
 
       {/* BACK TO TOP BUTTON */}
       {showScrollTop && (
-        <button 
+        <button
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
           className="fixed bottom-8 right-8 w-12 h-12 rounded-full bg-violet-600 hover:bg-violet-750 text-white flex items-center justify-center shadow-lg shadow-violet-600/30 z-[999] hover:scale-110 active:scale-95 transition-all duration-300"
           aria-label="Scroll to top"
@@ -1130,9 +1197,9 @@ export default function App() {
 
       {/* DETAIL MODAL (PROJECT / ACHIEVEMENT / POSTER) */}
       {activeModal && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex justify-center items-center z-[9999] p-4 sm:p-6 animate-in fade-in duration-300">
-          <div className="bg-zinc-900/90 border border-zinc-800 text-zinc-100 rounded-2xl max-w-4xl w-full p-6 relative max-h-[90vh] overflow-y-auto shadow-2xl">
-            <button 
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex justify-center items-center z-[9999] p-2 sm:p-4 animate-in fade-in duration-300">
+          <div className={`bg-zinc-900/95 border border-zinc-800 text-zinc-100 rounded-2xl w-full p-5 sm:p-6 relative shadow-2xl ${activeModal.type === "project" ? "max-w-[95vw] h-[90vh] flex flex-col" : "max-w-4xl max-h-[90vh] overflow-y-auto"}`}>
+            <button
               onClick={closePopup}
               className="absolute top-4 right-4 text-zinc-400 hover:text-white p-1 rounded-lg bg-zinc-800/80 hover:bg-zinc-800 transition-colors duration-200"
               aria-label="Close modal"
@@ -1142,47 +1209,121 @@ export default function App() {
 
             {/* Modal Image Slider / Header */}
             {activeModal.type === "project" && (
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mt-4">
-                <div className="md:col-span-3 aspect-video relative rounded-xl overflow-hidden bg-zinc-950 border border-zinc-850">
-                  <img 
-                    src={activeModal.data.mainImg[sliderIndex]} 
-                    alt={activeModal.data.title} 
-                    className="w-full h-full object-cover transition-all duration-500" 
-                  />
-                  {activeModal.data.link && (
-                    <a 
-                      href={activeModal.data.link} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="absolute top-4 right-4 bg-violet-600 hover:bg-violet-700 text-white px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-1.5 shadow-lg transition-colors duration-300"
-                    >
-                      Kunjungi Projek <ExternalLink size={12} />
-                    </a>
-                  )}
+              <div>
+                {/* Desktop / Mobile Toggle */}
+                <div className="flex items-center gap-2 mb-4 mt-2">
+                  <button
+                    onClick={() => { setViewMode("desktop"); setSliderIndex(0); }}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all duration-300 ${
+                      viewMode === "desktop"
+                        ? "bg-violet-600 text-white shadow-lg shadow-violet-500/30"
+                        : "bg-zinc-800/80 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200"
+                    }`}
+                  >
+                    <Monitor size={14} /> Desktop
+                  </button>
+                  <button
+                    onClick={() => { setViewMode("mobile"); setSliderIndex(0); }}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all duration-300 ${
+                      viewMode === "mobile"
+                        ? "bg-violet-600 text-white shadow-lg shadow-violet-500/30"
+                        : "bg-zinc-800/80 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200"
+                    } ${(!activeModal.data.mobileImg || activeModal.data.mobileImg.length === 0) ? "opacity-40 cursor-not-allowed" : ""}`}
+                    disabled={!activeModal.data.mobileImg || activeModal.data.mobileImg.length === 0}
+                  >
+                    <Smartphone size={14} /> Mobile
+                  </button>
                 </div>
-                {/* Thumbnails */}
-                <div className="flex md:flex-col gap-3 overflow-x-auto md:overflow-y-auto max-h-[220px]">
-                  {activeModal.data.mainImg.map((img, idx) => (
-                    <button 
-                      key={idx}
-                      onClick={() => setSliderIndex(idx)}
-                      className={`relative aspect-video w-20 md:w-full rounded-lg overflow-hidden border-2 flex-shrink-0 transition-all ${
-                        sliderIndex === idx ? "border-violet-500" : "border-zinc-800 hover:border-zinc-700"
-                      }`}
-                    >
-                      <img src={img} className="w-full h-full object-cover" alt="" />
-                    </button>
-                  ))}
-                </div>
+
+                {/* Desktop View */}
+                {viewMode === "desktop" && (
+                  <div className="flex-1 grid grid-cols-1 md:grid-cols-[1fr_120px] gap-4 min-h-0 overflow-hidden">
+                    <div className="relative rounded-xl overflow-hidden bg-zinc-950 border border-zinc-800 min-h-0 flex items-center justify-center">
+                      <img
+                        src={activeModal.data.mainImg[sliderIndex]}
+                        alt={activeModal.data.title}
+                        className="w-full h-full object-contain transition-all duration-500"
+                      />
+                      {activeModal.data.link && (
+                        <a
+                          href={activeModal.data.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="absolute top-4 right-4 bg-violet-600 hover:bg-violet-700 text-white px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-1.5 shadow-lg transition-colors duration-300"
+                        >
+                          Kunjungi Projek <ExternalLink size={12} />
+                        </a>
+                      )}
+                    </div>
+                    {/* Thumbnails — Full height sidebar */}
+                    <div className="flex md:flex-col gap-2 overflow-x-auto md:overflow-y-auto md:overflow-x-hidden min-h-0">
+                      {activeModal.data.mainImg.map((img, idx) => (
+                        <button
+                          key={idx}
+                          onClick={() => setSliderIndex(idx)}
+                          className={`relative aspect-video w-20 md:w-full rounded-lg overflow-hidden border-2 flex-shrink-0 transition-all ${sliderIndex === idx ? "border-violet-500 shadow-md shadow-violet-500/30" : "border-zinc-800 hover:border-zinc-700"
+                            }`}
+                        >
+                          <img src={img} className="w-full h-full object-cover" alt="" />
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Mobile View - Phone Mockup */}
+                {viewMode === "mobile" && activeModal.data.mobileImg && activeModal.data.mobileImg.length > 0 && (
+                  <div className="flex flex-col items-center gap-6">
+                    {/* Phone Frame */}
+                    <div className="relative mx-auto" style={{ width: "280px" }}>
+                      {/* Phone outer shell */}
+                      <div className="relative bg-zinc-900 rounded-[40px] p-[10px] border-[3px] border-zinc-700 shadow-2xl shadow-black/50">
+                        {/* Notch / Dynamic Island */}
+                        <div className="absolute top-[14px] left-1/2 -translate-x-1/2 w-[90px] h-[26px] bg-zinc-950 rounded-full z-20 flex items-center justify-center gap-2">
+                          <div className="w-[8px] h-[8px] rounded-full bg-zinc-800 border border-zinc-700"></div>
+                          <div className="w-[6px] h-[6px] rounded-full bg-zinc-800"></div>
+                        </div>
+                        {/* Screen */}
+                        <div className="relative rounded-[30px] overflow-hidden bg-zinc-950 aspect-[9/19.5]">
+                          <img
+                            src={activeModal.data.mobileImg[sliderIndex]}
+                            alt={activeModal.data.title}
+                            className="w-full h-full object-cover transition-all duration-500"
+                          />
+                          {/* Screen reflection glare */}
+                          <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-transparent pointer-events-none rounded-[30px]"></div>
+                        </div>
+                        {/* Bottom bar indicator */}
+                        <div className="absolute bottom-[8px] left-1/2 -translate-x-1/2 w-[100px] h-[4px] bg-zinc-600 rounded-full"></div>
+                      </div>
+                      {/* Phone shadow glow */}
+                      <div className="absolute -inset-4 bg-violet-500/5 rounded-[50px] blur-xl -z-10"></div>
+                    </div>
+
+                    {/* Mobile Thumbnails */}
+                    <div className="flex gap-3 overflow-x-auto pb-2 max-w-full justify-center">
+                      {activeModal.data.mobileImg.map((img, idx) => (
+                        <button
+                          key={idx}
+                          onClick={() => setSliderIndex(idx)}
+                          className={`relative aspect-[9/16] w-14 rounded-lg overflow-hidden border-2 flex-shrink-0 transition-all ${sliderIndex === idx ? "border-violet-500 shadow-md shadow-violet-500/30" : "border-zinc-800 hover:border-zinc-700"
+                            }`}
+                        >
+                          <img src={img} className="w-full h-full object-cover" alt="" />
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             )}
 
             {activeModal.type === "achievement" && (
               <div className="aspect-video w-full rounded-xl overflow-hidden bg-zinc-950 border border-zinc-800 mt-4 max-h-[400px]">
-                <img 
-                  src={activeModal.data.mainImg[0]} 
-                  alt={activeModal.data.title} 
-                  className="w-full h-full object-contain" 
+                <img
+                  src={activeModal.data.mainImg[0]}
+                  alt={activeModal.data.title}
+                  className="w-full h-full object-contain"
                 />
               </div>
             )}
@@ -1202,7 +1343,7 @@ export default function App() {
 
             {/* Modal Info Footer (only for non-poster, poster has it beside) */}
             {activeModal.type !== "poster" && (
-              <div className="mt-8">
+              <div className={`${activeModal.type === "project" ? "flex-shrink-0 pt-4 border-t border-zinc-800/50 mt-4" : "mt-8"}`}>
                 <div className="flex flex-wrap items-center gap-2 mb-4">
                   {activeModal.data.badges && activeModal.data.badges.map((badge, idx) => (
                     <span key={idx} className="text-xs font-bold uppercase px-3 py-1 rounded-full bg-violet-600/10 border border-violet-500/20 text-violet-400">
@@ -1217,6 +1358,68 @@ export default function App() {
           </div>
         </div>
       )}
+
+      {/* MOBILE WELCOME MODAL (DYNAMIC ISLAND STYLE WITH MOTION) */}
+      <AnimatePresence>
+        {showMobileWelcome && (
+          <div className="md:hidden fixed top-4 left-1/2 -translate-x-1/2 z-[1000] w-[92%] max-w-[350px] flex justify-center pointer-events-none">
+            <motion.div
+              layout
+              initial={{ width: 110, height: 38, borderRadius: 9999, opacity: 0 }}
+              animate={{
+                width: islandExpanded ? "100%" : 110,
+                height: islandExpanded ? "auto" : 38,
+                borderRadius: islandExpanded ? 24 : 9999,
+                opacity: 1,
+              }}
+              exit={{ width: 80, height: 30, opacity: 0, scale: 0.8 }}
+              transition={{ type: "spring", stiffness: 300, damping: 25 }}
+              className="bg-black/95 border border-zinc-800/80 shadow-2xl flex items-center justify-between p-1.5 pl-3 pr-3 overflow-hidden pointer-events-auto backdrop-blur-md"
+            >
+              {/* Dynamic Island Content */}
+              {!islandExpanded ? (
+                // Compact State (Camera/Sensor look)
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="flex items-center justify-center w-full gap-2"
+                >
+                  <Icon icon="ph:hand-waving-bold" className="text-violet-400 text-sm animate-pulse" />
+                  <span className="text-[10px] font-bold text-white font-sans">Hi!</span>
+                </motion.div>
+              ) : (
+                // Expanded State
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.15 }}
+                  className="flex items-center gap-3.5 w-full py-1.5"
+                >
+                  {/* Icon */}
+                  <div className="w-9 h-9 rounded-full bg-zinc-900/90 border border-zinc-800 flex items-center justify-center flex-shrink-0">
+                    <Icon icon="ph:hand-waving-bold" className="text-lg text-violet-400 animate-bounce" />
+                  </div>
+
+                  {/* Content */}
+                  <div className="flex-1 min-w-0">
+                    <p className="text-white text-xs font-bold font-sans tracking-wide">Selamat Datang!</p>
+                    <p className="text-zinc-400 text-[10px] leading-tight mt-0.5 truncate">Jelajahi portofolio terbaik Hafiz Alwan</p>
+                  </div>
+
+                  {/* Close Button */}
+                  <button
+                    onClick={() => setShowMobileWelcome(false)}
+                    className="w-7 h-7 rounded-full bg-zinc-900/90 border border-zinc-800 flex items-center justify-center text-zinc-400 hover:text-white active:scale-90 transition-all flex-shrink-0"
+                  >
+                    <Icon icon="ph:x-bold" className="text-[10px]" />
+                  </button>
+                </motion.div>
+              )}
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
 
     </div>
   );
