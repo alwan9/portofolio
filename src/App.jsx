@@ -70,20 +70,20 @@ const Counter = ({ target, duration = 2000 }) => {
 
 const ThreeDRingSlider = () => {
   const slides = [
-    { img: "./asset-page/website/bajubagus (1).png", title: "Baju Bagus Inc" },
-    { img: "./asset-page/website/evoting (1).png", title: "E-Voting OSIS" },
-    { img: "./asset-page/website/perpus (2).png", title: "Perpustakaan Online" },
-    { img: "./asset-page/website/game_setan (5).png", title: "Game Setan" },
-    { img: "./asset-page/website/rog_store (1).png", title: "RoG Store" },
-    { img: "./asset-page/website/memorence_spy (1).png", title: "Memorence 2.0" },
-    { img: "./asset-page/website/photoboth (1).png", title: "Memorence Photobooth" },
-    { img: "./asset-page/website/batakaksara (1).png", title: "Aksara Batak" },
-    { img: "./asset-page/website/bajubagus (6).png", title: "Baju Bagus Dashboard" },
-    { img: "./asset-page/website/evoting (3).png", title: "E-Voting Panel" },
-    { img: "./asset-page/website/rog_store (3).png", title: "RoG Store Catalog" },
-    { img: "./asset-page/website/memorence_spy (3).png", title: "Memorence Spotify Mode" },
-    { img: "./asset-page/website/fpmanager1.png", title: "FPManager" },
-    { img: "./asset-page/website/tpst1.png", title: "TPST Banyumas" }
+    { img: "./asset-page/website/bajubagus1.png", title: "Baju Bagus Inc" },
+    // { img: "./asset-page/website/evoting1.png", title: "E-Voting OSIS" },
+    { img: "./asset-page/website/perpus1.png", title: "Perpustakaan Online" },
+    // { img: "./asset-page/website/game_setan5.png", title: "Game Setan" },
+    { img: "./asset-page/website/rog_store1.png", title: "RoG Store" },
+    { img: "./asset-page/website/memorence_spy1.png", title: "Memorence 2.0" },
+    // { img: "./asset-page/website/photoboth1.png", title: "Memorence Photobooth" },
+    { img: "./asset-page/website/fpmanager3.png", title: "FPManager" },
+    // { img: "./asset-page/website/bajubagus6.png", title: "Baju Bagus Dashboard" },
+    { img: "./asset-page/website/fpmanager4.png", title: "FPManager" },
+    { img: "./asset-page/website/bajubagus8.png", title: "Baju Bagus  " },
+    // { img: "./asset-page/website/memorence_spy3.png", title: "Memorence Spotify Mode" },
+    { img: "./asset-page/website/tpst1.png", title: "TPST Banyumas" },
+    { img: "./asset-page/website/tpst5.png", title: "TPST Marketplace" }
   ];
 
   const containerRef = useRef(null);
@@ -159,11 +159,11 @@ const ThreeDRingSlider = () => {
       const isMobile = windowWidth < 640;
       const isTablet = windowWidth >= 640 && windowWidth < 1024;
 
-      // Sesuaikan ukuran kartu agar landscape jauh lebih besar dan megah
-      const cardWidth = isMobile ? 260 : isTablet ? 380 : 500;
-      // Perlebar radiusX agar meregang penuh ke ujung kiri dan kanan layar
-      const radiusX = windowWidth / 2 + (isMobile ? 30 : 150);
-      const radiusZ = isMobile ? 130 : 250;
+      // Sesuaikan ukuran kartu — diperbesar signifikan
+      const cardWidth = isMobile ? 340 : isTablet ? 500 : 700;
+      // RadiusX fullscreen: meregang hingga ujung layar
+      const radiusX = windowWidth / 2 + (isMobile ? 60 : 200);
+      const radiusZ = isMobile ? 100 : 200;
 
       cardsRef.current.forEach((card, i) => {
         if (!card) return;
@@ -174,40 +174,40 @@ const ThreeDRingSlider = () => {
         const cosVal = Math.cos(angleRad);
         const sinVal = Math.sin(angleRad);
 
-        // Warping non-linear sweet-spot: merapat dekat di tengah namun dihitung agar tidak saling menumpuk
-        const warpedSin = Math.sign(sinVal) * Math.pow(Math.abs(sinVal), 1.25);
+        // Warping non-linear: exponent lebih tinggi agar kartu merapat di samping tanpa bertabrakan
+        const warpedSin = Math.sign(sinVal) * Math.pow(Math.abs(sinVal), 1.4);
         const translateX = warpedSin * radiusX;
 
         // Translasi Z menggunakan cos (melengkung ke dalam/belakang)
         const translateZ = cosVal * radiusZ - radiusZ;
 
-        // Skala dikecilkan di ujung samping agar tidak menumpuk
-        const scale = 0.60 + 0.20 * (1 - Math.abs(sinVal));
+        // Skala: kartu di tengah depan paling besar, kartu di ujung samping mengecil
+        const scale = 0.45 + 0.35 * Math.max(0, cosVal);
 
-        // Opacity: Munculkan lebih banyak kartu (lebih lebat), hanya sembunyikan saat mendekati tengah depan
+        // Opacity: tampilkan kartu di setengah depan (dari pojok kanan ke pojok kiri)
         let opacity = 0;
-        if (cosVal < 0.4) {
-          if (cosVal > 0.15) {
-            opacity = (0.4 - cosVal) / 0.25; // Transisi memudar halus di depan
-          } else {
-            opacity = 0.95;
+        if (cosVal > -0.15) {
+          opacity = 0.95;
+          // Fade halus di batas belakang
+          if (cosVal < 0.1) {
+            opacity = ((cosVal + 0.15) / 0.25) * 0.95;
           }
         } else {
-          opacity = 0; // Hilang sepenuhnya di area tepat di depan teks hero
+          opacity = 0; // Sembunyikan kartu di belakang
         }
 
-        // Z-Index diatur dinamis berdasarkan kedalaman Z
-        const zIndex = Math.round((cosVal + 1) * 10) + 10;
+        // Z-Index: kartu di depan (cosVal tinggi) di atas kartu samping
+        const zIndex = Math.round((cosVal + 1) * 50) + 10;
 
         // Hitung persentase batas potong (clip path) tepat di koordinat tengah layar (X = 0)
         const pct = Math.max(0, Math.min(100, (0.5 - translateX / (cardWidth * scale)) * 100));
 
-        const dotsOpacity = Math.abs(sinVal) * 0.8;
-        const brightness = 1.0 - Math.abs(sinVal) * 0.25;
+        const dotsOpacity = (1 - cosVal) * 0.5;
+        const brightness = 0.7 + cosVal * 0.3;
 
         // Hitung rotasi kemiringan Y & Z 3D (Warp Effect) agar melengkung alami mengikuti tabung
-        const rotateYVal = sinVal * -38;
-        const rotateZVal = sinVal * 5.5;
+        const rotateYVal = sinVal * -35;
+        const rotateZVal = sinVal * 3;
 
         // Terapkan efek clipPath ke lapisan hitam-putih (data-bw)
         const bwImg = card.querySelector('[data-bw]');
@@ -231,15 +231,15 @@ const ThreeDRingSlider = () => {
           dots.style.opacity = dotsOpacity;
         }
 
-        // Mask-image: mulai fade lebih awal (sinVal=0.55) agar kartu di ujung menghilang sebelum sempat menumpuk
-        if (sinVal < -0.55) {
-          const fadeStop = Math.max(0, Math.min(100, ((-sinVal - 0.55) / 0.35) * 100));
-          const maskStr = `linear-gradient(to right, transparent ${fadeStop}%, black ${Math.min(100, fadeStop + 30)}%)`;
+        // Mask-image: fade di ujung kanan dan kiri agar menghilang halus di tepi layar
+        if (sinVal < -0.65) {
+          const fadeStop = Math.max(0, Math.min(100, ((-sinVal - 0.65) / 0.3) * 100));
+          const maskStr = `linear-gradient(to right, transparent ${fadeStop}%, black ${Math.min(100, fadeStop + 20)}%)`;
           card.style.webkitMaskImage = maskStr;
           card.style.maskImage = maskStr;
-        } else if (sinVal > 0.55) {
-          const fadeStop = Math.max(0, Math.min(100, ((sinVal - 0.55) / 0.35) * 100));
-          const maskStr = `linear-gradient(to left, transparent ${fadeStop}%, black ${Math.min(100, fadeStop + 30)}%)`;
+        } else if (sinVal > 0.65) {
+          const fadeStop = Math.max(0, Math.min(100, ((sinVal - 0.65) / 0.3) * 100));
+          const maskStr = `linear-gradient(to left, transparent ${fadeStop}%, black ${Math.min(100, fadeStop + 20)}%)`;
           card.style.webkitMaskImage = maskStr;
           card.style.maskImage = maskStr;
         } else {
@@ -271,7 +271,7 @@ const ThreeDRingSlider = () => {
       onTouchMove={handleMove}
       onTouchEnd={handleEnd}
       onMouseEnter={() => { isHoveredRef.current = true; }}
-      className="relative w-screen left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] h-[170px] sm:h-[320px] md:h-[440px] flex items-center justify-center overflow-hidden py-4 select-none cursor-grab active:cursor-grabbing"
+      className="relative w-screen left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] h-[250px] sm:h-[420px] md:h-[560px] flex items-center justify-center overflow-hidden py-4 select-none cursor-grab active:cursor-grabbing"
       style={{ perspective: "1200px" }}
     >
       {/* Ambient green glow di tengah belakang */}
@@ -288,7 +288,7 @@ const ThreeDRingSlider = () => {
           <div
             key={idx}
             ref={(el) => (cardsRef.current[idx] = el)}
-            className="absolute w-[260px] sm:w-[380px] md:w-[500px] aspect-video rounded-[100px] sm:rounded-[32px] overflow-hidden border border-zinc-800/80 bg-zinc-900 shadow-2xl cursor-pointer transition-all duration-300 ease-out hover:border-violet-500/60 hover:shadow-[0_0_50px_rgba(139,92,246,0.3)] hover:scale-105 group"
+            className="absolute w-[340px] sm:w-[500px] md:w-[700px] aspect-video rounded-[100px] sm:rounded-[32px] overflow-hidden border border-zinc-800/80 bg-zinc-900 shadow-2xl cursor-pointer transition-all duration-300 ease-out hover:border-violet-500/60 hover:shadow-[0_0_50px_rgba(139,92,246,0.3)] hover:scale-105 group"
             style={{
               transformOrigin: "center center"
             }}
@@ -343,6 +343,7 @@ export default function App() {
   const [activeModal, setActiveModal] = useState(null); // { type: 'project'|'achievement'|'poster', data: object }
   const [sliderIndex, setSliderIndex] = useState(0);
   const [viewMode, setViewMode] = useState("desktop"); // 'desktop' | 'mobile'
+  const [descExpanded, setDescExpanded] = useState(false);
 
   // Auto-slide for popup images
   useEffect(() => {
@@ -376,6 +377,7 @@ export default function App() {
     setActiveModal({ type, data });
     setSliderIndex(0);
     setViewMode("desktop");
+    setDescExpanded(false);
   };
 
   const closePopup = () => {
@@ -1013,7 +1015,7 @@ export default function App() {
             <div className="relative rounded-2xl overflow-hidden border border-zinc-800 shadow-2xl group">
               <img
                 className="w-full object-cover aspect-video hover:scale-105 transition-transform duration-500"
-                src="./asset-page/website/bajubagus (4).png"
+                src="./asset-page/website/bajubagus4.png"
                 alt="Baju Bagus Inc dashboard"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-transparent to-transparent opacity-60 pointer-events-none" />
@@ -1023,7 +1025,7 @@ export default function App() {
           {/* Part of Favorites Subcards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mt-16">
             <div className="p-6 rounded-xl bg-zinc-900/60 border border-zinc-800/80">
-              <img src="./asset-page/website/bajubagus (10).png" className="w-full aspect-video rounded-lg object-cover mb-4 border border-zinc-800" alt="Subcard" />
+              <img src="./asset-page/website/bajubagus10.png" className="w-full aspect-video rounded-lg object-cover mb-4 border border-zinc-800" alt="Subcard" />
               <h4 className="text-lg font-bold text-zinc-100 mb-2">Smart Product Management</h4>
               <p className="text-zinc-400 text-sm leading-relaxed">
                 Membangun catalog management dengan lazy loading image, multi-filter dinamis, dan chatbot AI asisten.
@@ -1031,7 +1033,7 @@ export default function App() {
             </div>
 
             <div className="p-6 rounded-xl bg-zinc-900/60 border border-zinc-800/80">
-              <img src="./asset-page/website/bajubagus (14).png" className="w-full aspect-video rounded-lg object-cover mb-4 border border-zinc-800" alt="Subcard" />
+              <img src="./asset-page/website/bajubagus14.png" className="w-full aspect-video rounded-lg object-cover mb-4 border border-zinc-800" alt="Subcard" />
               <h4 className="text-lg font-bold text-zinc-100 mb-2">Insightful Admin Dashboard</h4>
               <p className="text-zinc-400 text-sm leading-relaxed">
                 Visualisasi profit analytics secara grafis interaktif dengan real-time low-stock alerts.
@@ -1039,7 +1041,7 @@ export default function App() {
             </div>
 
             <div className="p-6 rounded-xl bg-zinc-900/60 border border-zinc-800/80">
-              <img src="./asset-page/website/bajubagus (7).png" className="w-full aspect-video rounded-lg object-cover mb-4 border border-zinc-800" alt="Subcard" />
+              <img src="./asset-page/website/bajubagus7.png" className="w-full aspect-video rounded-lg object-cover mb-4 border border-zinc-800" alt="Subcard" />
               <h4 className="text-lg font-bold text-zinc-100 mb-2">Sistem Kasir Pintar</h4>
               <p className="text-zinc-400 text-sm leading-relaxed">
                 Total memiliki 20 halaman operasional sistem penjualan dengan cetak invoice otomatis.
@@ -1198,7 +1200,7 @@ export default function App() {
       {/* DETAIL MODAL (PROJECT / ACHIEVEMENT / POSTER) */}
       {activeModal && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex justify-center items-center z-[9999] p-2 sm:p-4 animate-in fade-in duration-300">
-          <div className={`bg-zinc-900/95 border border-zinc-800 text-zinc-100 rounded-2xl w-full p-5 sm:p-6 relative shadow-2xl ${activeModal.type === "project" ? "max-w-[95vw] h-[90vh] flex flex-col" : "max-w-4xl max-h-[90vh] overflow-y-auto"}`}>
+          <div className={`bg-zinc-900/95 border border-zinc-800 text-zinc-100 rounded-2xl w-full p-5 sm:p-6 relative shadow-2xl ${activeModal.type === "project" ? "max-w-5xl max-h-[85vh] flex flex-col" : "max-w-4xl max-h-[90vh] overflow-y-auto"}`}>
             <button
               onClick={closePopup}
               className="absolute top-4 right-4 text-zinc-400 hover:text-white p-1 rounded-lg bg-zinc-800/80 hover:bg-zinc-800 transition-colors duration-200"
@@ -1214,21 +1216,19 @@ export default function App() {
                 <div className="flex items-center gap-2 mb-4 mt-2">
                   <button
                     onClick={() => { setViewMode("desktop"); setSliderIndex(0); }}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all duration-300 ${
-                      viewMode === "desktop"
-                        ? "bg-violet-600 text-white shadow-lg shadow-violet-500/30"
-                        : "bg-zinc-800/80 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200"
-                    }`}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all duration-300 ${viewMode === "desktop"
+                      ? "bg-violet-600 text-white shadow-lg shadow-violet-500/30"
+                      : "bg-zinc-800/80 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200"
+                      }`}
                   >
                     <Monitor size={14} /> Desktop
                   </button>
                   <button
                     onClick={() => { setViewMode("mobile"); setSliderIndex(0); }}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all duration-300 ${
-                      viewMode === "mobile"
-                        ? "bg-violet-600 text-white shadow-lg shadow-violet-500/30"
-                        : "bg-zinc-800/80 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200"
-                    } ${(!activeModal.data.mobileImg || activeModal.data.mobileImg.length === 0) ? "opacity-40 cursor-not-allowed" : ""}`}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all duration-300 ${viewMode === "mobile"
+                      ? "bg-violet-600 text-white shadow-lg shadow-violet-500/30"
+                      : "bg-zinc-800/80 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200"
+                      } ${(!activeModal.data.mobileImg || activeModal.data.mobileImg.length === 0) ? "opacity-40 cursor-not-allowed" : ""}`}
                     disabled={!activeModal.data.mobileImg || activeModal.data.mobileImg.length === 0}
                   >
                     <Smartphone size={14} /> Mobile
@@ -1237,8 +1237,9 @@ export default function App() {
 
                 {/* Desktop View */}
                 {viewMode === "desktop" && (
-                  <div className="flex-1 grid grid-cols-1 md:grid-cols-[1fr_120px] gap-4 min-h-0 overflow-hidden">
-                    <div className="relative rounded-xl overflow-hidden bg-zinc-950 border border-zinc-800 min-h-0 flex items-center justify-center">
+                  <div className="flex-1 flex flex-col md:flex-row gap-4 min-h-0 overflow-hidden"  >
+                    {/* Main Image */}
+                    <div className="relative rounded-xl overflow-hidden bg-zinc-950 border border-zinc-800 flex-1 min-h-0 flex items-center justify-center">
                       <img
                         src={activeModal.data.mainImg[sliderIndex]}
                         alt={activeModal.data.title}
@@ -1255,8 +1256,8 @@ export default function App() {
                         </a>
                       )}
                     </div>
-                    {/* Thumbnails — Full height sidebar */}
-                    <div className="flex md:flex-col gap-2 overflow-x-auto md:overflow-y-auto md:overflow-x-hidden min-h-0">
+                    {/* Thumbnails — Full height sidebar matching main image */}
+                    <div className="flex md:flex-col gap-2 overflow-x-auto md:overflow-y-auto md:overflow-x-hidden md:w-[110px] flex-shrink-0 h-full">
                       {activeModal.data.mainImg.map((img, idx) => (
                         <button
                           key={idx}
@@ -1352,7 +1353,21 @@ export default function App() {
                   ))}
                 </div>
                 <h3 className="text-2xl font-bold text-zinc-100">{activeModal.data.title}</h3>
-                <p className="text-zinc-400 text-sm mt-3 leading-relaxed">{activeModal.data.desc}</p>
+                <div className="mt-3">
+                  <p className="text-zinc-400 text-sm leading-relaxed">
+                    {descExpanded || !activeModal.data.desc || activeModal.data.desc.length <= 150
+                      ? activeModal.data.desc
+                      : `${activeModal.data.desc.slice(0, 150)}...`}
+                  </p>
+                  {activeModal.data.desc && activeModal.data.desc.length > 150 && (
+                    <button
+                      onClick={() => setDescExpanded(!descExpanded)}
+                      className="text-violet-400 hover:text-violet-300 text-xs font-semibold mt-1.5 transition-colors duration-200"
+                    >
+                      {descExpanded ? "Read Less ↑" : "Read More ↓"}
+                    </button>
+                  )}
+                </div>
               </div>
             )}
           </div>
