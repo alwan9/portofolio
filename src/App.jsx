@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { ArrowUp, Menu, X, Globe, ExternalLink, Award, Sparkles, Monitor, Smartphone } from "lucide-react";
+import { useLanguage } from "./contexts/LanguageContext";
+import { dict } from "./locales/dictionaries";
 import { Icon } from "@iconify/react";
 import { motion, AnimatePresence } from "motion/react";
 import { projects, achievements, posters } from "./data";
@@ -7,6 +9,52 @@ import GradientText from "./GradientText";
 import ScrollVelocity from "./ScrollVelocity";
 import BorderGlow from "./BorderGlow";
 import LightRays from "./LightRays";
+
+const techIcons = {
+  "Laravel": "logos:laravel",
+  "Laravel Filament": "logos:laravel",
+  "Flowise": "ph:robot-bold",
+  "JavaScript": "logos:javascript",
+  "Chart.js": "ic:round-insert-chart",
+  "React JS": "logos:react",
+  "Tailwind": "logos:tailwindcss-icon",
+  "Tailwind CSS": "logos:tailwindcss-icon",
+  "HTML": "logos:html-5",
+  "Google Apps Script": "logos:google-apps-script",
+  "Google Sheets": "vscode-icons:file-type-excel",
+  "API Gemini": "logos:google-gemini",
+  "ChatGPT": "logos:openai-icon",
+};
+
+// Scroll Reveal Component
+const ScrollReveal = ({ children, direction = "up", delay = 0, className = "", id }) => {
+  const directions = {
+    up: { y: 80, x: 0, scale: 0.95 },
+    down: { y: -80, x: 0, scale: 0.95 },
+    left: { x: 80, y: 0, scale: 0.95 },
+    right: { x: -80, y: 0, scale: 0.95 },
+    none: { x: 0, y: 0, scale: 1 }
+  };
+
+  return (
+    <motion.section
+      id={id}
+      initial={{ opacity: 0, ...directions[direction] }}
+      whileInView={{ opacity: 1, x: 0, y: 0, scale: 1 }}
+      viewport={{ once: true, margin: "-15%" }}
+      transition={{
+        type: "spring",
+        stiffness: 70,
+        damping: 15,
+        mass: 1.2,
+        delay
+      }}
+      className={className}
+    >
+      {children}
+    </motion.section>
+  );
+};
 
 // Animated Counter Component for premium feels
 const Counter = ({ target, duration = 2000 }) => {
@@ -160,9 +208,9 @@ const ThreeDRingSlider = () => {
       const isTablet = windowWidth >= 640 && windowWidth < 1024;
 
       // Sesuaikan ukuran kartu — diperbesar signifikan
-      const cardWidth = isMobile ? 340 : isTablet ? 500 : 700;
+      const cardWidth = isMobile ? 300 : isTablet ? 500 : 700;
       // RadiusX fullscreen: meregang hingga ujung layar
-      const radiusX = windowWidth / 2 + (isMobile ? 60 : 200);
+      const radiusX = windowWidth / 2 + (isMobile ? 40 : 200);
       const radiusZ = isMobile ? 100 : 200;
 
       cardsRef.current.forEach((card, i) => {
@@ -271,7 +319,7 @@ const ThreeDRingSlider = () => {
       onTouchMove={handleMove}
       onTouchEnd={handleEnd}
       onMouseEnter={() => { isHoveredRef.current = true; }}
-      className="relative w-screen left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] h-[250px] sm:h-[420px] md:h-[560px] flex items-center justify-center overflow-hidden py-4 select-none cursor-grab active:cursor-grabbing"
+      className="relative w-screen left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] h-[220px] sm:h-[420px] md:h-[560px] flex items-center justify-center overflow-hidden py-4 select-none cursor-grab active:cursor-grabbing"
       style={{ perspective: "1200px" }}
     >
       {/* Ambient green glow di tengah belakang */}
@@ -288,7 +336,7 @@ const ThreeDRingSlider = () => {
           <div
             key={idx}
             ref={(el) => (cardsRef.current[idx] = el)}
-            className="absolute w-[340px] sm:w-[500px] md:w-[700px] aspect-video rounded-[100px] sm:rounded-[32px] overflow-hidden border border-zinc-800/80 bg-zinc-900 shadow-2xl cursor-pointer transition-all duration-300 ease-out hover:border-violet-500/60 hover:shadow-[0_0_50px_rgba(139,92,246,0.3)] hover:scale-105 group"
+            className="absolute w-[300px] sm:w-[500px] md:w-[700px] aspect-video rounded-2xl sm:rounded-[32px] overflow-hidden border border-zinc-800/80 bg-zinc-900 shadow-2xl cursor-pointer transition-all duration-300 ease-out hover:border-violet-500/60 hover:shadow-[0_0_50px_rgba(139,92,246,0.3)] hover:scale-105 group"
             style={{
               transformOrigin: "center center"
             }}
@@ -321,6 +369,9 @@ const ThreeDRingSlider = () => {
 
 
 export default function App() {
+  const { lang, toggleLanguage } = useLanguage();
+  const t = dict[lang];
+
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [projectTab, setProjectTab] = useState("web"); // 'web' | 'design' | 'achievement'
@@ -384,6 +435,8 @@ export default function App() {
     setActiveModal(null);
   };
 
+  const modalDesc = activeModal?.data ? (lang === 'en' ? (activeModal.data.desc_en || activeModal.data.description_en) : (activeModal.data.desc_id || activeModal.data.description_id)) : '';
+
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-100 font-sans selection:bg-violet-500 selection:text-white">
 
@@ -403,21 +456,39 @@ export default function App() {
 
             {/* DESKTOP MENU */}
             <div className="hidden md:flex items-center space-x-8">
-              <a href="#home" className="text-sm font-medium text-zinc-300 hover:text-violet-400 transition-colors">Home</a>
-              <a href="#about" className="text-sm font-medium text-zinc-300 hover:text-violet-400 transition-colors">About</a>
-              <a href="#favorit" className="text-sm font-medium text-zinc-300 hover:text-violet-400 transition-colors">Favorite</a>
-              <a href="#all" className="text-sm font-medium text-zinc-300 hover:text-violet-400 transition-colors">Projects</a>
+              <a href="#home" className="text-sm font-medium text-zinc-300 hover:text-violet-400 transition-colors">{t.nav.home}</a>
+              <a href="#about" className="text-sm font-medium text-zinc-300 hover:text-violet-400 transition-colors">{t.nav.about}</a>
+              <a href="#favorit" className="text-sm font-medium text-zinc-300 hover:text-violet-400 transition-colors">{t.nav.favorite}</a>
+              <a href="#all" className="text-sm font-medium text-zinc-300 hover:text-violet-400 transition-colors">{t.nav.projects}</a>
               <a
                 href="#all"
                 onClick={() => setProjectTab("design")}
                 className="text-sm font-medium text-zinc-300 hover:text-violet-400 transition-colors"
               >
-                Graphic Design
+                {t.nav.graphicDesign}
               </a>
             </div>
 
-            {/* BURGER BUTTON */}
-            <div className="md:hidden flex items-center">
+            {/* LANGUAGE TOGGLE */}
+            <div className="hidden md:flex items-center ml-4">
+              <button
+                onClick={toggleLanguage}
+                className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-zinc-900 border border-zinc-800 text-zinc-300 hover:text-violet-400 hover:border-violet-500/30 transition-all text-sm font-medium shadow-sm hover:shadow-violet-500/20"
+              >
+                <Globe size={16} />
+                {lang === 'en' ? 'EN' : 'ID'}
+              </button>
+            </div>
+
+            {/* BURGER BUTTON & MOBILE TOGGLE */}
+            <div className="md:hidden flex items-center gap-3">
+              <button
+                onClick={toggleLanguage}
+                className="flex items-center gap-1 px-2 py-1 rounded-md bg-zinc-900 border border-zinc-800 text-zinc-300 text-xs font-medium"
+              >
+                <Globe size={14} />
+                {lang === 'en' ? 'EN' : 'ID'}
+              </button>
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 className="text-zinc-400 hover:text-white focus:outline-none p-1"
@@ -437,35 +508,35 @@ export default function App() {
               onClick={() => setMobileMenuOpen(false)}
               className="block px-3 py-2 rounded-md text-base font-medium text-zinc-300 hover:bg-zinc-900 hover:text-white"
             >
-              Home
+              {t.nav.home}
             </a>
             <a
               href="#about"
               onClick={() => setMobileMenuOpen(false)}
               className="block px-3 py-2 rounded-md text-base font-medium text-zinc-300 hover:bg-zinc-900 hover:text-white"
             >
-              About
+              {t.nav.about}
             </a>
             <a
               href="#favorit"
               onClick={() => setMobileMenuOpen(false)}
               className="block px-3 py-2 rounded-md text-base font-medium text-zinc-300 hover:bg-zinc-900 hover:text-white"
             >
-              Favorite Project
+              {t.nav.favoriteProject}
             </a>
             <a
               href="#all"
               onClick={() => { setMobileMenuOpen(false); setProjectTab("web"); }}
               className="block px-3 py-2 rounded-md text-base font-medium text-zinc-300 hover:bg-zinc-900 hover:text-white"
             >
-              All Projects
+              {t.nav.allProjects}
             </a>
             <a
               href="#all"
               onClick={() => { setMobileMenuOpen(false); setProjectTab("design"); }}
               className="block px-3 py-2 rounded-md text-base font-medium text-zinc-300 hover:bg-zinc-900 hover:text-white"
             >
-              Graphic Design
+              {t.nav.graphicDesign}
             </a>
           </div>
         )}
@@ -498,22 +569,22 @@ export default function App() {
         <div className="relative z-10 w-full max-w-7xl px-6 flex flex-col items-center">
           <div className="focus-in-expand max-w-4xl mx-auto flex flex-col items-center">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/30 text-violet-400 text-sm font-semibold mb-6 shadow-[0_0_15px_rgba(139,92,246,0.15)]">
-              <Sparkles size={16} /> Hi, Saya Hafiz Alwan 👋
+              <Sparkles size={16} /> {t.hero.greeting}
             </div>
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 font-outfit text-white">
-              Create Stunning Websites & Visuals
+              {t.hero.title1}
               <div className="mt-2 flex justify-center w-full">
                 <GradientText
                   colors={["#a78bfa", "#60a5fa", "#818cf8"]}
                   animationSpeed={6}
                   className="filter drop-shadow-[0_0_20px_rgba(139,92,246,0.4)] block"
                 >
-                  with Just a Concept
+                  {t.hero.title2}
                 </GradientText>
               </div>
             </h1>
             <p className="text-zinc-400 text-base md:text-lg max-w-2xl mx-auto mb-8 leading-relaxed font-light">
-              Mengubah ide Anda menjadi aplikasi web interaktif berkualitas tinggi dan grafis visual menakjubkan dalam hitungan detik.
+              {t.hero.desc}
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10 relative z-20">
@@ -521,11 +592,11 @@ export default function App() {
                 href="#all"
                 className="w-full sm:w-auto px-8 py-3.5 rounded-full bg-zinc-950 border border-zinc-800 hover:border-violet-500/60 text-white font-medium hover:bg-zinc-900 transition-all duration-300 shadow-[0_0_25px_rgba(99,102,241,0.2)] hover:shadow-[0_0_30px_rgba(99,102,241,0.35)] flex items-center justify-center gap-2 group"
               >
-                Lihat Projek Saya
+                {t.hero.btnProjects}
                 <span className="transform group-hover:translate-x-1 transition-transform">→</span>
               </a>
               <a href="#about" className="w-full sm:w-auto px-8 py-3.5 rounded-full bg-zinc-900 border border-zinc-800 text-zinc-300 hover:text-white font-medium hover:bg-zinc-800 transition-all duration-300 flex items-center justify-center gap-2">
-                Tentang Saya
+                {t.hero.btnAbout}
               </a>
             </div>
           </div>
@@ -534,33 +605,11 @@ export default function App() {
           <div className="w-full my-6">
             <ThreeDRingSlider />
           </div>
-
-          {/* Three Feature columns at the bottom - Styled exactly like the Framer reference */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 mt-10 sm:mt-12 w-full max-w-5xl text-left border-t border-zinc-900 pt-10 sm:pt-12">
-            <div>
-              <h3 className="text-white font-semibold text-lg mb-2">Lightning-Fast Web Apps</h3>
-              <p className="text-zinc-400 text-sm leading-relaxed">
-                Tulis ide Anda, tekan enter, dan saksikan antarmuka komponen React yang interaktif serta responsif langsung menyala di layar.
-              </p>
-            </div>
-            <div>
-              <h3 className="text-white font-semibold text-lg mb-2">Tailored Brand Aesthetics</h3>
-              <p className="text-zinc-400 text-sm leading-relaxed">
-                Pilih gaya visual modern dan sesuaikan detail halus seperti harmoni palet warna, tipografi premium, serta tata letak artistik.
-              </p>
-            </div>
-            <div>
-              <h3 className="text-white font-semibold text-lg mb-2">Production-Ready Code</h3>
-              <p className="text-zinc-400 text-sm leading-relaxed">
-                Kembangkan karya Anda ke dalam basis kode yang rapi, modular, dan dioptimalkan secara penuh untuk performa kecepatan web terbaik.
-              </p>
-            </div>
-          </div>
         </div>
       </header>
 
       {/* SKILLS SECTION */}
-      <section className="py-20 bg-zinc-950 border-t border-zinc-900 relative overflow-hidden">
+      <ScrollReveal direction="up" className="py-20 bg-zinc-950 border-t border-zinc-900 relative overflow-hidden">
         {/* Subtle background glow */}
         <div className="glow-blob bg-violet-800/10 w-[400px] h-[400px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
 
@@ -572,9 +621,9 @@ export default function App() {
                 <div className="w-14 h-14 rounded-xl bg-violet-600/10 border border-violet-500/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(139,92,246,0.15)]">
                   <img src="./asset/logo/logos_web-dev-icon.png" className="w-8 h-8 object-contain" alt="Web Dev icon" />
                 </div>
-                <h3 className="text-2xl font-bold text-zinc-100 mb-4">Web Development</h3>
+                <h3 className="text-2xl font-bold text-zinc-100 mb-4">{t.skills.webDevTitle}</h3>
                 <p className="text-zinc-400 leading-relaxed text-base">
-                  Mengembangkan website dengan pendekatan modern menggunakan Laravel, React JS, JavaScript, dan Tailwind CSS. Terbiasa membangun dashboard interaktif, sistem kasir digital, manajemen produk, dan integrasi AI chatbot.
+                  {t.skills.webDevDesc}
                 </p>
               </div>
             </BorderGlow>
@@ -585,42 +634,42 @@ export default function App() {
                 <div className="w-14 h-14 rounded-xl bg-violet-600/10 border border-violet-500/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(139,92,246,0.15)]">
                   <img src="./asset/logo/fluent-color_design-ideas-32.png" className="w-8 h-8 object-contain" alt="Design icon" />
                 </div>
-                <h3 className="text-2xl font-bold text-zinc-100 mb-4">Graphic Design</h3>
+                <h3 className="text-2xl font-bold text-zinc-100 mb-4">{t.skills.designTitle}</h3>
                 <p className="text-zinc-400 leading-relaxed text-base">
-                  Berpengalaman dalam pembuatan desain poster manipulation, visual branding, manipulasi foto, dan 3D visualizer menggunakan Photoshop serta SketchUp. Pernah meraih berbagai kejuaraan dari tingkat Kabupaten hingga Nasional.
+                  {t.skills.designDesc}
                 </p>
               </div>
             </BorderGlow>
           </div>
         </div>
-      </section>
+      </ScrollReveal>
 
       {/* STATS COUNT SECTION */}
-      <section className="py-16 bg-gradient-to-b from-zinc-950 to-zinc-900 border-t border-b border-zinc-900">
+      <ScrollReveal direction="up" className="py-16 bg-gradient-to-b from-zinc-950 to-zinc-900 border-t border-b border-zinc-900">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center justify-items-center">
             <div className="p-4">
               <Counter target="8+" />
-              <h5 className="text-zinc-400 text-sm md:text-base mt-2 font-medium">Web App & Landing Page</h5>
+              <h5 className="text-zinc-400 text-sm md:text-base mt-2 font-medium">{t.stats.web}</h5>
             </div>
             <div className="p-4">
               <Counter target="5+" />
-              <h5 className="text-zinc-400 text-sm md:text-base mt-2 font-medium">UI/UX Projects</h5>
+              <h5 className="text-zinc-400 text-sm md:text-base mt-2 font-medium">{t.stats.uiux}</h5>
             </div>
             <div className="p-4">
               <Counter target="1120+" />
-              <h5 className="text-zinc-400 text-sm md:text-base mt-2 font-medium">Graphic Designs</h5>
+              <h5 className="text-zinc-400 text-sm md:text-base mt-2 font-medium">{t.stats.design}</h5>
             </div>
             <div className="p-4">
               <Counter target="9+" />
-              <h5 className="text-zinc-400 text-sm md:text-base mt-2 font-medium">Prestasi & Penghargaan</h5>
+              <h5 className="text-zinc-400 text-sm md:text-base mt-2 font-medium">{t.stats.awards}</h5>
             </div>
           </div>
         </div>
-      </section>
+      </ScrollReveal>
 
       {/* ABOUT ME SECTION */}
-      <section id="about" className="py-28 bg-zinc-950 relative overflow-hidden">
+      <ScrollReveal direction="left" id="about" className="py-28 bg-zinc-950 relative overflow-hidden">
         {/* Ambient background glows */}
         <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-violet-600/5 rounded-full blur-[120px] pointer-events-none" />
         <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-blue-600/5 rounded-full blur-[100px] pointer-events-none" />
@@ -631,10 +680,10 @@ export default function App() {
           <div className="text-center mb-16">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/30 text-violet-400 text-sm font-semibold mb-4">
               <span className="w-1.5 h-1.5 rounded-full bg-violet-400 animate-pulse" />
-              Tentang Saya
+              {t.about.tag}
             </div>
             <h2 className="text-3xl md:text-5xl font-bold text-zinc-100 tracking-tight">
-              Kenali Lebih Dekat
+              {t.about.title}
             </h2>
             <div className="w-16 h-1 bg-gradient-to-r from-violet-500 to-blue-500 rounded-full mx-auto mt-4" />
           </div>
@@ -674,7 +723,7 @@ export default function App() {
                   {/* Bottom gradient overlay with info */}
                   <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-zinc-950 via-zinc-950/80 to-transparent pt-16 pb-5 px-5">
                     <h3 className="text-xl font-bold text-zinc-100 tracking-tight">Hafiz Alwan Susilo</h3>
-                    <p className="text-violet-400 text-sm font-medium mt-0.5">Fullstack Dev & Designer</p>
+                    <p className="text-violet-400 text-sm font-medium mt-0.5">{t.about.role}</p>
                   </div>
 
                   {/* Top corner accent line */}
@@ -689,7 +738,7 @@ export default function App() {
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                       <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
                     </span>
-                    <span className="text-emerald-400 text-[11px] font-semibold tracking-wide">Available for Hire</span>
+                    <span className="text-emerald-400 text-[11px] font-semibold tracking-wide">{t.about.status}</span>
                   </div>
                 </div>
               </div>
@@ -721,8 +770,8 @@ export default function App() {
             </div>
 
             {/* RIGHT — VS Code Snippet */}
-            <div className="lg:col-span-3 w-full flex flex-col gap-6 animate-in fade-in duration-300">
-              <div className={`rounded-t-xl overflow-hidden bg-[#1a1b26]/50 backdrop-blur-md border-t border-l border-r shadow-2xl font-mono text-sm lg:text-base w-full transition-all duration-300 relative ${isHeaderHovered ? "shadow-violet-500/10 border-violet-500/30" : "border-[#292e42]"}`}>
+            <div className="lg:col-span-3 w-full max-w-full flex flex-col gap-6 animate-in fade-in duration-300 min-w-0">
+              <div className={`rounded-t-xl overflow-hidden bg-[#1a1b26]/50 backdrop-blur-md border-t border-l border-r shadow-2xl font-mono text-sm lg:text-base w-full max-w-full transition-all duration-300 relative ${isHeaderHovered ? "shadow-violet-500/10 border-violet-500/30" : "border-[#292e42]"}`}>
                 {/* Window Header */}
                 <div
                   onMouseEnter={() => setIsHeaderHovered(true)}
@@ -734,35 +783,37 @@ export default function App() {
                     <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
                     <div className="w-3 h-3 rounded-full bg-green-500"></div>
                   </div>
-                  <div className="text-[#565f89] text-xs font-sans tracking-wide">about_me.json</div>
+                  <div className="text-[#565f89] text-xs font-sans tracking-wide">AboutMeController.php</div>
                   <div className="w-12"></div> {/* spacer for centering */}
                 </div>
                 {/* Editor Body */}
-                <div className="p-4 flex text-zinc-300 overflow-x-auto">
+                <div className="p-4 flex text-zinc-300 overflow-x-auto w-full max-w-full">
                   {/* Line Numbers */}
                   <div className="flex flex-col text-[#565f89] pr-4 select-none text-right border-r border-[#292e42] mr-4">
-                    <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span><span>16</span><span>17</span><span>18</span><span>19</span>
+                    <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span><span>16</span><span>17</span><span>18</span><span>19</span><span>20</span>
                   </div>
                   {/* Code */}
                   <div className="flex flex-col whitespace-pre">
-                    <span className="text-[#bb9af7]">{`{`}</span>
-                    <span>  <span className="text-[#7aa2f7]">"name"</span>: <span className="text-[#9ece6a]">"Hafiz Alwan Susilo"</span>,</span>
-                    <span>  <span className="text-[#7aa2f7]">"role"</span>: <span className="text-[#9ece6a]">"Fullstack Dev & Designer"</span>,</span>
-                    <span>  <span className="text-[#7aa2f7]">"university"</span>: <span className="text-[#9ece6a]">"Telkom University Purwokerto"</span>,</span>
-                    <span>  <span className="text-[#7aa2f7]">"location"</span>: <span className="text-[#9ece6a]">"Purwokerto, Indonesia"</span>,</span>
-                    <span>  <span className="text-[#7aa2f7]">"status"</span>: <span className="text-[#9ece6a]">"Available for Hire"</span>,</span>
-                    <span>  <span className="text-[#7aa2f7]">"focus"</span>: <span className="text-[#9ece6a]">"Web Dev & UI Design"</span>,</span>
-                    <span>  <span className="text-[#7aa2f7]">"socials"</span>: <span className="text-[#bb9af7]">{`{`}</span></span>
-                    <span>    <span className="text-[#7aa2f7]">"instagram"</span>: <a href="https://instagram.com" target="_blank" className="text-[#9ece6a] hover:underline">"@hafizalwan"</a>,</span>
-                    <span>    <span className="text-[#7aa2f7]">"fiverr"</span>: <a href="https://fiverr.com" target="_blank" className="text-[#9ece6a] hover:underline">"fiverr.com/hafizalwan"</a></span>
-                    <span>  <span className="text-[#bb9af7]">{`}`}</span>,</span>
-                    <span>  <span className="text-[#7aa2f7]">"description"</span>: <span className="text-[#9ece6a]">"Memiliki minat besar di bidang pemrograman,"</span></span>
-                    <span>                 <span className="text-[#9ece6a]">"desain web, dan pengembangan aplikasi interaktif."</span>,</span>
-                    <span>  <span className="text-[#7aa2f7]">"awards"</span>: <span className="text-[#bb9af7]">[</span></span>
-                    <span>    <span className="text-[#9ece6a]">"Juara 1 Desain Poster (Kabupaten & Provinsi)"</span>,</span>
-                    <span>    <span className="text-[#9ece6a]">"Juara 1 Web Design (Universitas Soedirman)"</span></span>
-                    <span>  <span className="text-[#bb9af7]">]</span></span>
-                    <span className="text-[#bb9af7]">{`}`}</span>
+                    <span className="text-[#89ddff]">{`<?php`}</span>
+                    <span>{` `}</span>
+                    <span><span className="text-[#bb9af7]">namespace</span> <span className="text-[#c0caf5]">App\Http\Controllers</span>;</span>
+                    <span>{` `}</span>
+                    <span><span className="text-[#bb9af7]">class</span> <span className="text-[#7aa2f7]">AboutMeController</span> <span className="text-[#bb9af7]">extends</span> <span className="text-[#c0caf5]">Controller</span> {`{`}</span>
+                    <span>    <span className="text-[#bb9af7]">public function</span> <span className="text-[#7aa2f7]">index</span>() {`{`}</span>
+                    <span>        <span className="text-[#bb9af7]">return</span> <span className="text-[#7aa2f7]">response</span>()-><span className="text-[#7aa2f7]">json</span>([</span>
+                    <span>            <span className="text-[#9ece6a]">'name'</span> => <span className="text-[#9ece6a]">'Hafiz Alwan Susilo'</span>,</span>
+                    <span>            <span className="text-[#9ece6a]">'role'</span> => <span className="text-[#9ece6a]">'Fullstack Dev & Designer'</span>,</span>
+                    <span>            <span className="text-[#9ece6a]">'university'</span> => <span className="text-[#9ece6a]">'Telkom Univ Purwokerto'</span>,</span>
+                    <span>            <span className="text-[#9ece6a]">'status'</span> => <span className="text-[#9ece6a]">'Available for Hire'</span>,</span>
+                    <span>            <span className="text-[#9ece6a]">'focus'</span> => <span className="text-[#9ece6a]">'Web Dev & UI Design'</span>,</span>
+                    <span>            <span className="text-[#9ece6a]">'socials'</span> => [</span>
+                    <span>                <span className="text-[#9ece6a]">'ig'</span> => <a href="https://instagram.com" target="_blank" className="text-[#9ece6a] hover:underline">'@hafizalwan'</a>,</span>
+                    <span>                <span className="text-[#9ece6a]">'fiverr'</span> => <a href="https://fiverr.com" target="_blank" className="text-[#9ece6a] hover:underline">'fiverr.com/hafizalwan'</a></span>
+                    <span>            ],</span>
+                    <span>            <span className="text-[#9ece6a]">'awards'</span> => [<span className="text-[#9ece6a]">'Juara 1 Web Design'</span>, <span className="text-[#9ece6a]">'Juara 1 Poster'</span>]</span>
+                    <span>        ]);</span>
+                    <span>    {`}`}</span>
+                    <span>{`}`}</span>
                   </div>
                 </div>
                 {/* Bottom Black Gradient Overlay */}
@@ -773,10 +824,10 @@ export default function App() {
             </div>
           </div>
         </div>
-      </section>
+      </ScrollReveal>
 
       {/* RIWAYAT PENDIDIKAN & PENGALAMAN */}
-      <section id="journey" className="py-20 bg-zinc-950 bg-dots relative border-b border-zinc-900">
+      <ScrollReveal direction="right" id="journey" className="py-20 bg-zinc-950 bg-dots relative border-b border-zinc-900">
         <div className="max-w-7xl mx-auto px-6 relative z-10">
           <div className="text-center mb-16">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/30 text-violet-400 text-sm font-semibold mb-4">
@@ -815,23 +866,23 @@ export default function App() {
                     tags: ["Programming", "Database", "Web Dev"],
                   },
                 ].map((edu, i) => (
-                  <div key={i} className="relative pl-8 group">
+                  <ScrollReveal key={i} direction="up" delay={i * 0.2} className="relative pl-8 group cursor-pointer">
                     {/* Dot on Timeline */}
-                    <span className={`absolute -left-[9px] top-1.5 w-4 h-4 rounded-full border-4 ${edu.active ? "bg-blue-400 border-zinc-950 scale-125 ring-4 ring-blue-500/20" : "bg-zinc-800 border-zinc-950"} transition-all duration-300 group-hover:scale-125`} />
+                    <span className={`absolute -left-[9px] top-1.5 w-4 h-4 rounded-full border-4 ${edu.active ? "bg-blue-400 border-zinc-950 scale-125 ring-4 ring-blue-500/20" : "bg-zinc-800 border-zinc-950"} transition-all duration-300 group-hover:scale-125 group-hover:bg-blue-400 group-hover:border-blue-900`} />
 
-                    <span className={`inline-block text-xs font-semibold px-2.5 py-0.5 rounded-full mb-3 ${edu.active ? "bg-blue-600/20 text-blue-400" : "bg-zinc-800/60 text-zinc-500"}`}>
+                    <span className={`inline-block text-xs font-semibold px-2.5 py-0.5 rounded-full mb-3 ${edu.active ? "bg-blue-600/20 text-blue-400" : "bg-zinc-800/60 text-zinc-500"} transition-all duration-300 group-hover:bg-blue-600/20 group-hover:text-blue-300`}>
                       {edu.period}
                     </span>
-                    <h4 className="text-xl font-bold text-zinc-100 group-hover:text-blue-400 transition-colors">{edu.institution}</h4>
-                    <p className="text-zinc-400 text-sm mt-1">{edu.major}</p>
+                    <h4 className="text-xl font-bold text-zinc-100 group-hover:text-blue-400 transition-all duration-300 group-hover:translate-x-1">{edu.institution}</h4>
+                    <p className="text-zinc-400 text-sm mt-1 group-hover:text-zinc-300 transition-colors duration-300">{edu.major}</p>
                     <div className="flex flex-wrap gap-2 mt-4">
                       {edu.tags.map((tag) => (
-                        <span key={tag} className="text-xs px-2 py-0.5 rounded bg-zinc-900 border border-zinc-800 text-zinc-500">
+                        <span key={tag} className="text-xs px-2 py-0.5 rounded bg-zinc-900 border border-zinc-800 text-zinc-500 transition-all duration-300 group-hover:border-blue-500/30 group-hover:text-blue-300 group-hover:bg-blue-500/10">
                           {tag}
                         </span>
                       ))}
                     </div>
-                  </div>
+                  </ScrollReveal>
                 ))}
               </div>
             </div>
@@ -872,36 +923,36 @@ export default function App() {
                     bullets: ["Predikat \"Excellent Performance\"", "371 desain feed Instagram 4 brand"],
                   },
                 ].map((work, i) => (
-                  <div key={i} className="relative pl-8 group">
+                  <ScrollReveal key={i} direction="up" delay={i * 0.2} className="relative pl-8 group cursor-pointer">
                     {/* Dot on Timeline */}
-                    <span className={`absolute -left-[9px] top-1.5 w-4 h-4 rounded-full border-4 ${work.active ? "bg-emerald-400 border-zinc-950 scale-125 ring-4 ring-emerald-500/20" : "bg-zinc-800 border-zinc-950"} transition-all duration-300 group-hover:scale-125`} />
+                    <span className={`absolute -left-[9px] top-1.5 w-4 h-4 rounded-full border-4 ${work.active ? "bg-emerald-400 border-zinc-950 scale-125 ring-4 ring-emerald-500/20" : "bg-zinc-800 border-zinc-950"} transition-all duration-300 group-hover:scale-125 group-hover:bg-emerald-400 group-hover:border-emerald-900`} />
 
                     <div className="flex items-center gap-2 mb-3">
-                      <span className={`text-xs font-semibold px-2.5 py-0.5 rounded-full ${work.active ? "bg-emerald-600/20 text-emerald-400" : "bg-zinc-800/60 text-zinc-500"}`}>
+                      <span className={`text-xs font-semibold px-2.5 py-0.5 rounded-full ${work.active ? "bg-emerald-600/20 text-emerald-400" : "bg-zinc-800/60 text-zinc-500"} transition-all duration-300 group-hover:bg-emerald-600/20 group-hover:text-emerald-300`}>
                         {work.type}
                       </span>
-                      <span className="text-zinc-500 text-xs font-medium">{work.period}</span>
+                      <span className="text-zinc-500 text-xs font-medium group-hover:text-zinc-400 transition-colors duration-300">{work.period}</span>
                     </div>
-                    <h4 className="text-xl font-bold text-zinc-100 group-hover:text-emerald-400 transition-colors">{work.company}</h4>
-                    <p className="text-emerald-500/80 text-sm font-medium mt-1">{work.role}</p>
+                    <h4 className="text-xl font-bold text-zinc-100 group-hover:text-emerald-400 transition-all duration-300 group-hover:translate-x-1">{work.company}</h4>
+                    <p className="text-emerald-500/80 text-sm font-medium mt-1 group-hover:text-emerald-400 transition-colors duration-300">{work.role}</p>
                     <ul className="mt-4 space-y-2">
                       {work.bullets.map((b, bi) => (
-                        <li key={bi} className="text-zinc-400 text-sm flex items-start gap-2">
-                          <Icon icon="ph:caret-right-bold" className="text-emerald-500 mt-1 flex-shrink-0" />
+                        <li key={bi} className="text-zinc-400 text-sm flex items-start gap-2 transition-all duration-300 group-hover:text-zinc-300 group-hover:translate-x-1" style={{ transitionDelay: `${bi * 50}ms` }}>
+                          <Icon icon="ph:caret-right-bold" className="text-emerald-500 mt-1 flex-shrink-0 group-hover:scale-125 transition-transform duration-300" />
                           <span className="leading-relaxed">{b}</span>
                         </li>
                       ))}
                     </ul>
-                  </div>
+                  </ScrollReveal>
                 ))}
               </div>
             </div>
           </div>
         </div>
-      </section>
+      </ScrollReveal>
 
       {/* MARQUEE LOOP */}
-      <section className="relative overflow-hidden py-10 bg-zinc-900 bg-dots border-t border-b border-zinc-800">
+      <ScrollReveal direction="up" className="relative overflow-hidden py-10 bg-zinc-900 bg-dots border-t border-b border-zinc-800">
         <ScrollVelocity
           texts={[
             (
@@ -960,10 +1011,10 @@ export default function App() {
           velocity={30}
           className="flex items-center opacity-90"
         />
-      </section>
+      </ScrollReveal>
 
       {/* FAVORITE PROJECT */}
-      <section id="favorit" className="py-24 bg-zinc-950 bg-dots">
+      <ScrollReveal direction="up" id="favorit" className="py-24 bg-zinc-950 bg-dots">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
@@ -1049,10 +1100,10 @@ export default function App() {
             </div>
           </div>
         </div>
-      </section>
+      </ScrollReveal>
 
       {/* ALL PROJECTS & ARTWORKS */}
-      <section id="all" className="py-24 bg-zinc-900/40 bg-dots border-t border-zinc-900">
+      <ScrollReveal direction="up" id="all" className="py-24 bg-zinc-900/40 bg-dots border-t border-zinc-900">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center max-w-3xl mx-auto mb-12">
             <h2 className="text-3xl md:text-5xl font-bold text-zinc-100 tracking-tight">Semua Karya & Projek</h2>
@@ -1089,7 +1140,7 @@ export default function App() {
 
           {/* Grid Render */}
           {projectTab === "web" && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 animate-in fade-in duration-300">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-10 animate-in fade-in duration-300">
               {projects.map((item, index) => (
                 <div
                   key={index}
@@ -1101,16 +1152,17 @@ export default function App() {
                       <div className="aspect-video w-full overflow-hidden bg-zinc-800 relative">
                         <img src={item.mainImg[0]} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                       </div>
-                      <div className="p-5 flex-1">
+                      <div className="p-3 sm:p-5 flex-1">
                         <div className="flex flex-wrap gap-1.5 mb-3">
                           {item.badges.map((badge, bIdx) => (
-                            <span key={bIdx} className="text-[10px] font-bold tracking-wide uppercase px-2.5 py-0.5 rounded-full bg-violet-600/10 border border-violet-500/20 text-violet-400">
-                              {badge}
+                            <span key={bIdx} className="flex items-center gap-1.5 text-[10px] md:text-[10px] font-bold tracking-wide uppercase p-1.5 md:px-2.5 md:py-0.5 rounded-full bg-violet-600/10 border border-violet-500/20 text-violet-400">
+                              {techIcons[badge] && <Icon icon={techIcons[badge]} className="text-sm md:text-xs" />}
+                              <span className={techIcons[badge] ? "hidden md:inline" : "inline"}>{badge}</span>
                             </span>
                           ))}
                         </div>
-                        <h3 className="text-lg font-bold text-zinc-100 group-hover:text-violet-400 transition-colors line-clamp-1">{item.title}</h3>
-                        <p className="text-zinc-400 text-xs mt-2 line-clamp-2 leading-relaxed">{item.desc}</p>
+                        <h3 className="text-sm sm:text-lg font-bold text-zinc-100 group-hover:text-violet-400 transition-colors line-clamp-1">{item.title}</h3>
+                        <p className="text-zinc-400 text-[10px] sm:text-xs mt-1 sm:mt-2 line-clamp-2 leading-relaxed">{lang === 'en' ? item.desc_en : item.desc_id}</p>
                       </div>
                     </div>
                   </BorderGlow>
@@ -1120,7 +1172,7 @@ export default function App() {
           )}
 
           {projectTab === "design" && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 animate-in fade-in duration-300">
+            <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-10 animate-in fade-in duration-300">
               {posters.map((item, index) => (
                 <div
                   key={index}
@@ -1132,9 +1184,9 @@ export default function App() {
                       <div className="aspect-[3/4] w-full overflow-hidden bg-zinc-800">
                         <img src={item.image} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                       </div>
-                      <div className="p-5 flex-1">
-                        <h3 className="text-lg font-bold text-zinc-100 group-hover:text-violet-400 transition-colors">{item.title}</h3>
-                        <p className="text-zinc-400 text-xs mt-2 line-clamp-2 leading-relaxed">{item.description}</p>
+                      <div className="p-3 sm:p-5 flex-1">
+                        <h3 className="text-sm sm:text-lg font-bold text-zinc-100 group-hover:text-violet-400 transition-colors line-clamp-1">{item.title}</h3>
+                        <p className="text-zinc-400 text-[10px] sm:text-xs mt-1 sm:mt-2 line-clamp-2 leading-relaxed">{lang === 'en' ? item.description_en : item.description_id}</p>
                       </div>
                     </div>
                   </BorderGlow>
@@ -1144,7 +1196,7 @@ export default function App() {
           )}
 
           {projectTab === "achievement" && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 animate-in fade-in duration-300">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-10 animate-in fade-in duration-300">
               {achievements.map((item, index) => (
                 <div
                   key={index}
@@ -1156,16 +1208,16 @@ export default function App() {
                       <div className="aspect-video w-full overflow-hidden bg-zinc-800 relative">
                         <img src={item.mainImg[0]} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                       </div>
-                      <div className="p-5 flex-1">
-                        <div className="flex flex-wrap gap-1.5 mb-3">
+                      <div className="p-3 sm:p-5 flex-1">
+                        <div className="flex flex-wrap gap-1.5 mb-2 sm:mb-3">
                           {item.badges.map((badge, bIdx) => (
                             <span key={bIdx} className="text-[10px] font-bold tracking-wide uppercase px-2.5 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400">
                               {badge}
                             </span>
                           ))}
                         </div>
-                        <h3 className="text-lg font-bold text-zinc-100 group-hover:text-violet-400 transition-colors line-clamp-1">{item.title}</h3>
-                        <p className="text-zinc-400 text-xs mt-2 line-clamp-2 leading-relaxed">{item.desc}</p>
+                        <h3 className="text-sm sm:text-lg font-bold text-zinc-100 group-hover:text-violet-400 transition-colors line-clamp-1">{item.title}</h3>
+                        <p className="text-zinc-400 text-[10px] sm:text-xs mt-1 sm:mt-2 line-clamp-2 leading-relaxed">{lang === 'en' ? item.desc_en : item.desc_id}</p>
                       </div>
                     </div>
                   </BorderGlow>
@@ -1174,7 +1226,7 @@ export default function App() {
             </div>
           )}
         </div>
-      </section>
+      </ScrollReveal>
 
       {/* FOOTER */}
       <footer className="w-full py-8 bg-zinc-950 bg-dots border-t border-zinc-900 text-center text-sm text-zinc-500 font-medium">
@@ -1198,181 +1250,199 @@ export default function App() {
       )}
 
       {/* DETAIL MODAL (PROJECT / ACHIEVEMENT / POSTER) */}
-      {activeModal && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex justify-center items-center z-[9999] p-2 sm:p-4 animate-in fade-in duration-300">
-          <div className={`bg-zinc-900/95 border border-zinc-800 text-zinc-100 rounded-2xl w-full p-5 sm:p-6 relative shadow-2xl ${activeModal.type === "project" ? "max-w-5xl max-h-[85vh] flex flex-col" : "max-w-4xl max-h-[90vh] overflow-y-auto"}`}>
-            <button
-              onClick={closePopup}
-              className="absolute top-4 right-4 text-zinc-400 hover:text-white p-1 rounded-lg bg-zinc-800/80 hover:bg-zinc-800 transition-colors duration-200"
-              aria-label="Close modal"
+      <AnimatePresence>
+        {activeModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 bg-black/80 backdrop-blur-sm flex justify-center items-center z-[9999] p-2 sm:p-4"
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              transition={{ type: "spring", bounce: 0.2, duration: 0.5 }}
+              className={`bg-zinc-900/95 border border-zinc-800 text-zinc-100 rounded-2xl w-full p-5 sm:p-6 relative shadow-2xl overflow-hidden ${activeModal.type === "project" ? "w-[95vw] max-w-[1500px] h-[95vh] flex flex-col" : "max-w-4xl max-h-[90vh] overflow-y-auto"}`}
             >
-              <X size={20} />
-            </button>
+              <button
+                onClick={closePopup}
+                className="absolute top-4 right-4 text-zinc-400 hover:text-white p-1 rounded-lg bg-zinc-800/80 hover:bg-zinc-800 transition-colors duration-200"
+                aria-label="Close modal"
+              >
+                <X size={20} />
+              </button>
 
-            {/* Modal Image Slider / Header */}
-            {activeModal.type === "project" && (
-              <div>
-                {/* Desktop / Mobile Toggle */}
-                <div className="flex items-center gap-2 mb-4 mt-2">
-                  <button
-                    onClick={() => { setViewMode("desktop"); setSliderIndex(0); }}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all duration-300 ${viewMode === "desktop"
-                      ? "bg-violet-600 text-white shadow-lg shadow-violet-500/30"
-                      : "bg-zinc-800/80 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200"
-                      }`}
-                  >
-                    <Monitor size={14} /> Desktop
-                  </button>
-                  <button
-                    onClick={() => { setViewMode("mobile"); setSliderIndex(0); }}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all duration-300 ${viewMode === "mobile"
-                      ? "bg-violet-600 text-white shadow-lg shadow-violet-500/30"
-                      : "bg-zinc-800/80 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200"
-                      } ${(!activeModal.data.mobileImg || activeModal.data.mobileImg.length === 0) ? "opacity-40 cursor-not-allowed" : ""}`}
-                    disabled={!activeModal.data.mobileImg || activeModal.data.mobileImg.length === 0}
-                  >
-                    <Smartphone size={14} /> Mobile
-                  </button>
-                </div>
+              <div className="flex flex-col md:flex-row md:items-start gap-6 md:gap-10 w-full h-full overflow-y-auto overflow-x-hidden md:overflow-hidden pb-6 md:pb-0">
 
-                {/* Desktop View */}
-                {viewMode === "desktop" && (
-                  <div className="flex-1 flex flex-col md:flex-row gap-4 min-h-0 overflow-hidden"  >
-                    {/* Main Image */}
-                    <div className="relative rounded-xl overflow-hidden bg-zinc-950 border border-zinc-800 flex-1 min-h-0 flex items-center justify-center">
-                      <img
-                        src={activeModal.data.mainImg[sliderIndex]}
-                        alt={activeModal.data.title}
-                        className="w-full h-full object-contain transition-all duration-500"
-                      />
-                      {activeModal.data.link && (
-                        <a
-                          href={activeModal.data.link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="absolute top-4 right-4 bg-violet-600 hover:bg-violet-700 text-white px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-1.5 shadow-lg transition-colors duration-300"
+                {/* Modal Image Slider / Header */}
+                {activeModal.type === "project" && (
+                  <div className="flex-1 min-w-0 w-full flex flex-col">
+                    {/* Desktop / Mobile Toggle */}
+                    <div className="flex items-center gap-2 mb-4 mt-2">
+                      <button
+                        onClick={() => { setViewMode("desktop"); setSliderIndex(0); }}
+                        className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all duration-300 ${viewMode === "desktop"
+                          ? "bg-violet-600 text-white shadow-lg shadow-violet-500/30"
+                          : "bg-zinc-800/80 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200"
+                          }`}
+                      >
+                        <Monitor size={14} /> Desktop
+                      </button>
+                      <button
+                        onClick={() => { setViewMode("mobile"); setSliderIndex(0); }}
+                        className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all duration-300 ${viewMode === "mobile"
+                          ? "bg-violet-600 text-white shadow-lg shadow-violet-500/30"
+                          : "bg-zinc-800/80 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200"
+                          } ${(!activeModal.data.mobileImg || activeModal.data.mobileImg.length === 0) ? "opacity-40 cursor-not-allowed" : ""}`}
+                        disabled={!activeModal.data.mobileImg || activeModal.data.mobileImg.length === 0}
+                      >
+                        <Smartphone size={14} /> Mobile
+                      </button>
+                    </div>
+
+                    {/* Desktop View */}
+                    {viewMode === "desktop" && (
+                      <div className="flex-1 flex flex-col md:flex-row gap-4 min-h-[300px] md:min-h-0 md:overflow-hidden"  >
+                        {/* Main Image */}
+                        <div className="relative rounded-xl overflow-hidden bg-zinc-950 border border-zinc-800 flex-1 min-h-0 flex items-center justify-center">
+                          <img
+                            src={activeModal.data.mainImg[sliderIndex]}
+                            alt={activeModal.data.title}
+                            className="w-full h-full object-contain transition-all duration-500"
+                          />
+                          {activeModal.data.link && (
+                            <a
+                              href={activeModal.data.link}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="absolute top-4 right-4 bg-violet-600 hover:bg-violet-700 text-white px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-1.5 shadow-lg transition-colors duration-300"
+                            >
+                              Kunjungi Projek <ExternalLink size={12} />
+                            </a>
+                          )}
+                        </div>
+                        {/* Thumbnails — Full height sidebar matching main image */}
+                        <div className="flex md:flex-col gap-2 overflow-x-auto md:overflow-y-auto md:overflow-x-hidden md:w-[110px] flex-shrink-0 md:h-full pb-2 md:pb-0">
+                          {activeModal.data.mainImg.map((img, idx) => (
+                            <button
+                              key={idx}
+                              onClick={() => setSliderIndex(idx)}
+                              className={`relative aspect-video w-20 md:w-full rounded-lg overflow-hidden border-2 flex-shrink-0 transition-all ${sliderIndex === idx ? "border-violet-500 shadow-md shadow-violet-500/30" : "border-zinc-800 hover:border-zinc-700"
+                                }`}
+                            >
+                              <img src={img} className="w-full h-full object-cover" alt="" />
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Mobile View - Phone Mockup */}
+                    {viewMode === "mobile" && activeModal.data.mobileImg && activeModal.data.mobileImg.length > 0 && (
+                      <div className="flex sm:flex-col items-center justify-center gap-6 md:gap-10 h-full min-h-0">
+                        {/* Phone Frame */}
+                        <div className="relative flex-shrink-0" style={{ width: "280px" }}>
+                          {/* Phone outer shell */}
+                          <div className="relative bg-zinc-900 rounded-[40px] p-[10px] border-[3px] border-zinc-700 shadow-2xl shadow-black/50">
+                            {/* Notch / Dynamic Island */}
+                            <div className="absolute top-[14px] left-1/2 -translate-x-1/2 w-[90px] h-[26px] bg-zinc-950 rounded-full z-20 flex items-center justify-center gap-2">
+                              <div className="w-[8px] h-[8px] rounded-full bg-zinc-800 border border-zinc-700"></div>
+                              <div className="w-[6px] h-[6px] rounded-full bg-zinc-800"></div>
+                            </div>
+                            {/* Screen */}
+                            <div className="relative rounded-[30px] overflow-hidden bg-zinc-950 aspect-[9/19.5]">
+                              <img
+                                src={activeModal.data.mobileImg[sliderIndex]}
+                                alt={activeModal.data.title}
+                                className="w-full h-full object-cover transition-all duration-500"
+                              />
+                              {/* Screen reflection glare */}
+                              <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-transparent pointer-events-none rounded-[30px]"></div>
+                            </div>
+                            {/* Bottom bar indicator */}
+                            <div className="absolute bottom-[8px] left-1/2 -translate-x-1/2 w-[100px] h-[4px] bg-zinc-600 rounded-full"></div>
+                          </div>
+                          {/* Phone shadow glow */}
+                          <div className="absolute -inset-4 bg-violet-500/5 rounded-[50px] blur-xl -z-10"></div>
+                        </div>
+
+                        {/* Mobile Thumbnails */}
+                        <div className="flex sm:flex-col gap-3 overflow-x-auto sm:overflow-y-auto sm:overflow-x-hidden pb-2 sm:pb-0 sm:pr-2 sm:max-h-[550px] max-w-full justify-center sm:justify-start">
+                          {activeModal.data.mobileImg.map((img, idx) => (
+                            <button
+                              key={idx}
+                              onClick={() => setSliderIndex(idx)}
+                              className={`relative aspect-[9/16] w-14 sm:w-16 rounded-lg overflow-hidden border-2 flex-shrink-0 transition-all ${sliderIndex === idx ? "border-violet-500 shadow-md shadow-violet-500/30" : "border-zinc-800 hover:border-zinc-700"
+                                }`}
+                            >
+                              <img src={img} className="w-full h-full object-cover" alt="" />
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {activeModal.type === "achievement" && (
+                  <div className="flex-1 min-w-0 aspect-video w-full rounded-xl overflow-hidden bg-zinc-950 border border-zinc-800 mt-4 max-h-[400px]">
+                    <img
+                      src={activeModal.data.mainImg[0]}
+                      alt={activeModal.data.title}
+                      className="w-full h-full object-contain"
+                    />
+                  </div>
+                )}
+
+                {activeModal.type === "poster" && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-4 items-start">
+                    <div className="aspect-[3/4] w-full rounded-xl overflow-hidden bg-zinc-950 border border-zinc-800">
+                      <img src={activeModal.data.image} alt={activeModal.data.title} className="w-full h-full object-cover" />
+                    </div>
+                    <div className="flex flex-col gap-4">
+                      <h3 className="text-2xl font-bold text-zinc-100">{activeModal.data.title}</h3>
+                      <div className="w-16 h-1 bg-violet-600 rounded-full"></div>
+                      <p className="text-zinc-400 text-sm leading-relaxed">{modalDesc}</p>
+                    </div>
+                  </div>
+                )}
+
+                {/* Modal Info Footer (only for non-poster, poster has it beside) */}
+                {activeModal.type !== "poster" && (
+                  <div className={`w-full md:w-[300px] lg:w-[380px] flex-shrink-0 ${activeModal.type === "project" ? "pt-4 border-t md:border-t-0 md:border-l border-zinc-800/50 md:pl-8 md:pt-8 mt-2 md:mt-0 md:overflow-y-auto md:h-full pb-8 md:pb-4" : "mt-8 md:mt-0"}`}>
+                    <div className="flex flex-wrap items-center gap-2 mb-4">
+                      {activeModal.data.badges && activeModal.data.badges.map((badge, idx) => (
+                        <span key={idx} className="flex items-center gap-1.5 text-xs font-bold uppercase p-2 md:px-3 md:py-1 rounded-full bg-violet-600/10 border border-violet-500/20 text-violet-400">
+                          {techIcons[badge] && <Icon icon={techIcons[badge]} className="text-lg md:text-sm" />}
+                          <span className={techIcons[badge] ? "hidden md:inline" : "inline"}>{badge}</span>
+                        </span>
+                      ))}
+                    </div>
+                    <h3 className="text-2xl font-bold text-zinc-100">{activeModal.data.title}</h3>
+                    <div className="mt-3">
+                      <p className="text-zinc-400 text-sm leading-relaxed">
+                        {descExpanded || !modalDesc || modalDesc.length <= 150
+                          ? modalDesc
+                          : `${modalDesc.slice(0, 150)}...`}
+                      </p>
+                      {modalDesc && modalDesc.length > 150 && (
+                        <button
+                          onClick={() => setDescExpanded(!descExpanded)}
+                          className="text-violet-400 hover:text-violet-300 text-xs font-semibold mt-1.5 transition-colors duration-200"
                         >
-                          Kunjungi Projek <ExternalLink size={12} />
-                        </a>
+                          {descExpanded ? "Read Less ↑" : "Read More ↓"}
+                        </button>
                       )}
                     </div>
-                    {/* Thumbnails — Full height sidebar matching main image */}
-                    <div className="flex md:flex-col gap-2 overflow-x-auto md:overflow-y-auto md:overflow-x-hidden md:w-[110px] flex-shrink-0 h-full">
-                      {activeModal.data.mainImg.map((img, idx) => (
-                        <button
-                          key={idx}
-                          onClick={() => setSliderIndex(idx)}
-                          className={`relative aspect-video w-20 md:w-full rounded-lg overflow-hidden border-2 flex-shrink-0 transition-all ${sliderIndex === idx ? "border-violet-500 shadow-md shadow-violet-500/30" : "border-zinc-800 hover:border-zinc-700"
-                            }`}
-                        >
-                          <img src={img} className="w-full h-full object-cover" alt="" />
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {/* Mobile View - Phone Mockup */}
-                {viewMode === "mobile" && activeModal.data.mobileImg && activeModal.data.mobileImg.length > 0 && (
-                  <div className="flex flex-col items-center gap-6">
-                    {/* Phone Frame */}
-                    <div className="relative mx-auto" style={{ width: "280px" }}>
-                      {/* Phone outer shell */}
-                      <div className="relative bg-zinc-900 rounded-[40px] p-[10px] border-[3px] border-zinc-700 shadow-2xl shadow-black/50">
-                        {/* Notch / Dynamic Island */}
-                        <div className="absolute top-[14px] left-1/2 -translate-x-1/2 w-[90px] h-[26px] bg-zinc-950 rounded-full z-20 flex items-center justify-center gap-2">
-                          <div className="w-[8px] h-[8px] rounded-full bg-zinc-800 border border-zinc-700"></div>
-                          <div className="w-[6px] h-[6px] rounded-full bg-zinc-800"></div>
-                        </div>
-                        {/* Screen */}
-                        <div className="relative rounded-[30px] overflow-hidden bg-zinc-950 aspect-[9/19.5]">
-                          <img
-                            src={activeModal.data.mobileImg[sliderIndex]}
-                            alt={activeModal.data.title}
-                            className="w-full h-full object-cover transition-all duration-500"
-                          />
-                          {/* Screen reflection glare */}
-                          <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-transparent pointer-events-none rounded-[30px]"></div>
-                        </div>
-                        {/* Bottom bar indicator */}
-                        <div className="absolute bottom-[8px] left-1/2 -translate-x-1/2 w-[100px] h-[4px] bg-zinc-600 rounded-full"></div>
-                      </div>
-                      {/* Phone shadow glow */}
-                      <div className="absolute -inset-4 bg-violet-500/5 rounded-[50px] blur-xl -z-10"></div>
-                    </div>
-
-                    {/* Mobile Thumbnails */}
-                    <div className="flex gap-3 overflow-x-auto pb-2 max-w-full justify-center">
-                      {activeModal.data.mobileImg.map((img, idx) => (
-                        <button
-                          key={idx}
-                          onClick={() => setSliderIndex(idx)}
-                          className={`relative aspect-[9/16] w-14 rounded-lg overflow-hidden border-2 flex-shrink-0 transition-all ${sliderIndex === idx ? "border-violet-500 shadow-md shadow-violet-500/30" : "border-zinc-800 hover:border-zinc-700"
-                            }`}
-                        >
-                          <img src={img} className="w-full h-full object-cover" alt="" />
-                        </button>
-                      ))}
-                    </div>
                   </div>
                 )}
               </div>
-            )}
-
-            {activeModal.type === "achievement" && (
-              <div className="aspect-video w-full rounded-xl overflow-hidden bg-zinc-950 border border-zinc-800 mt-4 max-h-[400px]">
-                <img
-                  src={activeModal.data.mainImg[0]}
-                  alt={activeModal.data.title}
-                  className="w-full h-full object-contain"
-                />
-              </div>
-            )}
-
-            {activeModal.type === "poster" && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-4 items-start">
-                <div className="aspect-[3/4] w-full rounded-xl overflow-hidden bg-zinc-950 border border-zinc-800">
-                  <img src={activeModal.data.image} alt={activeModal.data.title} className="w-full h-full object-cover" />
-                </div>
-                <div className="flex flex-col gap-4">
-                  <h3 className="text-2xl font-bold text-zinc-100">{activeModal.data.title}</h3>
-                  <div className="w-16 h-1 bg-violet-600 rounded-full"></div>
-                  <p className="text-zinc-400 text-sm leading-relaxed">{activeModal.data.description}</p>
-                </div>
-              </div>
-            )}
-
-            {/* Modal Info Footer (only for non-poster, poster has it beside) */}
-            {activeModal.type !== "poster" && (
-              <div className={`${activeModal.type === "project" ? "flex-shrink-0 pt-4 border-t border-zinc-800/50 mt-4" : "mt-8"}`}>
-                <div className="flex flex-wrap items-center gap-2 mb-4">
-                  {activeModal.data.badges && activeModal.data.badges.map((badge, idx) => (
-                    <span key={idx} className="text-xs font-bold uppercase px-3 py-1 rounded-full bg-violet-600/10 border border-violet-500/20 text-violet-400">
-                      {badge}
-                    </span>
-                  ))}
-                </div>
-                <h3 className="text-2xl font-bold text-zinc-100">{activeModal.data.title}</h3>
-                <div className="mt-3">
-                  <p className="text-zinc-400 text-sm leading-relaxed">
-                    {descExpanded || !activeModal.data.desc || activeModal.data.desc.length <= 150
-                      ? activeModal.data.desc
-                      : `${activeModal.data.desc.slice(0, 150)}...`}
-                  </p>
-                  {activeModal.data.desc && activeModal.data.desc.length > 150 && (
-                    <button
-                      onClick={() => setDescExpanded(!descExpanded)}
-                      className="text-violet-400 hover:text-violet-300 text-xs font-semibold mt-1.5 transition-colors duration-200"
-                    >
-                      {descExpanded ? "Read Less ↑" : "Read More ↓"}
-                    </button>
-                  )}
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* MOBILE WELCOME MODAL (DYNAMIC ISLAND STYLE WITH MOTION) */}
       <AnimatePresence>
