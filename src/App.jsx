@@ -831,10 +831,10 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-6 relative z-10">
           <div className="text-center mb-16">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/30 text-violet-400 text-sm font-semibold mb-4">
-              <Icon icon="ph:map-trifold-bold" /> Perjalanan Saya
+              <Icon icon="ph:map-trifold-bold" /> {t.journey.tag}
             </div>
             <h2 className="text-3xl md:text-5xl font-bold text-zinc-100 tracking-tight">
-              Pendidikan & Pengalaman
+              {t.journey.title}
             </h2>
             <div className="w-16 h-1 bg-gradient-to-r from-violet-500 to-blue-500 rounded-full mx-auto mt-4" />
           </div>
@@ -846,7 +846,7 @@ export default function App() {
                 <div className="w-10 h-10 rounded-lg bg-blue-500/15 border border-blue-500/30 flex items-center justify-center text-blue-400 text-xl">
                   <Icon icon="ph:graduation-cap-bold" />
                 </div>
-                <h3 className="text-2xl font-bold text-zinc-100">Riwayat Belajar</h3>
+                <h3 className="text-2xl font-bold text-zinc-100">{t.journey.eduTitle}</h3>
               </div>
 
               <div className="relative border-l border-zinc-800/80 ml-5 space-y-12">
@@ -893,7 +893,7 @@ export default function App() {
                 <div className="w-10 h-10 rounded-lg bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400 text-xl">
                   <Icon icon="ph:briefcase-bold" />
                 </div>
-                <h3 className="text-2xl font-bold text-zinc-100">Karir Profesional</h3>
+                <h3 className="text-2xl font-bold text-zinc-100">{t.journey.careerTitle}</h3>
               </div>
 
               <div className="relative border-l border-zinc-800/80 ml-5 space-y-12">
@@ -1019,13 +1019,13 @@ export default function App() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
               <div className="inline-block px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/30 text-violet-400 text-xs font-semibold mb-4">
-                PROJEK UNGGULAN
+                {t.favorite.tag}
               </div>
               <h2 className="text-3xl md:text-5xl font-bold text-zinc-100 tracking-tight leading-tight">
-                Projek Favorit: Baju Bagus Inc.
+                {t.favorite.title}
               </h2>
               <p className="mt-6 text-zinc-400 leading-relaxed text-lg">
-                Saya membuat platform e-commerce Baju Bagus Inc dengan manajemen produk terstruktur untuk 1.500+ katalog, chatbot AI pintar untuk merekomendasikan baju, panel kasir instan yang memangkas checkout hingga 40%, serta dashboard analytics untuk sales data secara real-time.
+                {t.favorite.desc}
               </p>
 
               {/* Tech Stack Icons */}
@@ -1077,25 +1077,25 @@ export default function App() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mt-16">
             <div className="p-6 rounded-xl bg-zinc-900/60 border border-zinc-800/80">
               <img src="./asset-page/website/bajubagus10.png" className="w-full aspect-video rounded-lg object-cover mb-4 border border-zinc-800" alt="Subcard" />
-              <h4 className="text-lg font-bold text-zinc-100 mb-2">Smart Product Management</h4>
+              <h4 className="text-lg font-bold text-zinc-100 mb-2">{t.favorite.sub1Title}</h4>
               <p className="text-zinc-400 text-sm leading-relaxed">
-                Membangun catalog management dengan lazy loading image, multi-filter dinamis, dan chatbot AI asisten.
+                {t.favorite.sub1Desc}
               </p>
             </div>
 
             <div className="p-6 rounded-xl bg-zinc-900/60 border border-zinc-800/80">
               <img src="./asset-page/website/bajubagus14.png" className="w-full aspect-video rounded-lg object-cover mb-4 border border-zinc-800" alt="Subcard" />
-              <h4 className="text-lg font-bold text-zinc-100 mb-2">Insightful Admin Dashboard</h4>
+              <h4 className="text-lg font-bold text-zinc-100 mb-2">{t.favorite.sub2Title}</h4>
               <p className="text-zinc-400 text-sm leading-relaxed">
-                Visualisasi profit analytics secara grafis interaktif dengan real-time low-stock alerts.
+                {t.favorite.sub2Desc}
               </p>
             </div>
 
             <div className="p-6 rounded-xl bg-zinc-900/60 border border-zinc-800/80">
               <img src="./asset-page/website/bajubagus7.png" className="w-full aspect-video rounded-lg object-cover mb-4 border border-zinc-800" alt="Subcard" />
-              <h4 className="text-lg font-bold text-zinc-100 mb-2">Sistem Kasir Pintar</h4>
+              <h4 className="text-lg font-bold text-zinc-100 mb-2">{t.favorite.sub3Title}</h4>
               <p className="text-zinc-400 text-sm leading-relaxed">
-                Total memiliki 20 halaman operasional sistem penjualan dengan cetak invoice otomatis.
+                {t.favorite.sub3Desc}
               </p>
             </div>
           </div>
@@ -1106,10 +1106,10 @@ export default function App() {
       <ScrollReveal direction="up" id="all" className="py-24 bg-zinc-900/40 bg-dots border-t border-zinc-900">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center max-w-3xl mx-auto mb-12">
-            <h2 className="text-3xl md:text-5xl font-bold text-zinc-100 tracking-tight">Semua Karya & Projek</h2>
+            <h2 className="text-3xl md:text-5xl font-bold text-zinc-100 tracking-tight">{t.allProjects.title}</h2>
             <div className="w-20 h-1 bg-violet-600 rounded-full mx-auto mt-4 mb-6"></div>
             <p className="text-zinc-400 text-base md:text-lg leading-relaxed">
-              Kumpulan hasil karya saya yang mencakup pengembangan web, desain grafis kreatif, dan pencapaian kompetisi.
+              {t.allProjects.desc}
             </p>
           </div>
 
@@ -1233,7 +1233,7 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
           <p>Designed By Alwan | Copyright © 2025</p>
           <div className="flex items-center gap-6">
-            <a href="#home" className="hover:text-zinc-300 transition-colors">Back to top</a>
+            <a href="#home" className="hover:text-zinc-300 transition-colors">{t.footer.backToTop}</a>
           </div>
         </div>
       </footer>
@@ -1319,7 +1319,7 @@ export default function App() {
                               rel="noopener noreferrer"
                               className="absolute top-4 right-4 bg-violet-600 hover:bg-violet-700 text-white px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-1.5 shadow-lg transition-colors duration-300"
                             >
-                              Kunjungi Projek <ExternalLink size={12} />
+                              {t.modal.visitProject} <ExternalLink size={12} />
                             </a>
                           )}
                         </div>
