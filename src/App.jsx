@@ -376,6 +376,31 @@ export default function App() {
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [projectTab, setProjectTab] = useState("web"); // 'web' | 'design' | 'achievement'
   const [showMobileWelcome, setShowMobileWelcome] = useState(true);
+
+  // Preloader state
+  const [isPreloading, setIsPreloading] = useState(true);
+  const [loadingProgress, setLoadingProgress] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setLoadingProgress((prev) => {
+        if (prev >= 100) {
+          clearInterval(interval);
+          return 100;
+        }
+        return prev + Math.floor(Math.random() * 15) + 5;
+      });
+    }, 150);
+
+    const timer = setTimeout(() => {
+      setIsPreloading(false);
+    }, 2200);
+
+    return () => {
+      clearInterval(interval);
+      clearTimeout(timer);
+    };
+  }, []);
   const [islandExpanded, setIslandExpanded] = useState(false);
   const [isHeaderHovered, setIsHeaderHovered] = useState(false);
 
@@ -440,17 +465,56 @@ export default function App() {
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-100 font-sans selection:bg-violet-500 selection:text-white">
 
+      {/* PRELOADER */}
+      <AnimatePresence>
+        {isPreloading && (
+          <motion.div
+            initial={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.8, ease: "easeInOut" }}
+            className="fixed inset-0 z-[99999] bg-zinc-950 flex flex-col items-center justify-center overflow-hidden"
+          >
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-violet-600/20 rounded-full blur-[80px]" />
+
+            <div className="relative z-10 flex flex-col items-center">
+              <motion.div
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ duration: 0.5 }}
+                className="font-mono font-black text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-indigo-500 tracking-[0.25em] text-3xl sm:text-4xl uppercase mb-8 filter drop-shadow-[0_0_15px_rgba(139,92,246,0.6)]"
+              >
+                HAFIZ_ALWAN
+              </motion.div>
+
+              <div className="text-zinc-400 font-mono text-sm tracking-widest mb-3 uppercase">
+                Loading System
+              </div>
+
+              <div className="w-64 h-1 bg-zinc-900 rounded-full overflow-hidden mb-4 border border-zinc-800">
+                <motion.div
+                  className="h-full bg-gradient-to-r from-violet-600 to-blue-500"
+                  initial={{ width: "0%" }}
+                  animate={{ width: `${Math.min(loadingProgress, 100)}%` }}
+                  transition={{ ease: "linear", duration: 0.2 }}
+                />
+              </div>
+
+              <div className="text-white font-mono text-xl font-bold">
+                {Math.min(loadingProgress, 100)}%
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* NAVBAR */}
       <nav className="bg-zinc-950/80 backdrop-blur-md border-b border-zinc-900 text-white fixed w-full z-50 transition-all duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             {/* LOGO */}
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-violet-600 to-indigo-500 flex items-center justify-center font-bold text-white text-lg shadow-lg shadow-violet-500/20">
-                H
-              </div>
-              <span className="text-xl font-bold tracking-tight bg-gradient-to-r from-white via-zinc-200 to-zinc-400 bg-clip-text text-transparent">
-                Hafiz Alwan
+              <span className="font-mono font-bold tracking-[0.2em] text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-indigo-400 text-lg sm:text-xl uppercase drop-shadow-[0_0_10px_rgba(139,92,246,0.3)]">
+                HAFIZ_ALWAN
               </span>
             </div>
 
@@ -743,8 +807,15 @@ export default function App() {
                 </div>
               </div>
 
-              {/* Social Links — Pill style */}
-              <div className="flex items-center gap-3 mt-4">
+              {/* Social Links & CV — Pill style */}
+              <div className="flex flex-wrap items-center gap-3 mt-4">
+                <a href="/CV.pdf" download
+                  className="flex items-center gap-2 px-5 py-2 rounded-full bg-violet-600 hover:bg-violet-500 text-white shadow-lg shadow-violet-500/20 active:scale-95 transition-all duration-300 text-xs font-bold"
+                  title="Download CV"
+                >
+                  <Icon icon="ph:download-simple-bold" className="text-sm" />
+                  {t.about.downloadCV}
+                </a>
                 <a href="https://fiverr.com" target="_blank" rel="noopener noreferrer"
                   className="flex items-center gap-2 px-4 py-2 rounded-full bg-zinc-900/80 border border-zinc-800 text-zinc-400 hover:text-emerald-400 hover:border-emerald-500/30 hover:shadow-lg hover:shadow-emerald-500/5 active:scale-95 transition-all duration-300 text-xs font-medium"
                   title="Fiverr"

@@ -33,7 +33,8 @@ export const dict = {
       tag: "About Me",
       title: "Get to Know Me Closer",
       role: "Fullstack Dev & Designer",
-      status: "Available for Hire"
+      status: "Available for Hire",
+      downloadCV: "Download CV"
     },
     journey: {
       tag: "My Journey",
@@ -97,7 +98,8 @@ export const dict = {
       tag: "Tentang Saya",
       title: "Kenali Lebih Dekat",
       role: "Fullstack Dev & Designer",
-      status: "Available for Hire"
+      status: "Available for Hire",
+      downloadCV: "Unduh CV"
     },
     journey: {
       tag: "Perjalanan Saya",
