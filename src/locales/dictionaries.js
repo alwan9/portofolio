@@ -2,66 +2,66 @@ export const dict = {
   en: {
     nav: {
       home: "Home",
-      about: "About",
-      favorite: "Favorite",
+      about: "About Me",
+      favorite: "Top Fav",
       projects: "Projects",
-      graphicDesign: "Graphic Design",
-      allProjects: "All Projects",
-      favoriteProject: "Favorite Project"
+      graphicDesign: "Design Corner",
+      allProjects: "All Works",
+      favoriteProject: "Star Project"
     },
     hero: {
-      greeting: "Hi, I'm Hafiz Alwan 👋",
-      title1: "Create Stunning Websites & Visuals",
-      title2: "with Just a Concept",
-      desc: "Transforming your ideas into high-quality interactive web applications and stunning visuals in seconds.",
-      btnProjects: "View My Projects",
-      btnAbout: "About Me"
+      greeting: "Hey there, I'm Hafiz Alwan 👋",
+      title1: "Turn Wild Ideas into Fresh Websites",
+      title2: "& Eye-Catching Visuals",
+      desc: "I build slick web apps and craft stunning designs that bring your vision to life in no time. Simple, clean, and full of vibe.",
+      btnProjects: "Check Out My Work",
+      btnAbout: "Get to Know Me"
     },
     skills: {
       webDevTitle: "Web Development",
-      webDevDesc: "Developing websites with a modern approach using Laravel, React JS, JavaScript, and Tailwind CSS. Experienced in building interactive dashboards, digital POS systems, product management, and AI chatbot integration.",
-      designTitle: "Graphic Design",
-      designDesc: "Experienced in creating manipulation poster designs, visual branding, photo manipulation, and 3D visualizers using Photoshop and SketchUp. Won various championships from Regency to National levels."
+      webDevDesc: "Building smooth web apps with Laravel, React JS, JavaScript & Tailwind CSS. From interactive dashboards to AI chatbots and digital POS systems — I code it all.",
+      designTitle: "Graphic Design & Visuals",
+      designDesc: "Creating photo manipulations, visual branding, and 3D visualizers in Photoshop & SketchUp. Scored award-winning posters from local to national design contests!"
     },
     stats: {
-      web: "Web App & Landing Page",
-      uiux: "UI/UX Projects",
-      design: "Graphic Designs",
-      awards: "Achievements & Awards"
+      web: "Web Apps & Landing Pages",
+      uiux: "UI/UX Concepts",
+      design: "Graphic Design Pieces",
+      awards: "Trophies & Awards Scored"
     },
     about: {
-      tag: "About Me",
-      title: "Get to Know Me Closer",
-      role: "Fullstack Dev & Designer",
-      status: "Available for Hire",
-      downloadCV: "Download CV"
+      tag: "ABOUT ME",
+      title: "Get to Know Me Better",
+      role: "Fullstack Dev & Visual Designer",
+      status: "Open for Cool Projects 🚀",
+      downloadCV: "Grab My CV"
     },
     journey: {
-      tag: "My Journey",
-      title: "Education & Experience",
-      eduTitle: "Education History",
-      careerTitle: "Professional Career"
+      tag: "MY STORY",
+      title: "Education & Real World Journey",
+      eduTitle: "Where I Learned",
+      careerTitle: "Where I've Worked"
     },
     favorite: {
-      tag: "FEATURED PROJECT",
-      title: "Favorite Project: Baju Bagus Inc.",
-      desc: "I built the Baju Bagus Inc e-commerce platform with structured product management for 1,500+ catalogs, a smart AI chatbot for outfit recommendations, an instant POS panel that cuts checkout time by 40%, and an analytics dashboard for real-time sales data.",
-      sub1Title: "Smart Product Management",
-      sub1Desc: "Built catalog management with lazy loading images, dynamic multi-filters, and an AI assistant chatbot.",
-      sub2Title: "Insightful Admin Dashboard",
-      sub2Desc: "Interactive graphical visualization of profit analytics with real-time low-stock alerts.",
-      sub3Title: "Smart POS System",
-      sub3Desc: "A total of 20 operational sales pages with automatic invoice generation."
+      tag: "STAR PROJECT",
+      title: "My Fav Build: Baju Bagus Inc.",
+      desc: "I built Baju Bagus Inc from the ground up — handling 1,500+ items effortlessly, hooking up a smart AI bot for outfit recommendations, speeding up checkout by 40% with a quick POS, and tracking live sales with a clean dashboard.",
+      sub1Title: "Smart Catalog & AI Help",
+      sub1Desc: "Smooth catalog browsing with multi-filters and a friendly AI shopping assistant.",
+      sub2Title: "Live Sales Dashboard",
+      sub2Desc: "Interactive profit charts with low-stock notifications so nothing gets missed.",
+      sub3Title: "Lightning-Fast POS",
+      sub3Desc: "A 20-page operational cashier suite with automatic instant invoice generation."
     },
     allProjects: {
-      title: "All Artworks & Projects",
-      desc: "A collection of my work covering web development, creative graphic design, and competition achievements."
+      title: "All The Cool Stuff I've Made",
+      desc: "Take a look through my web builds, creative graphic designs, and competition wins."
     },
     modal: {
-      visitProject: "Visit Project"
+      visitProject: "Check It Out 🚀"
     },
     footer: {
-      backToTop: "Back to top"
+      backToTop: "Take Me to Top ⬆️"
     }
   },
   id: {

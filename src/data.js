@@ -2,7 +2,7 @@ export const projects = [
   {
     title: "Baju Bagus INC",
     desc_id: "Baju Bagus INC adalah website e-commerce modern yang saya kembangkan selama masa PKL di Prabu Bima Tech Software House. Website ini memiliki fitur AI chatbot berbasis Flowise yang membantu pelanggan memilih produk, serta sistem kasir digital yang terhubung langsung dengan database transaksi. Pengelolaan produk menjadi otomatis dengan fitur CRUD, export-import data menggunakan Excel, dan manajemen stok yang real-time. Selain itu, sistem role permission juga diterapkan agar setiap pengguna memiliki hak akses yang sesuai dengan tugasnya. Proyek ini menjadi salah satu tonggak penting dalam pengembangan skill saya di Laravel dan integrasi AI untuk kebutuhan bisnis.",
-    desc_en: "Baju Bagus INC is a modern e-commerce website I developed during my internship at Prabu Bima Tech Software House. This website features a Flowise-based AI chatbot to help customers choose products, as well as a digital POS system connected directly to the transaction database. Product management is automated with CRUD features, Excel data export-import, and real-time stock management. Additionally, a role permission system is implemented so that each user has access rights according to their tasks. This project is a significant milestone in developing my skills in Laravel and AI integration for business needs.",
+    desc_en: "Baju Bagus INC is a full-featured e-commerce platform I built during my internship at Prabu Bima Tech. It comes with a Flowise-powered AI chatbot that recommends outfit picks, plus a super-fast digital POS connected right to the transaction database. Product management is totally automated with CRUD, Excel import/export, and live stock tracking. A key project that leveled up my skills in Laravel and AI integration!",
     link: "coba.com",
     mainImg: [
       "./asset-page/website/bajubagus1.png",
@@ -23,7 +23,7 @@ export const projects = [
   {
     title: "E-Voting OSIS",
     desc_id: "E-Voting OSIS merupakan aplikasi web untuk sistem pemilihan OSIS secara online yang aman dan efisien. Setiap siswa hanya dapat memberikan satu suara melalui token unik yang dihasilkan otomatis. Website ini juga memiliki fitur analisis hasil pemilihan dengan visualisasi data berbasis chart interaktif, memudahkan panitia untuk melihat statistik pemilihan secara langsung. Desain antarmukanya dibuat sederhana namun profesional agar mudah digunakan oleh pengguna dari berbagai kalangan. Proyek ini membantu saya memahami konsep autentikasi dan validasi data di Laravel, serta penerapan Chart.js untuk kebutuhan analisis visual.",
-    desc_en: "E-Voting OSIS is a web application for a secure and efficient online student council election system. Each student can only cast one vote through an automatically generated unique token. This website also features election result analysis with interactive chart-based data visualization, making it easier for the committee to view election statistics directly. Its interface design is kept simple yet professional so that it is easy to use for all kinds of users. This project helped me understand the concepts of authentication and data validation in Laravel, as well as the application of Chart.js for visual analysis needs.",
+    desc_en: "A smooth and secure online voting app built for student council elections. Students get a unique token for one-time voting, while the admin team gets real-time interactive charts to watch live election stats as votes roll in. Simple, reliable, and hassle-free!",
     link: "coba.com",
     mainImg: [
       "./asset-page/website/evoting1.png",
@@ -45,7 +45,7 @@ export const projects = [
   {
     title: "Perpustakaan Online",
     desc_id: "Perpustakaan Online adalah website sistem manajemen perpustakaan digital dengan fitur lengkap mulai dari pencatatan peminjaman buku, pengembalian otomatis dengan denda, hingga membaca e-book langsung dari browser. Selain itu, saya menambahkan fitur sosial berupa platform untuk menulis dan membaca cerpen antar pengguna. Admin dapat mengelola katalog buku, melihat riwayat aktivitas anggota, serta mencetak laporan dalam format PDF. Website ini dibangun menggunakan Laravel Filament sebagai dashboard admin yang memudahkan pengelolaan data secara efisien dan cepat.",
-    desc_en: "Online Library is a digital library management system website with complete features ranging from book borrowing records, automatic returns with fines, to reading e-books directly from the browser. Additionally, I added a social feature in the form of a platform for writing and reading short stories among users. Admins can manage the book catalog, view member activity history, and print reports in PDF format. This website was built using Laravel Filament as the admin dashboard, making data management efficient and fast.",
+    desc_en: "A digital library platform packed with features — track borrowed books, auto-calculate late fees, and read e-books straight from your browser. I even built a mini social space for users to write and share short stories! Admins can easily manage books and print PDF reports using Laravel Filament.",
     link: "coba.com",
     mainImg: [
       "./asset-page/website/perpus1.png",
@@ -65,7 +65,7 @@ export const projects = [
   {
     title: "Ecommers Games (RoG Store)",
     desc_id: "RoG Store adalah web e-commerce bertema gaming yang menjadi proyek latihan pertama saya menggunakan React JS. Website ini menampilkan daftar produk gaming seperti keyboard, mouse, dan laptop dengan tampilan dinamis yang interaktif. Pengguna dapat melihat detail produk, menambahkan ke keranjang, dan berinteraksi dengan tampilan yang dioptimalkan menggunakan Tailwind CSS. Tujuan utama proyek ini adalah untuk memperdalam pemahaman saya terhadap state management dan konsep komponen dalam React, serta implementasi layout responsif yang cepat dan ringan.",
-    desc_en: "RoG Store is a gaming-themed e-commerce website that became my first practice project using React JS. This website displays a list of gaming products such as keyboards, mice, and laptops with a dynamic and interactive layout. Users can view product details, add them to the cart, and interact with a layout optimized using Tailwind CSS. The main goal of this project was to deepen my understanding of state management and component concepts in React, as well as the implementation of fast and lightweight responsive layouts.",
+    desc_en: "A sleek gaming store website I built to dive deep into React JS and Tailwind CSS. Users can check out gaming gear like keyboards, mice, and laptops, add items to cart, and enjoy smooth interactive UI animations.",
     link: "",
     mainImg: [
       "./asset-page/website/rog_store1.png",
@@ -88,7 +88,7 @@ export const projects = [
   {
     title: "Memorence 2.0 x Spotify",
     desc_id: "Memorence 2.0 adalah versi lanjutan dari web photobooth pribadi saya, yang kini ditambahkan integrasi dengan Spotify. Pengguna dapat menautkan lagu favorit mereka, lalu ketika frame diklik, tampilannya berubah sesuai judul dan nuansa lagu yang sedang diputar. Website ini juga memiliki fitur dark mode dan animasi transisi lembut antara mode tampilan. Proyek ini merupakan hasil eksplorasi kreatif saya dalam menggabungkan musik dan visual dalam satu pengalaman interaktif berbasis JavaScript.",
-    desc_en: "Memorence 2.0 is an advanced version of my personal photobooth web, which is now integrated with Spotify. Users can link their favorite songs, then when the frame is clicked, its appearance changes according to the title and vibe of the currently playing song. This website also features a dark mode and smooth transition animations between view modes. This project is the result of my creative exploration in combining music and visuals in one interactive JavaScript-based experience.",
+    desc_en: "An upgraded personal photobooth integrated with Spotify! Link your favorite tracks, and the photobooth frame dynamically tweaks its style and vibe to match whatever song is playing. Smooth, dark-themed, and super interactive.",
     link: "https://alwan9.github.io/memorence-photobooth-spotify-by-alwan/",
     mainImg: [
       "./asset-page/website/memorence_spy1.png",

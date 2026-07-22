@@ -584,50 +584,50 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      {/* NAVBAR */}
-      <nav className="bg-zinc-950/80 backdrop-blur-md border-b border-zinc-900 text-white fixed w-full z-50 transition-all duration-300">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
+      {/* FLOATING NAVBAR */}
+      <nav className="fixed top-3 sm:top-4 left-1/2 -translate-x-1/2 w-[92vw] max-w-6xl lg:max-w-7xl z-50 bg-zinc-900/85 backdrop-blur-xl border border-zinc-800/90 text-white rounded-2xl sm:rounded-full shadow-2xl shadow-black/60 transition-all duration-300">
+        <div className="px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-14 sm:h-16">
             {/* LOGO */}
             <div className="flex items-center gap-2">
-              <span className="font-mono font-bold tracking-[0.2em] text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-indigo-400 text-lg sm:text-xl uppercase drop-shadow-[0_0_10px_rgba(139,92,246,0.3)]">
+              <span className="font-mono font-bold tracking-[0.2em] text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-indigo-400 text-base sm:text-lg uppercase drop-shadow-[0_0_10px_rgba(139,92,246,0.3)]">
                 HAFIZ_ALWAN
               </span>
             </div>
 
             {/* DESKTOP MENU */}
-            <div className="hidden md:flex items-center space-x-8">
-              <a href="#home" className="text-sm font-medium text-zinc-300 hover:text-violet-400 transition-colors">{t.nav.home}</a>
-              <a href="#about" className="text-sm font-medium text-zinc-300 hover:text-violet-400 transition-colors">{t.nav.about}</a>
-              <a href="#favorit" className="text-sm font-medium text-zinc-300 hover:text-violet-400 transition-colors">{t.nav.favorite}</a>
-              <a href="#all" className="text-sm font-medium text-zinc-300 hover:text-violet-400 transition-colors">{t.nav.projects}</a>
+            <div className="hidden md:flex items-center space-x-7">
+              <a href="#home" className="text-xs sm:text-sm font-medium text-zinc-300 hover:text-violet-400 transition-colors">{t.nav.home}</a>
+              <a href="#about" className="text-xs sm:text-sm font-medium text-zinc-300 hover:text-violet-400 transition-colors">{t.nav.about}</a>
+              <a href="#favorit" className="text-xs sm:text-sm font-medium text-zinc-300 hover:text-violet-400 transition-colors">{t.nav.favorite}</a>
+              <a href="#all" className="text-xs sm:text-sm font-medium text-zinc-300 hover:text-violet-400 transition-colors">{t.nav.projects}</a>
               <a
                 href="#all"
                 onClick={() => setProjectTab("design")}
-                className="text-sm font-medium text-zinc-300 hover:text-violet-400 transition-colors"
+                className="text-xs sm:text-sm font-medium text-zinc-300 hover:text-violet-400 transition-colors"
               >
                 {t.nav.graphicDesign}
               </a>
             </div>
 
             {/* LANGUAGE TOGGLE */}
-            <div className="hidden md:flex items-center ml-4">
+            <div className="hidden md:flex items-center ml-2">
               <button
                 onClick={toggleLanguage}
-                className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-zinc-900 border border-zinc-800 text-zinc-300 hover:text-violet-400 hover:border-violet-500/30 transition-all text-sm font-medium shadow-sm hover:shadow-violet-500/20"
+                className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-zinc-800/80 border border-zinc-700/60 text-zinc-300 hover:text-violet-400 hover:border-violet-500/40 transition-all text-xs font-semibold shadow-sm hover:shadow-violet-500/20"
               >
-                <Globe size={16} />
+                <Globe size={14} />
                 {lang === 'en' ? 'EN' : 'ID'}
               </button>
             </div>
 
             {/* BURGER BUTTON & MOBILE TOGGLE */}
-            <div className="md:hidden flex items-center gap-3">
+            <div className="md:hidden flex items-center gap-2.5">
               <button
                 onClick={toggleLanguage}
-                className="flex items-center gap-1 px-2 py-1 rounded-md bg-zinc-900 border border-zinc-800 text-zinc-300 text-xs font-medium"
+                className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-zinc-800 border border-zinc-700 text-zinc-300 text-xs font-medium"
               >
-                <Globe size={14} />
+                <Globe size={13} />
                 {lang === 'en' ? 'EN' : 'ID'}
               </button>
               <button
@@ -635,7 +635,7 @@ export default function App() {
                 className="text-zinc-400 hover:text-white focus:outline-none p-1"
                 aria-label="Toggle menu"
               >
-                {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
               </button>
             </div>
           </div>
@@ -643,7 +643,7 @@ export default function App() {
 
         {/* MOBILE MENU */}
         {mobileMenuOpen && (
-          <div className="md:hidden px-4 pt-2 pb-4 space-y-2 bg-zinc-950 border-b border-zinc-900/60 animate-in fade-in slide-in-from-top-5 duration-200">
+          <div className="md:hidden px-4 pt-2 pb-4 space-y-2 bg-zinc-900/95 border-t border-zinc-800/80 rounded-b-2xl animate-in fade-in slide-in-from-top-3 duration-200">
             <a
               href="#home"
               onClick={() => setMobileMenuOpen(false)}
@@ -974,123 +974,213 @@ export default function App() {
         </div>
       </ScrollReveal>
 
-      {/* RIWAYAT PENDIDIKAN & PENGALAMAN */}
-      <ScrollReveal direction="right" id="journey" className="py-20 bg-zinc-950 bg-dots relative border-b border-zinc-900">
+      {/* RIWAYAT PENDIDIKAN & PENGALAMAN (JOURNEY BENTO / DUAL TRACK) */}
+      <ScrollReveal direction="up" id="journey" className="py-24 bg-zinc-950 bg-dots relative border-b border-zinc-900 overflow-hidden">
+        {/* Ambient Background Glow Orbs */}
+        <div className="absolute top-1/3 left-1/4 w-96 h-96 bg-violet-600/10 rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute bottom-1/3 right-1/4 w-96 h-96 bg-emerald-600/10 rounded-full blur-[120px] pointer-events-none" />
+
         <div className="max-w-7xl mx-auto px-6 relative z-10">
+          {/* SECTION HEADER */}
           <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/10 border border-violet-500/30 text-violet-400 text-sm font-semibold mb-4">
-              <Icon icon="ph:map-trifold-bold" /> {t.journey.tag}
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-violet-500/10 border border-violet-500/30 text-violet-400 text-xs font-bold tracking-wider uppercase mb-4 shadow-sm shadow-violet-500/10">
+              <Icon icon="ph:map-trifold-bold" className="text-sm" /> {t.journey.tag}
             </div>
-            <h2 className="text-3xl md:text-5xl font-bold text-zinc-100 tracking-tight">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-zinc-100 tracking-tight">
               {t.journey.title}
             </h2>
-            <div className="w-16 h-1 bg-gradient-to-r from-violet-500 to-blue-500 rounded-full mx-auto mt-4" />
+            <div className="w-20 h-1.5 bg-gradient-to-r from-violet-500 via-indigo-500 to-emerald-500 rounded-full mx-auto mt-4" />
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
-            {/* COLUMN 1: PENDIDIKAN */}
-            <div>
-              <div className="flex items-center gap-3 mb-8">
-                <div className="w-10 h-10 rounded-lg bg-blue-500/15 border border-blue-500/30 flex items-center justify-center text-blue-400 text-xl">
+          {/* DUAL TRACK GRID */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-stretch">
+            {/* COLUMN 1: EDUCATION TRACK */}
+            <div className="flex flex-col gap-8 h-full">
+              <div className="flex items-center gap-3.5 pb-3 border-b border-zinc-800/80">
+                <div className="w-12 h-12 rounded-2xl bg-blue-500/15 border border-blue-500/30 flex items-center justify-center text-blue-400 text-2xl shadow-lg shadow-blue-500/10">
                   <Icon icon="ph:graduation-cap-bold" />
                 </div>
-                <h3 className="text-2xl font-bold text-zinc-100">{t.journey.eduTitle}</h3>
+                <div>
+                  <h3 className="text-2xl font-bold text-zinc-100">{t.journey.eduTitle}</h3>
+                  <p className="text-xs text-zinc-400 font-medium">Academic foundation & software engineering degree</p>
+                </div>
               </div>
 
-              <div className="relative border-l border-zinc-800/80 ml-5 space-y-12">
+              {/* Education Timeline Cards */}
+              <div className="relative pl-6 sm:pl-8 space-y-8 flex-1 flex flex-col justify-between before:absolute before:left-2.5 sm:before:left-3 before:top-3 before:bottom-3 before:w-0.5 before:bg-gradient-to-b before:from-blue-500 before:via-violet-500 before:to-zinc-800">
                 {[
                   {
                     active: true,
-                    period: "2023 – Sekarang",
+                    period: lang === 'en' ? "2023 – Present" : "2023 – Sekarang",
                     institution: "Telkom University Purwokerto",
                     major: "S1 Rekayasa Perangkat Lunak",
-                    tags: ["Informatika", "Software Engineering"],
+                    desc: lang === 'en' ? "Focusing on Fullstack Web Systems, Software Architecture, and UI/UX Design." : "Berfokus pada Pengembangan Sistem Web Fullstack, Arsitektur Perangkat Lunak, dan UI/UX Design.",
+                    tags: ["Software Engineering", "Informatika", "Web Systems", "UI/UX"],
+                    icon: "ph:student-bold"
+                  },
+                  {
+                    active: false,
+                    period: lang === 'en' ? "2023 – 2024" : "2023 – 2024",
+                    institution: lang === 'en' ? "Skill Specialization & Bootcamp" : "Sertifikasi & Spesialisasi Mandiri",
+                    major: lang === 'en' ? "Fullstack Web & Visual Mastery" : "Pengembangan Web Fullstack & Desain Visual",
+                    desc: lang === 'en' ? "Deep dive into modern web ecosystems (React, Tailwind, Laravel) and 3D visualizers." : "Eksplorasi mendalam ekosistem web modern (React, Tailwind, Laravel) serta visualisasi 3D.",
+                    tags: ["React JS", "Laravel", "Tailwind CSS", "SketchUp"],
+                    icon: "ph:certificate-bold"
                   },
                   {
                     active: false,
                     period: "2020 – 2023",
                     institution: "SMK Negeri 1 Purwokerto",
                     major: "Rekayasa Perangkat Lunak (RPL)",
-                    tags: ["Programming", "Database", "Web Dev"],
+                    desc: lang === 'en' ? "Learned foundational programming, web development, MySQL databases, and visual graphic design." : "Mempelajari dasar pemrograman, web dev, database MySQL, serta dasar-dasar desain grafis visual.",
+                    tags: ["Programming", "Database", "Web Dev", "Photoshop"],
+                    icon: "ph:book-bookmark-bold"
                   },
                 ].map((edu, i) => (
-                  <ScrollReveal key={i} direction="up" delay={i * 0.2} className="relative pl-8 group cursor-pointer">
-                    {/* Dot on Timeline */}
-                    <span className={`absolute -left-[9px] top-1.5 w-4 h-4 rounded-full border-4 ${edu.active ? "bg-blue-400 border-zinc-950 scale-125 ring-4 ring-blue-500/20" : "bg-zinc-800 border-zinc-950"} transition-all duration-300 group-hover:scale-125 group-hover:bg-blue-400 group-hover:border-blue-900`} />
-
-                    <span className={`inline-block text-xs font-semibold px-2.5 py-0.5 rounded-full mb-3 ${edu.active ? "bg-blue-600/20 text-blue-400" : "bg-zinc-800/60 text-zinc-500"} transition-all duration-300 group-hover:bg-blue-600/20 group-hover:text-blue-300`}>
-                      {edu.period}
+                  <ScrollReveal key={i} direction="up" delay={i * 0.15} className="relative group flex-1 flex flex-col justify-between">
+                    {/* Timeline Connector Dot */}
+                    <span className={`absolute -left-[31px] sm:-left-[35px] top-4 w-6 h-6 rounded-full border-4 ${
+                      edu.active 
+                        ? "bg-blue-400 border-zinc-950 ring-4 ring-blue-500/30 animate-pulse" 
+                        : "bg-zinc-900 border-zinc-800 group-hover:bg-blue-400 group-hover:border-zinc-950"
+                    } transition-all duration-300 flex items-center justify-center z-10`}>
+                      {edu.active && <span className="w-1.5 h-1.5 rounded-full bg-white"></span>}
                     </span>
-                    <h4 className="text-xl font-bold text-zinc-100 group-hover:text-blue-400 transition-all duration-300 group-hover:translate-x-1">{edu.institution}</h4>
-                    <p className="text-zinc-400 text-sm mt-1 group-hover:text-zinc-300 transition-colors duration-300">{edu.major}</p>
-                    <div className="flex flex-wrap gap-2 mt-4">
-                      {edu.tags.map((tag) => (
-                        <span key={tag} className="text-xs px-2 py-0.5 rounded bg-zinc-900 border border-zinc-800 text-zinc-500 transition-all duration-300 group-hover:border-blue-500/30 group-hover:text-blue-300 group-hover:bg-blue-500/10">
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
+
+                    {/* Bento Card */}
+                    <BorderGlow borderRadius={16} backgroundColor="#18181b" className="w-full h-full">
+                      <div className="p-6 rounded-2xl bg-zinc-900/80 border border-zinc-800/90 group-hover:border-blue-500/40 transition-all duration-300 group-hover:-translate-y-1 shadow-lg group-hover:shadow-blue-500/10 h-full flex flex-col justify-between">
+                        <div>
+                          <div className="flex items-center justify-between gap-2 mb-3 flex-wrap">
+                            <span className={`text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider ${
+                              edu.active 
+                                ? "bg-blue-500/20 text-blue-300 border border-blue-500/30" 
+                                : "bg-zinc-800 text-zinc-400 border border-zinc-700/60"
+                            }`}>
+                              {edu.period}
+                            </span>
+                            <span className="text-zinc-500 text-xs font-mono">Purwokerto</span>
+                          </div>
+
+                          <h4 className="text-xl font-extrabold text-zinc-100 group-hover:text-blue-400 transition-colors duration-300 flex items-center gap-2">
+                            <Icon icon={edu.icon} className="text-blue-400 text-lg flex-shrink-0" />
+                            {edu.institution}
+                          </h4>
+                          <p className="text-blue-400/90 text-sm font-semibold mt-1">{edu.major}</p>
+                          <p className="text-zinc-400 text-xs sm:text-sm mt-2.5 leading-relaxed">{edu.desc}</p>
+                        </div>
+
+                        <div className="flex flex-wrap gap-2 mt-4 pt-3 border-t border-zinc-800/60">
+                          {edu.tags.map((tag) => (
+                            <span key={tag} className="text-[11px] font-medium px-2.5 py-1 rounded-lg bg-zinc-950 border border-zinc-800 text-zinc-400 group-hover:border-blue-500/30 group-hover:text-blue-300 transition-colors">
+                              #{tag}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    </BorderGlow>
                   </ScrollReveal>
                 ))}
               </div>
             </div>
 
-            {/* COLUMN 2: PENGALAMAN */}
-            <div>
-              <div className="flex items-center gap-3 mb-8">
-                <div className="w-10 h-10 rounded-lg bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400 text-xl">
+            {/* COLUMN 2: CAREER & EXPERIENCE TRACK */}
+            <div className="flex flex-col gap-8">
+              <div className="flex items-center gap-3.5 pb-3 border-b border-zinc-800/80">
+                <div className="w-12 h-12 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400 text-2xl shadow-lg shadow-emerald-500/10">
                   <Icon icon="ph:briefcase-bold" />
                 </div>
-                <h3 className="text-2xl font-bold text-zinc-100">{t.journey.careerTitle}</h3>
+                <div>
+                  <h3 className="text-2xl font-bold text-zinc-100">{t.journey.careerTitle}</h3>
+                  <p className="text-xs text-zinc-400 font-medium">Hands-on work experience & software client projects</p>
+                </div>
               </div>
 
-              <div className="relative border-l border-zinc-800/80 ml-5 space-y-12">
+              {/* Career Timeline Cards */}
+              <div className="relative pl-6 sm:pl-8 space-y-8 before:absolute before:left-2.5 sm:before:left-3 before:top-3 before:bottom-3 before:w-0.5 before:bg-gradient-to-b before:from-emerald-500 before:via-teal-500 before:to-zinc-800">
                 {[
                   {
                     active: true,
                     type: "Full Time",
-                    period: "2025 – Sekarang",
+                    period: lang === 'en' ? "2025 – Present" : "2025 – Sekarang",
                     company: "Dr Kreatif",
                     role: "Graphic Designer & WordPress Admin",
-                    bullets: ["Desain visual komersial (logo, brosur, promo)", "Modeling 3D dengan SketchUp", "Mengelola website WordPress"],
+                    bullets: [
+                      lang === 'en' ? "Designing commercial visuals (logos, promotional banners, flyers)" : "Desain visual komersial (logo, brosur, promo)",
+                      lang === 'en' ? "Crafting 3D scene visualizers & models using SketchUp" : "Modeling 3D dengan SketchUp",
+                      lang === 'en' ? "Managing and maintaining WordPress e-commerce websites" : "Mengelola website WordPress"
+                    ],
+                    icon: "ph:paint-brush-broad-bold"
                   },
                   {
                     active: false,
                     type: "Internship",
-                    period: "4 Bulan",
+                    period: lang === 'en' ? "4 Months" : "4 Bulan",
                     company: "CV. Prabu Bima Tech",
                     role: "Fullstack Developer",
-                    bullets: ["Web App E-Voting Ketua OSIS", "E-commerce dengan AI Chatbot (Flowise)"],
+                    bullets: [
+                      lang === 'en' ? "Built E-Voting OSIS Web App with real-time charts" : "Web App E-Voting Ketua OSIS",
+                      lang === 'en' ? "Developed E-Commerce web app integrated with Flowise AI Chatbot" : "E-commerce dengan AI Chatbot (Flowise)"
+                    ],
+                    icon: "ph:code-bold"
                   },
                   {
                     active: false,
                     type: "Internship",
-                    period: "3 Bulan",
+                    period: lang === 'en' ? "3 Months" : "3 Bulan",
                     company: "CV. JVM Purwokerto",
                     role: "Graphic Designer",
-                    bullets: ["Predikat \"Excellent Performance\"", "371 desain feed Instagram 4 brand"],
+                    bullets: [
+                      lang === 'en' ? "Awarded 'Excellent Performance' for top internship results" : "Predikat 'Excellent Performance'",
+                      lang === 'en' ? "Produced 371 Instagram feed design assets across 4 client brands" : "371 desain feed Instagram 4 brand"
+                    ],
+                    icon: "ph:palette-bold"
                   },
                 ].map((work, i) => (
-                  <ScrollReveal key={i} direction="up" delay={i * 0.2} className="relative pl-8 group cursor-pointer">
-                    {/* Dot on Timeline */}
-                    <span className={`absolute -left-[9px] top-1.5 w-4 h-4 rounded-full border-4 ${work.active ? "bg-emerald-400 border-zinc-950 scale-125 ring-4 ring-emerald-500/20" : "bg-zinc-800 border-zinc-950"} transition-all duration-300 group-hover:scale-125 group-hover:bg-emerald-400 group-hover:border-emerald-900`} />
+                  <ScrollReveal key={i} direction="up" delay={i * 0.15} className="relative group">
+                    {/* Timeline Connector Dot */}
+                    <span className={`absolute -left-[31px] sm:-left-[35px] top-4 w-6 h-6 rounded-full border-4 ${
+                      work.active 
+                        ? "bg-emerald-400 border-zinc-950 ring-4 ring-emerald-500/30 animate-pulse" 
+                        : "bg-zinc-900 border-zinc-800 group-hover:bg-emerald-400 group-hover:border-zinc-950"
+                    } transition-all duration-300 flex items-center justify-center`}>
+                      {work.active && <span className="w-1.5 h-1.5 rounded-full bg-white"></span>}
+                    </span>
 
-                    <div className="flex items-center gap-2 mb-3">
-                      <span className={`text-xs font-semibold px-2.5 py-0.5 rounded-full ${work.active ? "bg-emerald-600/20 text-emerald-400" : "bg-zinc-800/60 text-zinc-500"} transition-all duration-300 group-hover:bg-emerald-600/20 group-hover:text-emerald-300`}>
-                        {work.type}
-                      </span>
-                      <span className="text-zinc-500 text-xs font-medium group-hover:text-zinc-400 transition-colors duration-300">{work.period}</span>
-                    </div>
-                    <h4 className="text-xl font-bold text-zinc-100 group-hover:text-emerald-400 transition-all duration-300 group-hover:translate-x-1">{work.company}</h4>
-                    <p className="text-emerald-500/80 text-sm font-medium mt-1 group-hover:text-emerald-400 transition-colors duration-300">{work.role}</p>
-                    <ul className="mt-4 space-y-2">
-                      {work.bullets.map((b, bi) => (
-                        <li key={bi} className="text-zinc-400 text-sm flex items-start gap-2 transition-all duration-300 group-hover:text-zinc-300 group-hover:translate-x-1" style={{ transitionDelay: `${bi * 50}ms` }}>
-                          <Icon icon="ph:caret-right-bold" className="text-emerald-500 mt-1 flex-shrink-0 group-hover:scale-125 transition-transform duration-300" />
-                          <span className="leading-relaxed">{b}</span>
-                        </li>
-                      ))}
-                    </ul>
+                    {/* Bento Card */}
+                    <BorderGlow borderRadius={16} backgroundColor="#18181b" className="w-full">
+                      <div className="p-6 rounded-2xl bg-zinc-900/80 border border-zinc-800/90 group-hover:border-emerald-500/40 transition-all duration-300 group-hover:-translate-y-1 shadow-lg group-hover:shadow-emerald-500/10">
+                        <div className="flex items-center justify-between gap-2 mb-3 flex-wrap">
+                          <span className={`text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider ${
+                            work.active 
+                              ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30" 
+                              : "bg-zinc-800 text-zinc-400 border border-zinc-700/60"
+                          }`}>
+                            {work.type}
+                          </span>
+                          <span className="text-zinc-500 text-xs font-semibold px-2.5 py-0.5 rounded-full bg-zinc-950 border border-zinc-800">
+                            {work.period}
+                          </span>
+                        </div>
+
+                        <h4 className="text-xl font-extrabold text-zinc-100 group-hover:text-emerald-400 transition-colors duration-300 flex items-center gap-2">
+                          <Icon icon={work.icon} className="text-emerald-400 text-lg flex-shrink-0" />
+                          {work.company}
+                        </h4>
+                        <p className="text-emerald-400/90 text-sm font-semibold mt-1">{work.role}</p>
+
+                        <ul className="mt-4 space-y-2.5 pt-3 border-t border-zinc-800/60">
+                          {work.bullets.map((b, bi) => (
+                            <li key={bi} className="text-zinc-300 text-xs sm:text-sm flex items-start gap-2.5 group-hover:translate-x-0.5 transition-transform">
+                              <span className="w-5 h-5 rounded-md bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 text-xs flex-shrink-0 mt-0.5">
+                                <Icon icon="ph:check-bold" />
+                              </span>
+                              <span className="leading-relaxed">{b}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </BorderGlow>
                   </ScrollReveal>
                 ))}
               </div>
@@ -1439,14 +1529,16 @@ export default function App() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 bg-black/80 backdrop-blur-sm flex justify-center items-center z-[9999] p-2 sm:p-4"
+            onClick={closePopup}
+            className="fixed inset-0 bg-black/80 backdrop-blur-sm flex justify-center items-center z-[9999] p-2 sm:p-4 cursor-pointer"
           >
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 15 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 15 }}
               transition={{ type: "spring", bounce: 0.15, duration: 0.4 }}
-              className={`bg-zinc-900/95 border border-zinc-800 text-zinc-100 rounded-2xl w-full p-4 sm:p-6 relative shadow-2xl ${
+              onClick={(e) => e.stopPropagation()}
+              className={`cursor-default bg-zinc-900/95 border border-zinc-800 text-zinc-100 rounded-2xl w-full p-4 sm:p-6 relative shadow-2xl ${
                 activeModal.type === "project" 
                   ? "w-[92vw] max-w-5xl lg:max-w-6xl h-auto max-h-[88vh] md:h-[88vh] flex flex-col overflow-hidden" 
                   : activeModal.type === "poster" && posterOrientation === "landscape"
@@ -1462,13 +1554,13 @@ export default function App() {
                 <X size={18} />
               </button>
 
-              <div className="flex flex-col md:flex-row md:items-start gap-6 md:gap-8 w-full h-full overflow-y-auto overflow-x-hidden md:overflow-hidden pb-6 md:pb-0">
+              <div className="flex flex-col md:flex-row md:items-start gap-6 md:gap-8 w-full h-full overflow-y-auto overflow-x-hidden pb-6 md:pb-2">
 
-                {/* Modal Image Slider / Header */}
+                {/* Modal Image Slider & Project Details */}
                 {activeModal.type === "project" && (
-                  <div className="flex-1 min-w-0 w-full flex flex-col">
+                  <div className="flex-1 min-w-0 w-full flex flex-col gap-5">
                     {/* Desktop / Mobile Toggle */}
-                    <div className="flex items-center gap-2 mb-4 mt-2">
+                    <div className="flex items-center gap-2 mt-1">
                       <button
                         onClick={() => { setViewMode("desktop"); setSliderIndex(0); }}
                         className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all duration-300 ${viewMode === "desktop"
@@ -1491,32 +1583,32 @@ export default function App() {
 
                     {/* Desktop View */}
                     {viewMode === "desktop" && (
-                      <div className="flex-1 flex flex-col md:flex-row gap-4 min-h-[300px] md:min-h-0 md:overflow-hidden font-sans">
+                      <div className="flex flex-col md:flex-row gap-4 min-h-[300px] md:min-h-[400px] items-stretch">
                         {/* Main Image */}
-                        <div className="relative rounded-xl overflow-hidden bg-zinc-950 border border-zinc-800 flex-1 min-h-0 flex items-center justify-center">
+                        <div className="relative rounded-xl overflow-hidden bg-zinc-950 border border-zinc-800 flex-1 min-h-[280px] flex items-center justify-center">
                           <img
                             src={activeModal.data.mainImg[sliderIndex]}
                             alt={activeModal.data.title}
-                            className="w-full h-full object-contain transition-all duration-500"
+                            className="w-full h-full object-contain transition-all duration-500 max-h-[55vh]"
                           />
                           {activeModal.data.link && (
                             <a
                               href={activeModal.data.link}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="absolute top-4 right-4 bg-violet-600 hover:bg-violet-700 text-white px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-1.5 shadow-lg transition-colors duration-300"
+                              className="absolute top-4 right-4 bg-violet-600 hover:bg-violet-700 text-white px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-1.5 shadow-lg transition-colors duration-300 z-20"
                             >
                               {t.modal.visitProject} <ExternalLink size={12} />
                             </a>
                           )}
                         </div>
-                        {/* Thumbnails — Full height sidebar matching main image */}
-                        <div className="flex md:flex-col gap-2 overflow-x-auto md:overflow-y-auto md:overflow-x-hidden md:w-[110px] flex-shrink-0 md:h-full pb-2 md:pb-0">
+                        {/* Thumbnails Sidebar */}
+                        <div className="flex md:flex-col gap-2.5 overflow-x-auto md:overflow-y-auto md:overflow-x-hidden md:w-[110px] flex-shrink-0 md:max-h-[55vh] pb-2 md:pb-0">
                           {activeModal.data.mainImg.map((img, idx) => (
                             <button
                               key={idx}
                               onClick={() => setSliderIndex(idx)}
-                              className={`relative aspect-video w-20 md:w-full rounded-lg overflow-hidden border-2 flex-shrink-0 transition-all ${sliderIndex === idx ? "border-violet-500 shadow-md shadow-violet-500/30" : "border-zinc-800 hover:border-zinc-700"
+                              className={`relative aspect-video w-20 md:w-full rounded-lg overflow-hidden border-2 flex-shrink-0 transition-all ${sliderIndex === idx ? "border-violet-500 shadow-md shadow-violet-500/30 scale-105" : "border-zinc-800 hover:border-zinc-700 opacity-75 hover:opacity-100"
                                 }`}
                             >
                               <img src={img} className="w-full h-full object-cover" alt="" />
@@ -1528,7 +1620,7 @@ export default function App() {
 
                     {/* Mobile View - Phone Shape Mockup Frame */}
                     {viewMode === "mobile" && (
-                      <div className="flex-1 flex flex-col md:flex-row items-center justify-center gap-6 md:gap-10 h-full min-h-0 py-2">
+                      <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-10 py-2">
                         {/* Phone Frame (Left Side) */}
                         <div className="relative flex-shrink-0" style={{ width: "270px" }}>
                           {/* Phone outer shell */}
@@ -1653,16 +1745,49 @@ export default function App() {
                         )}
                       </div>
                     )}
+
+                    {/* Project Text Details & Badges (Placed Below Image / Mockup Viewer) */}
+                    <div className="pt-4 border-t border-zinc-800/80 flex flex-col gap-3 bg-zinc-950/40 p-4 sm:p-5 rounded-xl border border-zinc-800/60 mt-1">
+                      <div className="flex flex-wrap items-center gap-2">
+                        {activeModal.data.badges && activeModal.data.badges.map((badge, idx) => (
+                          <span key={idx} className="flex items-center gap-1.5 text-xs font-bold uppercase px-3 py-1 rounded-full bg-violet-600/10 border border-violet-500/20 text-violet-400">
+                            {techIcons[badge] && <Icon icon={techIcons[badge]} className="text-sm" />}
+                            <span>{badge}</span>
+                          </span>
+                        ))}
+                      </div>
+                      <h3 className="text-2xl sm:text-3xl font-bold text-zinc-100">{activeModal.data.title}</h3>
+                      <p className="text-zinc-300 text-sm sm:text-base leading-relaxed font-sans">{modalDesc}</p>
+                    </div>
                   </div>
                 )}
 
                 {activeModal.type === "achievement" && (
-                  <div className="flex-1 min-w-0 aspect-video w-full rounded-xl overflow-hidden bg-zinc-950 border border-zinc-800 mt-4 max-h-[400px]">
-                    <img
-                      src={activeModal.data.mainImg[0]}
-                      alt={activeModal.data.title}
-                      className="w-full h-full object-contain"
-                    />
+                  <div className="flex-1 min-w-0 w-full flex flex-col gap-5 overflow-y-auto">
+                    {/* Award Certificate Image Container */}
+                    <div className="w-full aspect-[4/3] sm:aspect-[16/10] max-h-[52vh] sm:max-h-[58vh] rounded-2xl overflow-hidden bg-zinc-950 border border-zinc-800 flex items-center justify-center p-2 sm:p-4 shadow-inner group relative">
+                      <img
+                        src={activeModal.data.mainImg[0]}
+                        alt={activeModal.data.title}
+                        className="w-full h-full object-contain group-hover:scale-102 transition-transform duration-500 rounded-lg"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/20 via-transparent to-transparent pointer-events-none" />
+                    </div>
+
+                    {/* Award Details (Badges, Title, Description) */}
+                    <div className="pt-4 border-t border-zinc-800/80 flex flex-col gap-3 bg-zinc-950/40 p-4 sm:p-6 rounded-xl border border-zinc-800/60 mt-1">
+                      <div className="flex flex-wrap items-center gap-2">
+                        {activeModal.data.badges && activeModal.data.badges.map((badge, idx) => (
+                          <span key={idx} className="flex items-center gap-1.5 text-xs font-bold uppercase px-3 py-1 rounded-full bg-violet-600/10 border border-violet-500/20 text-violet-400">
+                            {techIcons[badge] && <Icon icon={techIcons[badge]} className="text-sm" />}
+                            <span>{badge}</span>
+                          </span>
+                        ))}
+                      </div>
+                      <h3 className="text-2xl sm:text-3xl font-bold text-zinc-100">{activeModal.data.title}</h3>
+                      <div className="w-16 h-1 bg-violet-600 rounded-full"></div>
+                      <p className="text-zinc-300 text-sm sm:text-base leading-relaxed font-sans">{modalDesc}</p>
+                    </div>
                   </div>
                 )}
 
@@ -1774,35 +1899,6 @@ export default function App() {
                   )
                 )}
 
-                {/* Modal Info Footer (only for non-poster, poster has it beside) */}
-                {activeModal.type !== "poster" && (
-                  <div className={`w-full md:w-[300px] lg:w-[380px] flex-shrink-0 ${activeModal.type === "project" ? "pt-4 border-t md:border-t-0 md:border-l border-zinc-800/50 md:pl-8 md:pt-8 mt-2 md:mt-0 md:overflow-y-auto md:h-full pb-8 md:pb-4" : "mt-8 md:mt-0"}`}>
-                    <div className="flex flex-wrap items-center gap-2 mb-4">
-                      {activeModal.data.badges && activeModal.data.badges.map((badge, idx) => (
-                        <span key={idx} className="flex items-center gap-1.5 text-xs font-bold uppercase p-2 md:px-3 md:py-1 rounded-full bg-violet-600/10 border border-violet-500/20 text-violet-400">
-                          {techIcons[badge] && <Icon icon={techIcons[badge]} className="text-lg md:text-sm" />}
-                          <span className={techIcons[badge] ? "hidden md:inline" : "inline"}>{badge}</span>
-                        </span>
-                      ))}
-                    </div>
-                    <h3 className="text-2xl font-bold text-zinc-100">{activeModal.data.title}</h3>
-                    <div className="mt-3">
-                      <p className="text-zinc-400 text-sm leading-relaxed">
-                        {descExpanded || !modalDesc || modalDesc.length <= 150
-                          ? modalDesc
-                          : `${modalDesc.slice(0, 150)}...`}
-                      </p>
-                      {modalDesc && modalDesc.length > 150 && (
-                        <button
-                          onClick={() => setDescExpanded(!descExpanded)}
-                          className="text-violet-400 hover:text-violet-300 text-xs font-semibold mt-1.5 transition-colors duration-200"
-                        >
-                          {descExpanded ? "Read Less ↑" : "Read More ↓"}
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                )}
               </div>
             </motion.div>
           </motion.div>
