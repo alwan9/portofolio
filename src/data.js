@@ -256,33 +256,45 @@ export const achievements = [
 
 export const posters = [
   {
-    title: "Poster Edukasi",
-    description_id: "Desain poster edukatif bertema teknologi ramah lingkungan.",
-    description_en: "Educational poster design themed around eco-friendly technology.",
-    image: "./asset-page/manipulation/manipulation1.png",
-    gallery: [
-      "https://via.placeholder.com/150x100?text=Detail+1",
-      "https://via.placeholder.com/150x100?text=Detail+2"
-    ]
+    title: "Photoshop Manipulation Speed Art I",
+    description_id: "Karya manipulasi Photoshop dengan proses video speed art visual resolusi tinggi.",
+    description_en: "Photoshop manipulation artwork featuring high-resolution speed art video process.",
+    image: "./asset-page/manipulation/manipulation phootsho.png",
+    video: "./asset-page/manipulation/manipulation phootsho.mp4",
+    orientation: "landscape",
+    gallery: []
   },
   {
-    title: "Poster Lomba 1",
-    description_id: "Poster promosi lomba desain tingkat nasional 2024.",
-    description_en: "Promotional poster for the 2024 national level design competition.",
-    image: "./asset-page/manipulation/manipulation2.png",
-    gallery: [
-      "https://via.placeholder.com/150x100?text=Detail+1",
-      "https://via.placeholder.com/150x100?text=Detail+2"
-    ]
+    title: "Photoshop Manipulation Speed Art II",
+    description_id: "Karya manipulasi Photoshop edisi kedua dengan efek visual futuristik dan pencahayaan sinematik.",
+    description_en: "Second edition Photoshop manipulation artwork with futuristic visual effects and cinematic lighting.",
+    image: "./asset-page/manipulation/manipulation phootsho2.png",
+    video: "./asset-page/manipulation/manipulation phootsho2.mp4",
+    orientation: "landscape",
+    gallery: []
   },
   {
-    title: "Poster Lomba 2",
-    description_id: "Poster promosi lomba desain tingkat nasional 2024.",
-    description_en: "Promotional poster for the 2024 national level design competition.",
+    title: "Poster Manipulasi 8.1",
+    description_id: "Karya poster manipulasi foto bertema surreal dengan komposisi kontras tajam format portrait.",
+    description_en: "Surreal photo manipulation poster artwork with sharp contrast portrait layout.",
+    image: "./asset-page/manipulation/8.1.jpg",
+    orientation: "portrait",
+    gallery: []
+  },
+  {
+    title: "Poster Manipulasi 12.1",
+    description_id: "Desain poster manipulasi foto digital dengan penggabungan elemen halus format portrait.",
+    description_en: "Digital photo manipulation poster design featuring smooth element blending in portrait orientation.",
+    image: "./asset-page/manipulation/12.1.jpg",
+    orientation: "portrait",
+    gallery: []
+  },
+  {
+    title: "Poster Manipulasi 3",
+    description_id: "Karya poster manipulasi lanskap dengan konsep visual teknologi dan lingkungan.",
+    description_en: "Landscape photo manipulation poster artwork featuring tech and environment visual concept.",
     image: "./asset-page/manipulation/manipulation3.png",
-    gallery: [
-      "https://via.placeholder.com/150x100?text=Detail+1",
-      "https://via.placeholder.com/150x100?text=Detail+2"
-    ]
+    orientation: "landscape",
+    gallery: []
   }
 ];

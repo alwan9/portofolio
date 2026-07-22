@@ -420,6 +420,80 @@ export default function App() {
   const [sliderIndex, setSliderIndex] = useState(0);
   const [viewMode, setViewMode] = useState("desktop"); // 'desktop' | 'mobile'
   const [descExpanded, setDescExpanded] = useState(false);
+  const [posterOrientation, setPosterOrientation] = useState("portrait"); // 'portrait' | 'landscape'
+  const [isFastConnection, setIsFastConnection] = useState(true);
+
+  // Network speed detection (video auto-playback vs image fallback)
+  useEffect(() => {
+    if (typeof window === "undefined" || !navigator) return;
+    const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+    const checkSpeed = () => {
+      if (conn) {
+        const isSlow = conn.saveData || conn.effectiveType === 'slow-2g' || conn.effectiveType === '2g' || conn.effectiveType === '3g' || (typeof conn.downlink === 'number' && conn.downlink < 1.5);
+        setIsFastConnection(!isSlow);
+      }
+    };
+    checkSpeed();
+    if (conn && conn.addEventListener) {
+      conn.addEventListener('change', checkSpeed);
+      return () => conn.removeEventListener('change', checkSpeed);
+    }
+  }, []);
+
+  // Global Protection: Disable Right-Click and Drag-to-Save on Images and Videos
+  useEffect(() => {
+    const handleContextMenu = (e) => {
+      const target = e.target;
+      if (
+        target &&
+        (target.tagName === "IMG" ||
+          target.tagName === "VIDEO" ||
+          target.closest("img") ||
+          target.closest("video"))
+      ) {
+        e.preventDefault();
+      }
+    };
+
+    const handleDragStart = (e) => {
+      const target = e.target;
+      if (
+        target &&
+        (target.tagName === "IMG" ||
+          target.tagName === "VIDEO" ||
+          target.closest("img") ||
+          target.closest("video"))
+      ) {
+        e.preventDefault();
+      }
+    };
+
+    document.addEventListener("contextmenu", handleContextMenu);
+    document.addEventListener("dragstart", handleDragStart);
+
+    return () => {
+      document.removeEventListener("contextmenu", handleContextMenu);
+      document.removeEventListener("dragstart", handleDragStart);
+    };
+  }, []);
+
+  // Auto-detect poster orientation when graphic design modal opens
+  useEffect(() => {
+    if (activeModal?.type === "poster" && activeModal.data?.image) {
+      if (activeModal.data.orientation) {
+        setPosterOrientation(activeModal.data.orientation);
+      }
+      const img = new Image();
+      img.src = activeModal.data.image;
+      img.onload = () => {
+        if (img.width >= img.height * 1.05) {
+          setPosterOrientation("landscape");
+        } else {
+          setPosterOrientation("portrait");
+        }
+      };
+    }
+  }, [activeModal]);
 
   // Auto-slide for popup images
   useEffect(() => {
@@ -454,6 +528,9 @@ export default function App() {
     setSliderIndex(0);
     setViewMode("desktop");
     setDescExpanded(false);
+    if (type === "poster") {
+      setPosterOrientation(data.orientation || "portrait");
+    }
   };
 
   const closePopup = () => {
@@ -871,17 +948,17 @@ export default function App() {
                     <span>{` `}</span>
                     <span><span className="text-[#bb9af7]">class</span> <span className="text-[#7aa2f7]">AboutMeController</span> <span className="text-[#bb9af7]">extends</span> <span className="text-[#c0caf5]">Controller</span> {`{`}</span>
                     <span>    <span className="text-[#bb9af7]">public function</span> <span className="text-[#7aa2f7]">index</span>() {`{`}</span>
-                    <span>        <span className="text-[#bb9af7]">return</span> <span className="text-[#7aa2f7]">response</span>()-><span className="text-[#7aa2f7]">json</span>([</span>
-                    <span>            <span className="text-[#9ece6a]">'name'</span> => <span className="text-[#9ece6a]">'Hafiz Alwan Susilo'</span>,</span>
-                    <span>            <span className="text-[#9ece6a]">'role'</span> => <span className="text-[#9ece6a]">'Fullstack Dev & Designer'</span>,</span>
-                    <span>            <span className="text-[#9ece6a]">'university'</span> => <span className="text-[#9ece6a]">'Telkom Univ Purwokerto'</span>,</span>
-                    <span>            <span className="text-[#9ece6a]">'status'</span> => <span className="text-[#9ece6a]">'Available for Hire'</span>,</span>
-                    <span>            <span className="text-[#9ece6a]">'focus'</span> => <span className="text-[#9ece6a]">'Web Dev & UI Design'</span>,</span>
-                    <span>            <span className="text-[#9ece6a]">'socials'</span> => [</span>
-                    <span>                <span className="text-[#9ece6a]">'ig'</span> => <a href="https://instagram.com" target="_blank" className="text-[#9ece6a] hover:underline">'@hafizalwan'</a>,</span>
-                    <span>                <span className="text-[#9ece6a]">'fiverr'</span> => <a href="https://fiverr.com" target="_blank" className="text-[#9ece6a] hover:underline">'fiverr.com/hafizalwan'</a></span>
+                    <span>        <span className="text-[#bb9af7]">return</span> <span className="text-[#7aa2f7]">response</span>(){"->"}<span className="text-[#7aa2f7]">json</span>([</span>
+                    <span>            <span className="text-[#9ece6a]">'name'</span> {"=>"} <span className="text-[#9ece6a]">'Hafiz Alwan Susilo'</span>,</span>
+                    <span>            <span className="text-[#9ece6a]">'role'</span> {"=>"} <span className="text-[#9ece6a]">'Fullstack Dev & Designer'</span>,</span>
+                    <span>            <span className="text-[#9ece6a]">'university'</span> {"=>"} <span className="text-[#9ece6a]">'Telkom Univ Purwokerto'</span>,</span>
+                    <span>            <span className="text-[#9ece6a]">'status'</span> {"=>"} <span className="text-[#9ece6a]">'Available for Hire'</span>,</span>
+                    <span>            <span className="text-[#9ece6a]">'focus'</span> {"=>"} <span className="text-[#9ece6a]">'Web Dev & UI Design'</span>,</span>
+                    <span>            <span className="text-[#9ece6a]">'socials'</span> {"=>"} [</span>
+                    <span>                <span className="text-[#9ece6a]">'ig'</span> {"=>"} <a href="https://instagram.com" target="_blank" className="text-[#9ece6a] hover:underline">'@hafizalwan'</a>,</span>
+                    <span>                <span className="text-[#9ece6a]">'fiverr'</span> {"=>"} <a href="https://fiverr.com" target="_blank" className="text-[#9ece6a] hover:underline">'fiverr.com/hafizalwan'</a></span>
                     <span>            ],</span>
-                    <span>            <span className="text-[#9ece6a]">'awards'</span> => [<span className="text-[#9ece6a]">'Juara 1 Web Design'</span>, <span className="text-[#9ece6a]">'Juara 1 Poster'</span>]</span>
+                    <span>            <span className="text-[#9ece6a]">'awards'</span> {"=>"} [<span className="text-[#9ece6a]">'Juara 1 Web Design'</span>, <span className="text-[#9ece6a]">'Juara 1 Poster'</span>]</span>
                     <span>        ]);</span>
                     <span>    {`}`}</span>
                     <span>{`}`}</span>
@@ -1243,26 +1320,60 @@ export default function App() {
           )}
 
           {projectTab === "design" && (
-            <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-10 animate-in fade-in duration-300">
-              {posters.map((item, index) => (
-                <div
-                  key={index}
-                  onClick={() => openPopup("poster", item)}
-                  className="cursor-pointer group transition-all duration-300 h-full hover:-translate-y-2 hover:shadow-xl hover:shadow-violet-500/20 rounded-xl"
-                >
-                  <BorderGlow borderRadius={12} backgroundColor="#18181b" className="h-full w-full">
-                    <div className="bg-zinc-900/60 rounded-xl border border-zinc-800 overflow-hidden flex flex-col h-full">
-                      <div className="aspect-[3/4] w-full overflow-hidden bg-zinc-800">
-                        <img src={item.image} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 animate-in fade-in duration-300">
+              {posters.map((item, index) => {
+                const isLandscape = item.orientation === "landscape";
+                const hasVideo = !!item.video;
+                return (
+                  <div
+                    key={index}
+                    onClick={() => openPopup("poster", item)}
+                    className="cursor-pointer group transition-all duration-300 h-full hover:-translate-y-2 hover:shadow-xl hover:shadow-violet-500/20 rounded-xl"
+                  >
+                    <BorderGlow borderRadius={12} backgroundColor="#18181b" className="h-full w-full">
+                      <div className="bg-zinc-900/60 rounded-xl border border-zinc-800 overflow-hidden flex flex-col h-full">
+                        <div className="aspect-square w-full overflow-hidden bg-zinc-950 flex items-center justify-center p-1.5 relative">
+                          {hasVideo && isFastConnection ? (
+                            <video
+                              src={item.video}
+                              poster={item.image}
+                              autoPlay
+                              loop
+                              muted
+                              playsInline
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 rounded-lg"
+                            />
+                          ) : (
+                            <img
+                              src={item.image}
+                              alt={item.title}
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 rounded-lg"
+                            />
+                          )}
+                          <div className="absolute top-2.5 right-2.5 flex items-center gap-1.5">
+                            {hasVideo && (
+                              <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-violet-600/90 text-white flex items-center gap-1 shadow-md">
+                                <Icon icon="ph:play-circle-bold" className="text-xs animate-pulse" />
+                                Video
+                              </span>
+                            )}
+                            <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-zinc-950/80 backdrop-blur-md border border-zinc-700/80 text-violet-300 flex items-center gap-1.5 shadow-md">
+                              <Icon icon={isLandscape ? "ph:rectangle-bold" : "ph:rectangle-portrait-bold"} className="text-xs" />
+                              {isLandscape ? "Landscape" : "Portrait"}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between">
+                          <div>
+                            <h3 className="text-base sm:text-lg font-bold text-zinc-100 group-hover:text-violet-400 transition-colors line-clamp-1">{item.title}</h3>
+                            <p className="text-zinc-400 text-xs mt-1.5 line-clamp-2 leading-relaxed">{lang === 'en' ? (item.description_en || item.desc_en) : (item.description_id || item.desc_id)}</p>
+                          </div>
+                        </div>
                       </div>
-                      <div className="p-3 sm:p-5 flex-1">
-                        <h3 className="text-sm sm:text-lg font-bold text-zinc-100 group-hover:text-violet-400 transition-colors line-clamp-1">{item.title}</h3>
-                        <p className="text-zinc-400 text-[10px] sm:text-xs mt-1 sm:mt-2 line-clamp-2 leading-relaxed">{lang === 'en' ? item.description_en : item.description_id}</p>
-                      </div>
-                    </div>
-                  </BorderGlow>
-                </div>
-              ))}
+                    </BorderGlow>
+                  </div>
+                );
+              })}
             </div>
           )}
 
@@ -1331,21 +1442,27 @@ export default function App() {
             className="fixed inset-0 bg-black/80 backdrop-blur-sm flex justify-center items-center z-[9999] p-2 sm:p-4"
           >
             <motion.div
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              initial={{ opacity: 0, scale: 0.95, y: 15 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              transition={{ type: "spring", bounce: 0.2, duration: 0.5 }}
-              className={`bg-zinc-900/95 border border-zinc-800 text-zinc-100 rounded-2xl w-full p-5 sm:p-6 relative shadow-2xl overflow-hidden ${activeModal.type === "project" ? "w-[95vw] max-w-[1500px] h-[95vh] flex flex-col" : "max-w-4xl max-h-[90vh] overflow-y-auto"}`}
+              exit={{ opacity: 0, scale: 0.95, y: 15 }}
+              transition={{ type: "spring", bounce: 0.15, duration: 0.4 }}
+              className={`bg-zinc-900/95 border border-zinc-800 text-zinc-100 rounded-2xl w-full p-4 sm:p-6 relative shadow-2xl ${
+                activeModal.type === "project" 
+                  ? "w-[92vw] max-w-5xl lg:max-w-6xl h-auto max-h-[88vh] md:h-[88vh] flex flex-col overflow-hidden" 
+                  : activeModal.type === "poster" && posterOrientation === "landscape"
+                    ? "w-[92vw] max-w-4xl lg:max-w-5xl max-h-[88vh] overflow-y-auto"
+                    : "w-[92vw] max-w-3xl lg:max-w-4xl max-h-[88vh] overflow-y-auto"
+              }`}
             >
               <button
                 onClick={closePopup}
-                className="absolute top-4 right-4 text-zinc-400 hover:text-white p-1 rounded-lg bg-zinc-800/80 hover:bg-zinc-800 transition-colors duration-200"
+                className="absolute top-3.5 right-3.5 sm:top-4 sm:right-4 text-zinc-400 hover:text-white p-1.5 rounded-full bg-zinc-800/90 hover:bg-zinc-700 border border-zinc-700/60 transition-colors duration-200 z-40 shadow-md"
                 aria-label="Close modal"
               >
-                <X size={20} />
+                <X size={18} />
               </button>
 
-              <div className="flex flex-col md:flex-row md:items-start gap-6 md:gap-10 w-full h-full overflow-y-auto overflow-x-hidden md:overflow-hidden pb-6 md:pb-0">
+              <div className="flex flex-col md:flex-row md:items-start gap-6 md:gap-8 w-full h-full overflow-y-auto overflow-x-hidden md:overflow-hidden pb-6 md:pb-0">
 
                 {/* Modal Image Slider / Header */}
                 {activeModal.type === "project" && (
@@ -1366,16 +1483,15 @@ export default function App() {
                         className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all duration-300 ${viewMode === "mobile"
                           ? "bg-violet-600 text-white shadow-lg shadow-violet-500/30"
                           : "bg-zinc-800/80 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200"
-                          } ${(!activeModal.data.mobileImg || activeModal.data.mobileImg.length === 0) ? "opacity-40 cursor-not-allowed" : ""}`}
-                        disabled={!activeModal.data.mobileImg || activeModal.data.mobileImg.length === 0}
+                          }`}
                       >
-                        <Smartphone size={14} /> Mobile
+                        <Smartphone size={14} /> Mobile Mockup
                       </button>
                     </div>
 
                     {/* Desktop View */}
                     {viewMode === "desktop" && (
-                      <div className="flex-1 flex flex-col md:flex-row gap-4 min-h-[300px] md:min-h-0 md:overflow-hidden"  >
+                      <div className="flex-1 flex flex-col md:flex-row gap-4 min-h-[300px] md:min-h-0 md:overflow-hidden font-sans">
                         {/* Main Image */}
                         <div className="relative rounded-xl overflow-hidden bg-zinc-950 border border-zinc-800 flex-1 min-h-0 flex items-center justify-center">
                           <img
@@ -1410,11 +1526,11 @@ export default function App() {
                       </div>
                     )}
 
-                    {/* Mobile View - Phone Mockup */}
-                    {viewMode === "mobile" && activeModal.data.mobileImg && activeModal.data.mobileImg.length > 0 && (
-                      <div className="flex sm:flex-col items-center justify-center gap-6 md:gap-10 h-full min-h-0">
-                        {/* Phone Frame */}
-                        <div className="relative flex-shrink-0" style={{ width: "280px" }}>
+                    {/* Mobile View - Phone Shape Mockup Frame */}
+                    {viewMode === "mobile" && (
+                      <div className="flex-1 flex flex-col md:flex-row items-center justify-center gap-6 md:gap-10 h-full min-h-0 py-2">
+                        {/* Phone Frame (Left Side) */}
+                        <div className="relative flex-shrink-0" style={{ width: "270px" }}>
                           {/* Phone outer shell */}
                           <div className="relative bg-zinc-900 rounded-[40px] p-[10px] border-[3px] border-zinc-700 shadow-2xl shadow-black/50">
                             {/* Notch / Dynamic Island */}
@@ -1422,36 +1538,119 @@ export default function App() {
                               <div className="w-[8px] h-[8px] rounded-full bg-zinc-800 border border-zinc-700"></div>
                               <div className="w-[6px] h-[6px] rounded-full bg-zinc-800"></div>
                             </div>
+
                             {/* Screen */}
-                            <div className="relative rounded-[30px] overflow-hidden bg-zinc-950 aspect-[9/19.5]">
-                              <img
-                                src={activeModal.data.mobileImg[sliderIndex]}
-                                alt={activeModal.data.title}
-                                className="w-full h-full object-cover transition-all duration-500"
-                              />
+                            <div className="relative rounded-[30px] overflow-hidden bg-zinc-950 aspect-[9/19.5] flex items-center justify-center">
+                              {activeModal.data.mobileImg && activeModal.data.mobileImg.length > 0 ? (
+                                <img
+                                  src={activeModal.data.mobileImg[sliderIndex]}
+                                  alt={activeModal.data.title}
+                                  onError={(e) => {
+                                    e.currentTarget.style.display = 'none';
+                                    if (e.currentTarget.nextSibling) e.currentTarget.nextSibling.style.display = 'flex';
+                                  }}
+                                  className="w-full h-full object-cover transition-all duration-500 rounded-[22px]"
+                                />
+                              ) : null}
+
+                              {/* Empty Project Shape Layout (Wireframe Mockup Shape) */}
+                              <div
+                                className={`w-full h-full rounded-[22px] bg-zinc-950 p-4 pt-10 flex-col justify-between relative overflow-hidden select-none border border-zinc-800/80 ${
+                                  activeModal.data.mobileImg && activeModal.data.mobileImg.length > 0 ? "hidden" : "flex"
+                                }`}
+                              >
+                                {/* Ambient background glow */}
+                                <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-32 h-32 bg-violet-600/15 rounded-full blur-2xl pointer-events-none" />
+
+                                {/* Header Shape */}
+                                <div className="flex items-center justify-between gap-2 pb-2.5 border-b border-zinc-800/60 z-10">
+                                  <div className="w-16 h-3.5 rounded-full bg-violet-500/20 border border-violet-500/30 flex items-center px-1.5">
+                                    <div className="w-1.5 h-1.5 rounded-full bg-violet-400"></div>
+                                  </div>
+                                  <div className="flex items-center gap-1.5">
+                                    <div className="w-4 h-4 rounded-md bg-zinc-800 border border-zinc-700/60"></div>
+                                    <div className="w-4 h-4 rounded-md bg-zinc-800 border border-zinc-700/60"></div>
+                                  </div>
+                                </div>
+
+                                {/* Hero Banner Shape */}
+                                <div className="flex flex-col gap-2 my-1 z-10">
+                                  <div className="w-full h-20 rounded-xl bg-gradient-to-r from-violet-900/30 via-zinc-900 to-indigo-900/30 border border-violet-500/20 p-2.5 flex flex-col justify-between relative overflow-hidden">
+                                    <div className="w-20 h-2.5 rounded-full bg-violet-400/40"></div>
+                                    <div className="space-y-1">
+                                      <div className="w-3/4 h-1.5 rounded-full bg-zinc-700/60"></div>
+                                      <div className="w-1/2 h-1.5 rounded-full bg-zinc-800/80"></div>
+                                    </div>
+                                    <div className="absolute bottom-2 right-2 w-6 h-6 rounded-lg bg-violet-500/20 border border-violet-500/30 flex items-center justify-center text-violet-400">
+                                      <Icon icon="ph:sparkle-fill" className="text-[10px]" />
+                                    </div>
+                                  </div>
+
+                                  {/* Buttons Shape */}
+                                  <div className="flex items-center gap-2">
+                                    <div className="flex-1 h-6 rounded-lg bg-violet-600/30 border border-violet-500/40 flex items-center justify-center">
+                                      <div className="w-10 h-1.5 rounded-full bg-violet-300/60"></div>
+                                    </div>
+                                    <div className="w-6 h-6 rounded-lg bg-zinc-900 border border-zinc-800 flex items-center justify-center">
+                                      <div className="w-2 h-2 rounded-full bg-zinc-600"></div>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                {/* Feature Grid Cards Shape */}
+                                <div className="grid grid-cols-2 gap-2 my-1 z-10">
+                                  {[1, 2, 3, 4].map((i) => (
+                                    <div key={i} className="p-2 rounded-xl bg-zinc-900/80 border border-zinc-800/80 flex flex-col gap-1.5">
+                                      <div className="w-5 h-5 rounded-lg bg-violet-500/10 border border-violet-500/20 flex items-center justify-center text-violet-400">
+                                        <Icon icon={i % 2 === 0 ? "ph:layout-bold" : "ph:brackets-curly-bold"} className="text-[10px]" />
+                                      </div>
+                                      <div className="w-10 h-1.5 rounded-full bg-zinc-700/60"></div>
+                                      <div className="w-full h-1 rounded-full bg-zinc-800/80"></div>
+                                    </div>
+                                  ))}
+                                </div>
+
+                                {/* Bottom Nav Shape */}
+                                <div className="pt-2 border-t border-zinc-800/60 flex items-center justify-around z-10">
+                                  <div className="w-3.5 h-3.5 rounded-md bg-violet-500/40 flex items-center justify-center text-violet-300">
+                                    <Icon icon="ph:house-bold" className="text-[9px]" />
+                                  </div>
+                                  <div className="w-3.5 h-3.5 rounded-md bg-zinc-800 flex items-center justify-center text-zinc-600">
+                                    <Icon icon="ph:compass-bold" className="text-[9px]" />
+                                  </div>
+                                  <div className="w-3.5 h-3.5 rounded-md bg-zinc-800 flex items-center justify-center text-zinc-600">
+                                    <Icon icon="ph:user-bold" className="text-[9px]" />
+                                  </div>
+                                </div>
+                              </div>
+
                               {/* Screen reflection glare */}
                               <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-transparent pointer-events-none rounded-[30px]"></div>
                             </div>
+
                             {/* Bottom bar indicator */}
                             <div className="absolute bottom-[8px] left-1/2 -translate-x-1/2 w-[100px] h-[4px] bg-zinc-600 rounded-full"></div>
                           </div>
                           {/* Phone shadow glow */}
-                          <div className="absolute -inset-4 bg-violet-500/5 rounded-[50px] blur-xl -z-10"></div>
+                          <div className="absolute -inset-4 bg-violet-500/10 rounded-[50px] blur-xl -z-10"></div>
                         </div>
 
-                        {/* Mobile Thumbnails */}
-                        <div className="flex sm:flex-col gap-3 overflow-x-auto sm:overflow-y-auto sm:overflow-x-hidden pb-2 sm:pb-0 sm:pr-2 sm:max-h-[550px] max-w-full justify-center sm:justify-start">
-                          {activeModal.data.mobileImg.map((img, idx) => (
-                            <button
-                              key={idx}
-                              onClick={() => setSliderIndex(idx)}
-                              className={`relative aspect-[9/16] w-14 sm:w-16 rounded-lg overflow-hidden border-2 flex-shrink-0 transition-all ${sliderIndex === idx ? "border-violet-500 shadow-md shadow-violet-500/30" : "border-zinc-800 hover:border-zinc-700"
+                        {/* Mobile Thumbnails Sidebar (Right Side) */}
+                        {activeModal.data.mobileImg && activeModal.data.mobileImg.length > 0 && (
+                          <div className="flex md:flex-col gap-3 overflow-x-auto md:overflow-y-auto md:overflow-x-hidden pb-2 md:pb-0 md:w-[90px] flex-shrink-0 md:h-full md:max-h-[500px] max-w-full justify-center md:justify-start">
+                            {activeModal.data.mobileImg.map((img, idx) => (
+                              <button
+                                key={idx}
+                                onClick={() => setSliderIndex(idx)}
+                                className={`relative aspect-[9/16] w-14 md:w-full rounded-lg overflow-hidden border-2 flex-shrink-0 transition-all ${
+                                  sliderIndex === idx ? "border-violet-500 shadow-md shadow-violet-500/30 scale-105" : "border-zinc-800 hover:border-zinc-700 opacity-70 hover:opacity-100"
                                 }`}
-                            >
-                              <img src={img} className="w-full h-full object-cover" alt="" />
-                            </button>
-                          ))}
-                        </div>
+                              >
+                                <img src={img} className="w-full h-full object-cover" alt="" />
+                              </button>
+                            ))}
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>
@@ -1468,16 +1667,111 @@ export default function App() {
                 )}
 
                 {activeModal.type === "poster" && (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-4 items-start">
-                    <div className="aspect-[3/4] w-full rounded-xl overflow-hidden bg-zinc-950 border border-zinc-800">
-                      <img src={activeModal.data.image} alt={activeModal.data.title} className="w-full h-full object-cover" />
+                  posterOrientation === "landscape" ? (
+                    /* LANDSCAPE FORMAT POPUP */
+                    <div className="flex flex-col gap-6 mt-2 w-full">
+                      <div className="flex flex-col gap-2 pr-10">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className="px-3 py-1 rounded-full text-xs font-bold bg-violet-500/10 border border-violet-500/30 text-violet-400 flex items-center gap-1.5 w-fit uppercase tracking-wider">
+                            <Icon icon="ph:rectangle-bold" className="text-sm" />
+                            Landscape Format
+                          </span>
+                          {activeModal.data.video && (
+                            <span className="px-3 py-1 rounded-full text-xs font-bold bg-violet-600/20 border border-violet-500/30 text-violet-300 flex items-center gap-1.5 w-fit uppercase tracking-wider">
+                              <Icon icon="ph:film-strip-bold" className="text-sm" />
+                              {isFastConnection ? "Video Speed Art" : "Image Mode (Slow Net)"}
+                            </span>
+                          )}
+                        </div>
+                        <h3 className="text-2xl sm:text-3xl font-bold text-zinc-100">{activeModal.data.title}</h3>
+                        <div className="w-16 h-1 bg-violet-600 rounded-full"></div>
+                      </div>
+
+                      {/* Wide Landscape Image / Video Container */}
+                      <div className="w-full aspect-video max-h-[60vh] rounded-2xl overflow-hidden bg-zinc-950 border border-zinc-800 flex items-center justify-center p-2 sm:p-4 shadow-inner group relative">
+                        {activeModal.data.video && isFastConnection ? (
+                          <video
+                            src={activeModal.data.video}
+                            poster={activeModal.data.image}
+                            autoPlay
+                            loop
+                            muted
+                            controls
+                            playsInline
+                            className="w-full h-full object-contain rounded-xl"
+                          />
+                        ) : (
+                          <img
+                            src={activeModal.data.image}
+                            alt={activeModal.data.title}
+                            onLoad={(e) => {
+                              if (e.currentTarget.naturalWidth >= e.currentTarget.naturalHeight * 1.05) {
+                                setPosterOrientation("landscape");
+                              } else {
+                                setPosterOrientation("portrait");
+                              }
+                            }}
+                            className="w-full h-full object-contain group-hover:scale-102 transition-transform duration-500 rounded-xl"
+                          />
+                        )}
+                        <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/20 via-transparent to-transparent pointer-events-none" />
+                      </div>
+
+                      <div className="bg-zinc-950/60 p-4 sm:p-6 rounded-xl border border-zinc-800/80">
+                        <p className="text-zinc-300 text-sm sm:text-base leading-relaxed">{modalDesc}</p>
+                      </div>
                     </div>
-                    <div className="flex flex-col gap-4">
-                      <h3 className="text-2xl font-bold text-zinc-100">{activeModal.data.title}</h3>
-                      <div className="w-16 h-1 bg-violet-600 rounded-full"></div>
-                      <p className="text-zinc-400 text-sm leading-relaxed">{modalDesc}</p>
+                  ) : (
+                    /* PORTRAIT FORMAT POPUP */
+                    <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 mt-2 items-start w-full">
+                      <div className="col-span-12 md:col-span-6 aspect-[3/4] max-h-[65vh] md:max-h-[75vh] w-full rounded-2xl overflow-hidden bg-zinc-950 border border-zinc-800 flex items-center justify-center p-2 shadow-inner group relative">
+                        {activeModal.data.video && isFastConnection ? (
+                          <video
+                            src={activeModal.data.video}
+                            poster={activeModal.data.image}
+                            autoPlay
+                            loop
+                            muted
+                            controls
+                            playsInline
+                            className="w-full h-full object-contain rounded-lg"
+                          />
+                        ) : (
+                          <img
+                            src={activeModal.data.image}
+                            alt={activeModal.data.title}
+                            onLoad={(e) => {
+                              if (e.currentTarget.naturalWidth >= e.currentTarget.naturalHeight * 1.05) {
+                                setPosterOrientation("landscape");
+                              } else {
+                                setPosterOrientation("portrait");
+                              }
+                            }}
+                            className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500 rounded-lg"
+                          />
+                        )}
+                        <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/20 via-transparent to-transparent pointer-events-none" />
+                      </div>
+
+                      <div className="col-span-12 md:col-span-6 flex flex-col gap-4 pr-6">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className="px-3 py-1 rounded-full text-xs font-bold bg-violet-500/10 border border-violet-500/30 text-violet-400 flex items-center gap-1.5 w-fit uppercase tracking-wider">
+                            <Icon icon="ph:rectangle-portrait-bold" className="text-sm" />
+                            Portrait Format
+                          </span>
+                          {activeModal.data.video && (
+                            <span className="px-3 py-1 rounded-full text-xs font-bold bg-violet-600/20 border border-violet-500/30 text-violet-300 flex items-center gap-1.5 w-fit uppercase tracking-wider">
+                              <Icon icon="ph:film-strip-bold" className="text-sm" />
+                              {isFastConnection ? "Video Speed Art" : "Image Mode (Slow Net)"}
+                            </span>
+                          )}
+                        </div>
+                        <h3 className="text-2xl sm:text-3xl font-bold text-zinc-100">{activeModal.data.title}</h3>
+                        <div className="w-16 h-1 bg-violet-600 rounded-full"></div>
+                        <p className="text-zinc-300 text-sm sm:text-base leading-relaxed">{modalDesc}</p>
+                      </div>
                     </div>
-                  </div>
+                  )
                 )}
 
                 {/* Modal Info Footer (only for non-poster, poster has it beside) */}
