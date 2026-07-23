@@ -24,6 +24,13 @@ const techIcons = {
   "Google Sheets": "vscode-icons:file-type-excel",
   "API Gemini": "logos:google-gemini",
   "ChatGPT": "logos:openai-icon",
+  "Photoshop": "logos:adobe-photoshop",
+  "Illustrator": "logos:adobe-illustrator",
+  "Affinity": "logos:affinity-designer",
+  "CorelDRAW": "devicon:coreldraw",
+  "Figma": "logos:figma",
+  "Canva": "logos:canva",
+  "SketchUp": "logos:sketchup",
 };
 
 // Scroll Reveal Component
@@ -758,27 +765,78 @@ export default function App() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
             {/* Web Dev skill */}
             <BorderGlow borderRadius={16} backgroundColor="#18181b" className="h-full w-full">
-              <div className="p-8 rounded-2xl bg-zinc-900/40 border border-zinc-800/80 group h-full">
-                <div className="w-14 h-14 rounded-xl bg-violet-600/10 border border-violet-500/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(139,92,246,0.15)]">
-                  <img src="./asset/logo/logos_web-dev-icon.png" className="w-8 h-8 object-contain" alt="Web Dev icon" />
+              <div className="p-8 rounded-2xl bg-zinc-900/40 border border-zinc-800/80 group h-full flex flex-col justify-between">
+                <div>
+                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-violet-500/20 to-blue-500/10 border border-violet-500/30 flex items-center justify-center mb-6 group-hover:scale-110 transition-all duration-300 shadow-[0_0_20px_rgba(139,92,246,0.25)]">
+                    <Icon icon="fluent-emoji:desktop-computer" className="w-9 h-9 flex-shrink-0" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-zinc-100 mb-4">{t.skills.webDevTitle}</h3>
+                  <p className="text-zinc-400 leading-relaxed text-base">
+                    {t.skills.webDevDesc}
+                  </p>
                 </div>
-                <h3 className="text-2xl font-bold text-zinc-100 mb-4">{t.skills.webDevTitle}</h3>
-                <p className="text-zinc-400 leading-relaxed text-base">
-                  {t.skills.webDevDesc}
-                </p>
+
+                {/* Colorful Tech Badges */}
+                <div className="flex flex-wrap gap-2.5 mt-6 pt-6 border-t border-zinc-800/60">
+                  <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-zinc-800/60 border border-zinc-700/50 text-xs font-medium text-zinc-200 hover:bg-zinc-800 transition-colors shadow-sm">
+                    <Icon icon="logos:laravel" className="w-4 h-4" /> Laravel
+                  </span>
+                  <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-zinc-800/60 border border-zinc-700/50 text-xs font-medium text-zinc-200 hover:bg-zinc-800 transition-colors shadow-sm">
+                    <Icon icon="logos:react" className="w-4 h-4" /> React JS
+                  </span>
+                  <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-zinc-800/60 border border-zinc-700/50 text-xs font-medium text-zinc-200 hover:bg-zinc-800 transition-colors shadow-sm">
+                    <Icon icon="logos:tailwindcss-icon" className="w-4 h-4" /> Tailwind CSS
+                  </span>
+                  <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-zinc-800/60 border border-zinc-700/50 text-xs font-medium text-zinc-200 hover:bg-zinc-800 transition-colors shadow-sm">
+                    <Icon icon="fluent-emoji:robot" className="w-4 h-4" /> Flowise AI
+                  </span>
+                  <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-zinc-800/60 border border-zinc-700/50 text-xs font-medium text-zinc-200 hover:bg-zinc-800 transition-colors shadow-sm">
+                    <Icon icon="flat-color-icons:database" className="w-4 h-4" /> Database (DB)
+                  </span>
+                  <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-zinc-800/60 border border-zinc-700/50 text-xs font-medium text-zinc-200 hover:bg-zinc-800 transition-colors shadow-sm">
+                    <Icon icon="logos:javascript" className="w-4 h-4" /> JavaScript (JS)
+                  </span>
+                </div>
               </div>
             </BorderGlow>
 
             {/* Graphic Design skill */}
             <BorderGlow borderRadius={16} backgroundColor="#18181b" className="h-full w-full">
-              <div className="p-8 rounded-2xl bg-zinc-900/40 border border-zinc-800/80 group h-full">
-                <div className="w-14 h-14 rounded-xl bg-violet-600/10 border border-violet-500/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(139,92,246,0.15)]">
-                  <img src="./asset/logo/fluent-color_design-ideas-32.png" className="w-8 h-8 object-contain" alt="Design icon" />
+              <div className="p-8 rounded-2xl bg-zinc-900/40 border border-zinc-800/80 group h-full flex flex-col justify-between">
+                <div>
+                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-fuchsia-500/20 to-rose-500/10 border border-fuchsia-500/30 flex items-center justify-center mb-6 group-hover:scale-110 transition-all duration-300 shadow-[0_0_20px_rgba(217,70,239,0.25)]">
+                    <Icon icon="fluent-emoji:artist-palette" className="w-9 h-9 flex-shrink-0" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-zinc-100 mb-4">{t.skills.designTitle}</h3>
+                  <p className="text-zinc-400 leading-relaxed text-base">
+                    {t.skills.designDesc}
+                  </p>
                 </div>
-                <h3 className="text-2xl font-bold text-zinc-100 mb-4">{t.skills.designTitle}</h3>
-                <p className="text-zinc-400 leading-relaxed text-base">
-                  {t.skills.designDesc}
-                </p>
+
+                {/* Colorful Tool & Visual Badges */}
+                <div className="flex flex-wrap gap-2.5 mt-6 pt-6 border-t border-zinc-800/60">
+                  <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-zinc-800/60 border border-zinc-700/50 text-xs font-medium text-zinc-200 hover:bg-zinc-800 transition-colors shadow-sm">
+                    <Icon icon="logos:adobe-illustrator" className="w-4 h-4" /> Illustrator (Ai)
+                  </span>
+                  <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-zinc-800/60 border border-zinc-700/50 text-xs font-medium text-zinc-200 hover:bg-zinc-800 transition-colors shadow-sm">
+                    <Icon icon="logos:adobe-photoshop" className="w-4 h-4" /> Photoshop (Ps)
+                  </span>
+                  <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-zinc-800/60 border border-zinc-700/50 text-xs font-medium text-zinc-200 hover:bg-zinc-800 transition-colors shadow-sm">
+                    <Icon icon="logos:affinity-designer" className="w-4 h-4" /> Affinity
+                  </span>
+                  <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-zinc-800/60 border border-zinc-700/50 text-xs font-medium text-zinc-200 hover:bg-zinc-800 transition-colors shadow-sm">
+                    <Icon icon="devicon:coreldraw" className="w-4 h-4" /> CorelDRAW
+                  </span>
+                  <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-zinc-800/60 border border-zinc-700/50 text-xs font-medium text-zinc-200 hover:bg-zinc-800 transition-colors shadow-sm">
+                    <Icon icon="logos:figma" className="w-4 h-4" /> Figma
+                  </span>
+                  <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-zinc-800/60 border border-zinc-700/50 text-xs font-medium text-zinc-200 hover:bg-zinc-800 transition-colors shadow-sm">
+                    <Icon icon="logos:canva" className="w-4 h-4" /> Canva
+                  </span>
+                  <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-zinc-800/60 border border-zinc-700/50 text-xs font-medium text-zinc-200 hover:bg-zinc-800 transition-colors shadow-sm">
+                    <Icon icon="logos:sketchup" className="w-4 h-4" /> SketchUp
+                  </span>
+                </div>
               </div>
             </BorderGlow>
           </div>
@@ -974,7 +1032,7 @@ export default function App() {
         </div>
       </ScrollReveal>
 
-      {/* RIWAYAT PENDIDIKAN & PENGALAMAN (JOURNEY BENTO / DUAL TRACK) */}
+      {/* RIWAYAT PENDIDIKAN & PENGALAMAN (HORIZONTAL STACKED LAYOUT) */}
       <ScrollReveal direction="up" id="journey" className="py-24 bg-zinc-950 bg-dots relative border-b border-zinc-900 overflow-hidden">
         {/* Ambient Background Glow Orbs */}
         <div className="absolute top-1/3 left-1/4 w-96 h-96 bg-violet-600/10 rounded-full blur-[120px] pointer-events-none" />
@@ -992,22 +1050,21 @@ export default function App() {
             <div className="w-20 h-1.5 bg-gradient-to-r from-violet-500 via-indigo-500 to-emerald-500 rounded-full mx-auto mt-4" />
           </div>
 
-          {/* DUAL TRACK GRID */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-stretch">
-            {/* COLUMN 1: EDUCATION TRACK */}
-            <div className="flex flex-col gap-8 h-full">
-              <div className="flex items-center gap-3.5 pb-3 border-b border-zinc-800/80">
+          {/* HORIZONTAL STACKED LAYOUT */}
+          <div className="space-y-16">
+            {/* 1. ACADEMIC & EDUCATION SECTION (Horizontal 3-Column Grid) */}
+            <div>
+              <div className="flex items-center gap-3.5 mb-8 pb-3 border-b border-zinc-800/80">
                 <div className="w-12 h-12 rounded-2xl bg-blue-500/15 border border-blue-500/30 flex items-center justify-center text-blue-400 text-2xl shadow-lg shadow-blue-500/10">
                   <Icon icon="ph:graduation-cap-bold" />
                 </div>
                 <div>
                   <h3 className="text-2xl font-bold text-zinc-100">{t.journey.eduTitle}</h3>
-                  <p className="text-xs text-zinc-400 font-medium">Academic foundation & software engineering degree</p>
+                  <p className="text-xs text-zinc-400 font-medium">Academic foundation & technical specialization</p>
                 </div>
               </div>
 
-              {/* Education Timeline Cards */}
-              <div className="relative pl-6 sm:pl-8 space-y-8 flex-1 flex flex-col justify-between before:absolute before:left-2.5 sm:before:left-3 before:top-3 before:bottom-3 before:w-0.5 before:bg-gradient-to-b before:from-blue-500 before:via-violet-500 before:to-zinc-800">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {[
                   {
                     active: true,
@@ -1015,17 +1072,8 @@ export default function App() {
                     institution: "Telkom University Purwokerto",
                     major: "S1 Rekayasa Perangkat Lunak",
                     desc: lang === 'en' ? "Focusing on Fullstack Web Systems, Software Architecture, and UI/UX Design." : "Berfokus pada Pengembangan Sistem Web Fullstack, Arsitektur Perangkat Lunak, dan UI/UX Design.",
-                    tags: ["Software Engineering", "Informatika", "Web Systems", "UI/UX"],
+                    tags: ["Software Eng", "Informatika", "Web Systems", "UI/UX"],
                     icon: "ph:student-bold"
-                  },
-                  {
-                    active: false,
-                    period: lang === 'en' ? "2023 – 2024" : "2023 – 2024",
-                    institution: lang === 'en' ? "Skill Specialization & Bootcamp" : "Sertifikasi & Spesialisasi Mandiri",
-                    major: lang === 'en' ? "Fullstack Web & Visual Mastery" : "Pengembangan Web Fullstack & Desain Visual",
-                    desc: lang === 'en' ? "Deep dive into modern web ecosystems (React, Tailwind, Laravel) and 3D visualizers." : "Eksplorasi mendalam ekosistem web modern (React, Tailwind, Laravel) serta visualisasi 3D.",
-                    tags: ["React JS", "Laravel", "Tailwind CSS", "SketchUp"],
-                    icon: "ph:certificate-bold"
                   },
                   {
                     active: false,
@@ -1037,21 +1085,11 @@ export default function App() {
                     icon: "ph:book-bookmark-bold"
                   },
                 ].map((edu, i) => (
-                  <ScrollReveal key={i} direction="up" delay={i * 0.15} className="relative group flex-1 flex flex-col justify-between">
-                    {/* Timeline Connector Dot */}
-                    <span className={`absolute -left-[31px] sm:-left-[35px] top-4 w-6 h-6 rounded-full border-4 ${
-                      edu.active 
-                        ? "bg-blue-400 border-zinc-950 ring-4 ring-blue-500/30 animate-pulse" 
-                        : "bg-zinc-900 border-zinc-800 group-hover:bg-blue-400 group-hover:border-zinc-950"
-                    } transition-all duration-300 flex items-center justify-center z-10`}>
-                      {edu.active && <span className="w-1.5 h-1.5 rounded-full bg-white"></span>}
-                    </span>
-
-                    {/* Bento Card */}
-                    <BorderGlow borderRadius={16} backgroundColor="#18181b" className="w-full h-full">
-                      <div className="p-6 rounded-2xl bg-zinc-900/80 border border-zinc-800/90 group-hover:border-blue-500/40 transition-all duration-300 group-hover:-translate-y-1 shadow-lg group-hover:shadow-blue-500/10 h-full flex flex-col justify-between">
+                  <ScrollReveal key={i} direction="up" delay={i * 0.15} className="h-full">
+                    <BorderGlow borderRadius={16} backgroundColor="#18181b" className="h-full w-full">
+                      <div className="p-6 rounded-2xl bg-zinc-900/80 border border-zinc-800/90 h-full flex flex-col justify-between hover:border-blue-500/40 transition-all duration-300 hover:-translate-y-1 shadow-lg hover:shadow-blue-500/10">
                         <div>
-                          <div className="flex items-center justify-between gap-2 mb-3 flex-wrap">
+                          <div className="flex items-center justify-between gap-2 mb-3">
                             <span className={`text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider ${
                               edu.active 
                                 ? "bg-blue-500/20 text-blue-300 border border-blue-500/30" 
@@ -1061,18 +1099,17 @@ export default function App() {
                             </span>
                             <span className="text-zinc-500 text-xs font-mono">Purwokerto</span>
                           </div>
-
-                          <h4 className="text-xl font-extrabold text-zinc-100 group-hover:text-blue-400 transition-colors duration-300 flex items-center gap-2">
-                            <Icon icon={edu.icon} className="text-blue-400 text-lg flex-shrink-0" />
+                          <h4 className="text-xl font-extrabold text-zinc-100 flex items-center gap-2 mb-1">
+                            <Icon icon={edu.icon} className="text-blue-400 flex-shrink-0" />
                             {edu.institution}
                           </h4>
-                          <p className="text-blue-400/90 text-sm font-semibold mt-1">{edu.major}</p>
+                          <p className="text-blue-400/90 text-sm font-semibold">{edu.major}</p>
                           <p className="text-zinc-400 text-xs sm:text-sm mt-2.5 leading-relaxed">{edu.desc}</p>
                         </div>
 
-                        <div className="flex flex-wrap gap-2 mt-4 pt-3 border-t border-zinc-800/60">
+                        <div className="flex flex-wrap gap-1.5 mt-5 pt-3 border-t border-zinc-800/60">
                           {edu.tags.map((tag) => (
-                            <span key={tag} className="text-[11px] font-medium px-2.5 py-1 rounded-lg bg-zinc-950 border border-zinc-800 text-zinc-400 group-hover:border-blue-500/30 group-hover:text-blue-300 transition-colors">
+                            <span key={tag} className="text-[11px] font-medium px-2.5 py-1 rounded-lg bg-zinc-950 border border-zinc-800 text-zinc-400 hover:border-blue-500/30 hover:text-blue-300 transition-colors">
                               #{tag}
                             </span>
                           ))}
@@ -1084,9 +1121,9 @@ export default function App() {
               </div>
             </div>
 
-            {/* COLUMN 2: CAREER & EXPERIENCE TRACK */}
-            <div className="flex flex-col gap-8">
-              <div className="flex items-center gap-3.5 pb-3 border-b border-zinc-800/80">
+            {/* 2. REAL WORLD CAREER JOURNEY SECTION (Vertical Timeline Below) */}
+            <div className="pt-4">
+              <div className="flex items-center gap-3.5 mb-8 pb-3 border-b border-zinc-800/80">
                 <div className="w-12 h-12 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400 text-2xl shadow-lg shadow-emerald-500/10">
                   <Icon icon="ph:briefcase-bold" />
                 </div>
@@ -1096,7 +1133,6 @@ export default function App() {
                 </div>
               </div>
 
-              {/* Career Timeline Cards */}
               <div className="relative pl-6 sm:pl-8 space-y-8 before:absolute before:left-2.5 sm:before:left-3 before:top-3 before:bottom-3 before:w-0.5 before:bg-gradient-to-b before:from-emerald-500 before:via-teal-500 before:to-zinc-800">
                 {[
                   {
@@ -1104,6 +1140,7 @@ export default function App() {
                     type: "Full Time",
                     period: lang === 'en' ? "2025 – Present" : "2025 – Sekarang",
                     company: "Dr Kreatif",
+                    url: "https://www.instagram.com/drkreatif/",
                     role: "Graphic Designer & WordPress Admin",
                     bullets: [
                       lang === 'en' ? "Designing commercial visuals (logos, promotional banners, flyers)" : "Desain visual komersial (logo, brosur, promo)",
@@ -1117,6 +1154,7 @@ export default function App() {
                     type: "Internship",
                     period: lang === 'en' ? "4 Months" : "4 Bulan",
                     company: "CV. Prabu Bima Tech",
+                    url: "https://www.instagram.com/prabubimatech/",
                     role: "Fullstack Developer",
                     bullets: [
                       lang === 'en' ? "Built E-Voting OSIS Web App with real-time charts" : "Web App E-Voting Ketua OSIS",
@@ -1129,6 +1167,7 @@ export default function App() {
                     type: "Internship",
                     period: lang === 'en' ? "3 Months" : "3 Bulan",
                     company: "CV. JVM Purwokerto",
+                    url: "https://www.instagram.com/jvm.purwokerto/",
                     role: "Graphic Designer",
                     bullets: [
                       lang === 'en' ? "Awarded 'Excellent Performance' for top internship results" : "Predikat 'Excellent Performance'",
@@ -1143,7 +1182,7 @@ export default function App() {
                       work.active 
                         ? "bg-emerald-400 border-zinc-950 ring-4 ring-emerald-500/30 animate-pulse" 
                         : "bg-zinc-900 border-zinc-800 group-hover:bg-emerald-400 group-hover:border-zinc-950"
-                    } transition-all duration-300 flex items-center justify-center`}>
+                    } transition-all duration-300 flex items-center justify-center z-10`}>
                       {work.active && <span className="w-1.5 h-1.5 rounded-full bg-white"></span>}
                     </span>
 
@@ -1163,9 +1202,22 @@ export default function App() {
                           </span>
                         </div>
 
-                        <h4 className="text-xl font-extrabold text-zinc-100 group-hover:text-emerald-400 transition-colors duration-300 flex items-center gap-2">
+                        <h4 className="text-xl font-extrabold text-zinc-100 flex items-center gap-2">
                           <Icon icon={work.icon} className="text-emerald-400 text-lg flex-shrink-0" />
-                          {work.company}
+                          {work.url ? (
+                            <a
+                              href={work.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1.5 hover:text-emerald-400 hover:underline transition-colors group/link cursor-pointer"
+                              title={`Kunjungi Medsos / Website ${work.company}`}
+                            >
+                              <span>{work.company}</span>
+                              <Icon icon="ph:arrow-square-out-bold" className="text-sm text-emerald-400 opacity-80 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 transition-transform flex-shrink-0" />
+                            </a>
+                          ) : (
+                            <span>{work.company}</span>
+                          )}
                         </h4>
                         <p className="text-emerald-400/90 text-sm font-semibold mt-1">{work.role}</p>
 
