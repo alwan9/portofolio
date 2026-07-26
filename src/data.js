@@ -296,5 +296,45 @@ export const posters = [
     image: "./asset-page/manipulation/manipulation3.png",
     orientation: "landscape",
     gallery: []
+  },
+  {
+    title: "Embik Eco Green Farm",
+    description_id: "Poster infografis bisnis usaha sosial-agrobisnis peternakan kambing, susu kambing GEMIK, dan pupuk organik KOHEMAX berbasis kemitraan dan pemberdayaan masyarakat.",
+    description_en: "Business infographic poster for Embik Eco Green Farm, an integrated social-agribusiness initiative focusing on goat farming, goat milk products, and organic fertilizers.",
+    image: "./asset-page/manipulation/poster.png",
+    orientation: "portrait",
+    gallery: []
+  },
+  {
+    title: "Penerapan K3 Bekerja Di Atas Laut",
+    description_id: "Poster edukasi Keselamatan dan Kesehatan Kerja (K3) industri maritim yang menjelaskan penggunaan Alat Pelindung Diri (APD) lengkap saat beroperasi di atas laut.",
+    description_en: "Occupational Health and Safety (K3) poster for maritime operations detailing mandatory Personal Protective Equipment (PPE) for working at sea.",
+    image: "./asset-page/manipulation/poster.jpg",
+    orientation: "portrait",
+    gallery: []
+  },
+  {
+    title: "NYOLOK - Smart Home Energy Management",
+    description_id: "Poster perancangan aplikasi Smart Home untuk kontrol dan manajemen efisiensi energi listrik rumah tangga menggunakan pendekatan Design Thinking.",
+    description_en: "Design Thinking project poster for NYOLOK, a smart home mobile application designed to monitor and manage household electricity consumption.",
+    image: "./asset-page/manipulation/poster (1).png",
+    orientation: "portrait",
+    gallery: []
+  },
+  {
+    title: "SALUR - Platform Redistribusi Pangan (GEMASTIK XVIII)",
+    description_id: "Poster proposal aplikasi SALUR untuk kompetisi GEMASTIK XVIII, menghubungkan penyedia surplus pangan dengan panti asuhan guna mencegah food waste.",
+    description_en: "GEMASTIK XVIII competition poster for SALUR, a digital platform connecting food surplus providers with orphanages to tackle food waste and support SDGs.",
+    image: "./asset-page/manipulation/poster (2).png",
+    orientation: "portrait",
+    gallery: []
+  },
+  {
+    title: "Bersama Kita Lawan Pelecehan Seksual",
+    description_id: "Poster infografis edukasi publik dan kesadaran sosial mengenai bahaya, dampak psikologis, serta langkah penanganan korban pelecehan seksual.",
+    description_en: "Public awareness infographic poster educating on sexual harassment prevention, psychological impacts, emergency steps for victims, and statistics.",
+    image: "./asset-page/manipulation/poster (3).png",
+    orientation: "portrait",
+    gallery: []
   }
 ];
